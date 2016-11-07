@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+{% block html_tag %}<html>{% endblock %}
     <head>
-        <meta charset="UTF-8" />
+        {% block metas %}
+            <meta charset="UTF-8" />
+        {% endblock %}
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
+    {% block body_tag %}<body>{% endblock %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

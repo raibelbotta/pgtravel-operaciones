@@ -27,7 +27,7 @@
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "vich/uploader-bundle": "^0.14.0",
         "liip/imagine-bundle": "^1.6",
-        "oneup/flysystem-bundle": "^1.4",
+        "oneup/flysystem-bundle": "^1.5",
         "knplabs/knp-paginator-bundle": "^2.5",
         "jms/i18n-routing-bundle": "^2.0"
     },

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af5ae53666d37358f10dcbea957209d1",
-    "content-hash": "37a02d2717d3f6529bce0401ba10edce",
+    "hash": "c460531e61bd4ae1da6770cabfdbf4b6",
+    "content-hash": "94f3b85b6455b0e2f158848ab04a6a26",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2423,16 +2423,16 @@
         },
         {
             "name": "oneup/flysystem-bundle",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/1up-lab/OneupFlysystemBundle.git",
-                "reference": "2459169ed38e38bff1471ce0b25d4b341d0a938f"
+                "reference": "6d3dd85d8ac417a3b405e98ab8564d3296a0ff0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/1up-lab/OneupFlysystemBundle/zipball/2459169ed38e38bff1471ce0b25d4b341d0a938f",
-                "reference": "2459169ed38e38bff1471ce0b25d4b341d0a938f",
+                "url": "https://api.github.com/repos/1up-lab/OneupFlysystemBundle/zipball/6d3dd85d8ac417a3b405e98ab8564d3296a0ff0f",
+                "reference": "6d3dd85d8ac417a3b405e98ab8564d3296a0ff0f",
                 "shasum": ""
             },
             "require": {
@@ -2452,7 +2452,8 @@
                 "league/flysystem-ziparchive": "~1.0",
                 "phpunit/phpunit": "4.4.*",
                 "symfony/browser-kit": "~2.0|~3.0",
-                "symfony/finder": "~2.0|~3.0"
+                "symfony/finder": "~2.0|~3.0",
+                "twistor/flysystem-stream-wrapper": "~1.0"
             },
             "suggest": {
                 "ext-fileinfo": "Required for MimeType",
@@ -2464,7 +2465,8 @@
                 "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
                 "league/flysystem-sftp": "Allows SFTP server storage via phpseclib",
                 "league/flysystem-webdav": "Allows you to use WebDAV storage",
-                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter"
+                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter",
+                "twistor/flysystem-stream-wrapper": "Allows you to use stream wrapper"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -2492,7 +2494,7 @@
                 "abstraction",
                 "filesystem"
             ],
-            "time": "2016-05-31 11:05:39"
+            "time": "2016-11-03 12:44:01"
         },
         {
             "name": "paragonie/random_compat",

@@ -22,6 +22,11 @@
 
     <!-- Custom Theme Style -->
     <link href="{{ asset('css/custom.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        label.required:after {
+            content: '*';
+        }
+    </style>
 {% endblock %}
 
 {% block body_tag %}<body class="nav-md">{% endblock %}
@@ -32,7 +37,7 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
+                        <a href="{{ path('homepage') }}" class="site_title"><i class="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
                     </div>
 
                     <div class="clearfix"></div>
@@ -43,8 +48,10 @@
                             <img src="{{ asset('images/img.jpg') }}" alt="..." class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
-                            <span>Welcome,</span>
-                            <h2>{{ app.user.email }}</h2>
+                            {% trans with {'%user%': app.user.email} -%}
+                                <span>Welcome, </span>
+                                <h2>%%user%%</h2>
+                            {%- endtrans %}
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -192,15 +199,12 @@
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li><a href="javascript:;"> Profile</a></li>
+                                    <li><a href="{{ path('fos_user_profile_edit') }}"> {{ 'Profile'|trans }}</a></li>
                                     <li>
-                                        <a href="javascript:;">
-                                            <span class="badge bg-red pull-right">50%</span>
-                                            <span>Settings</span>
-                                        </a>
+                                        <a href="javascript:;" id="linkChangePassword">{{ 'Change password'|trans }}</a>
                                     </li>
                                     <li><a href="javascript:;">Help</a></li>
-                                    <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out pull-right"></i> {{ 'Log Out'|trans }}</a></li>
                                 </ul>
                             </li>
 
@@ -277,182 +281,7 @@
             <!-- page content -->
             <div class="right_col" role="main">
                 <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>Users <small>Some examples to get you started</small></h3>
-                        </div>
-
-                        <div class="title_right">
-                            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for...">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Go!</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="clearfix"></div>
-
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Default Example <small>Users</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a></li>
-                                                <li><a href="#">Settings 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <p class="text-muted font-13 m-b-30">
-                                        DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Plus Table Design</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a></li>
-                                                <li><a href="#">Settings 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <p class="text-muted font-13 m-b-30">
-                                        DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function: <code>$().DataTable();</code>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Button Example <small>Users</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a></li>
-                                                <li><a href="#">Settings 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <p class="text-muted font-13 m-b-30">
-                                        The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Fixed Header Example <small>Users</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a></li>
-                                                <li><a href="#">Settings 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <p class="text-muted font-13 m-b-30">
-                                        This example shows FixedHeader being styling by the Bootstrap CSS framework.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>KeyTable example <small>Users</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a></li>
-                                                <li><a href="#">Settings 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="card-box table-responsive">
-                                                <p class="text-muted font-13 m-b-30">
-                                                KeyTable provides Excel like cell navigation on any table. Events (focus, blur, action etc) can be assigned to individual cells, columns, rows or all cells.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Responsive example <small>Users</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a></li>
-                                                <li><a href="#">Settings 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <p class="text-muted font-13 m-b-30">
-                                        Responsive is an extension for DataTables that resolves that problem by optimising the table's layout for different screen sizes through the dynamic insertion and removal of columns from the table.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% block content %}{% endblock %}
                 </div>
             </div>
             <!-- /page content -->

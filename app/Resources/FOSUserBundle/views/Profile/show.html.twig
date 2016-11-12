@@ -1,0 +1,58 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'My profile'|trans }} <small>{{ 'view'|trans }}</small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ 'Personal info'|trans }}</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-xs-12 text-right">
+                            <strong>{{ 'First name'|trans }}</strong>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ app.user.firstName }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-xs-12 text-right">
+                            <strong>{{ 'Last name'|trans }}</strong>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ app.user.lastName }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ 'System info'|trans }}</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-xs-12 text-right">
+                            <strong>{{ 'Email'|trans }}</strong>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ app.user.email }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right">
+                <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary">{{ 'Edit'|trans }}</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

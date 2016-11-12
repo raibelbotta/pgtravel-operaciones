@@ -34,6 +34,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form_themes:
+        - 'fields.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -87,3 +89,25 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: AppBundle\Entity\User
+    profile:
+        form: 
+            type: AppBundle\Form\Type\ProfileFormType
+
+oneup_flysystem:
+    adapters:
+        users_adapter:
+            local:
+                directory: %kernel.root_dir%/../web/uploads/users/images
+    filesystems:
+        users_images_fs:
+            adapter: users_adapter
+            mount: users_images_fs
+
+vich_uploader:
+    db_driver:  orm
+    storage:    flysystem
+    mappings:
+        users_images:
+            uri_prefix:         /uploads/users/images
+            upload_destination: users_images_fs
+

@@ -18,6 +18,8 @@ class AppKernel extends Kernel
             
             new FOS\UserBundle\FOSUserBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+            new Oneup\FlysystemBundle\OneupFlysystemBundle(),
+            new Vich\UploaderBundle\VichUploaderBundle(),
 
             new AppBundle\AppBundle(),
         );

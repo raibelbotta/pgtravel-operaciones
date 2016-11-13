@@ -89,6 +89,11 @@ class User extends BaseUser
         $this->username = uniqid();
     }
 
+    public function getFullName()
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+    }
+
     /**
      * @param File $file
      * @return \AppBundle\Entity\User

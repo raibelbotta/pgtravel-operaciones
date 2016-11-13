@@ -1,0 +1,50 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Users'|trans }} <span>{{ 'view'|trans }}</span></h3>
+        </div>
+    </div>
+    
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Personal info'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'First name'|trans }}</dt>
+                        <dd>{{ record.firstName }}</dd>
+                        <dt>{{ 'Last name'|trans }}</dt>
+                        <dd>{{ record.lastName }}</dd>
+                        <dt>{{ 'Gender'|trans }}</dt>
+                        <dd>{{ record.gender == 'F' ? 'Female'|trans : 'Male'|trans }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'System info'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'Email'|trans }}</dt>
+                        <dd>{{ record.email }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pull-right">
+        <a href="{{ path('app_users_index') }}" class="btn btn-default">{{ 'Return to list'|trans }}</a>
+        <a href="{{ path('app_users_edit', {'id': record.id}) }}" class="btn btn-primary">{{ 'Edit'|trans }}</a>
+    </div>
+{% endblock %}

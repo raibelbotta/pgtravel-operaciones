@@ -22,7 +22,7 @@ security:
                 csrf_provider: form.csrf_provider
             logout:       true
             anonymous:    true
-            
+
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
@@ -30,4 +30,4 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_OFFERS, ROLE_RESERVATIONS, ROLE_ACCOUNTS, ROLE_REPORTS ]

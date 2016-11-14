@@ -1,0 +1,57 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Suppliers'|trans }} <small>{{ 'new'|trans }}</small></h3>
+        </div>
+    </div>
+    {{ form_start(form, {'attr': {'role': 'form', 'id': 'supplier', 'class': 'form-horizontal form-label-left'}}) }}
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>{{ 'Identification info'|trans }}</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <dirv class="row">
+                    <div class="form-group">
+                        {{ form_label(form.name, null, {'label_attr': {'class': 'control-label col-sm-3 xol-xs-12'}}) }}
+                        <div class="col-xs-12 col-sm-6">
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                        </div>
+                    </div>
+                </dirv>
+            </div>
+        </div>
+        <div class="pull-right">
+            <a href="{{ path('app_suppliers_index') }}" class="btn btn-default">{{ 'Cancel'|trans }}</a>
+            <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            +(function() {
+                $('#supplier').validate({
+                    errorPlacement: function(error, element) {
+                        if (!element.data('tooltipster-ns')) {
+                            element.tooltipster({
+                                trigger: 'custom',
+                                onlyOne: false,
+                                position: 'bottom-left',
+                                positionTracker: true
+                            });
+                        }
+                        element.tooltipster('update', $(error).text());
+                        element.tooltipster('show');
+                    },
+                    success: function (label, element) {
+                        $(element).tooltipster('hide');
+                    }
+                });
+            }());
+        });
+    </script>
+{% endblock %}

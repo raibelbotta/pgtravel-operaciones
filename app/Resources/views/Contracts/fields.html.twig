@@ -1,0 +1,59 @@
+{% block collection_row %}
+    {% for child in form %}
+        {{ form_row(child) }}
+    {% endfor %}
+{% endblock %}
+
+{% block contract_attachment_row %}
+    <div class="item item-attachment">
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.file, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.file) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-danger btn-block btn-xs btn-remove" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></button>
+        </div>
+        <div class="col-xs-12">
+            <hr>
+        </div>
+    </div>
+{% endblock %}
+
+{% block contract_top_service_row %}
+    <div class="row item item-top-service">
+        <div class="form-group col-xs-12 col-sm-10">
+            {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-2">
+            {{ form_label(form.price, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.price, {'attr': {'class': 'form-control text-right'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.startAt, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.endAt, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.notes, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-danger btn-block btn-xs btn-remove" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></button>
+        </div>
+        <div class="col-xs-12">
+            <hr>
+        </div>
+    </div>
+{% endblock %}

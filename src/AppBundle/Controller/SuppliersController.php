@@ -63,7 +63,7 @@ class SuppliersController extends Controller
         if ($orders) {
             $column = call_user_func(function($name) {
                 if ($name == 'name') {
-                    return 's.mame';
+                    return 's.name';
                 }
                 return null;
             }, $columns[$orders[0]['column']]['name']);

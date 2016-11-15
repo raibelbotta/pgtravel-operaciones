@@ -1,0 +1,15 @@
+{% block vich_file_widget %}
+    <div class="input-group">
+        {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
+        {% if download_uri is defined and download_uri %}
+            <div class="input-group-addon">
+                <a href="{{ download_uri }}" target="_blank" title="{{ 'download'|trans({}, 'VichUploaderBundle') }}"><i class="fa fa-download"></i></a>
+            </div>
+        {% endif %}
+        {% if form.delete is defined %}
+            <div class="input-group-addon">
+                {{ form_widget(form.delete) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

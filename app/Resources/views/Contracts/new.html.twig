@@ -1,0 +1,52 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Contracts'|trans }} <small>{{ 'new'|trans }}</small></h3>
+        </div>
+    </div>
+    {{ form_start(form, {'attr': {'role': 'form', 'id': 'contract'}}) }}
+        {{ include('Contracts/form.html.twig') }}
+        <div class="pull-right">
+            <a href="{{ path('app_contracts_index') }}" class="btn btn-default">{{ 'Cancel'|trans }}</a>
+            <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            +(function() {
+                $('#contract').validate({
+                    errorPlacement: function(error, element) {
+                        if (!element.data('tooltipster-ns')) {
+                            element.tooltipster({
+                                trigger: 'custom',
+                                onlyOne: false,
+                                position: 'bottom-left',
+                                positionTracker: true
+                            });
+                        }
+                        element.tooltipster('update', $(error).text());
+                        element.tooltipster('show');
+                    },
+                    success: function (label, element) {
+                        $(element).tooltipster('hide');
+                    }
+                });
+            }());
+
+            +(function() {
+                var clickRemoveItem = function(event) {
+                    event.preventDefault();
+
+                    $(this).closest('.item').remove();
+                }
+
+                $('.btn-remove').on('click', clickRemoveItem);
+            }());
+        });
+    </script>
+{% endblock %}

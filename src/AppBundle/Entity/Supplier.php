@@ -52,6 +52,18 @@ class Supplier
      */
     private $updatedAt;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contracts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
 
     /**
      * Get id
@@ -133,13 +145,6 @@ class Supplier
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->contracts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

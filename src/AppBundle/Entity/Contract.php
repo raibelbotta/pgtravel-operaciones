@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -26,20 +27,42 @@ class Contract
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start_at", type="datetime", nullable=true)
+     * @ORM\Column(name="signed_at", type="date", nullable=true)
+     */
+    private $signedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="start_at", type="date", nullable=true)
      */
     private $startAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="end_at", type="datetime", nullable=true)
+     * @ORM\Column(name="end_at", type="date", nullable=true)
      */
     private $endAt;
 
@@ -50,6 +73,20 @@ class Contract
      * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     private $supplier;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractTopService", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $topServices;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractAttachment", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $attachments;
 
     /**
      * @var \DateTime
@@ -67,6 +104,14 @@ class Contract
      */
     private $updatedAt;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->topServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -100,6 +145,30 @@ class Contract
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set signedAt
+     *
+     * @param \DateTime $signedAt
+     *
+     * @return Contract
+     */
+    public function setSignedAt($signedAt)
+    {
+        $this->signedAt = $signedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get signedAt
+     *
+     * @return \DateTime
+     */
+    public function getSignedAt()
+    {
+        return $this->signedAt;
     }
 
     /**
@@ -220,5 +289,125 @@ class Contract
     public function getSupplier()
     {
         return $this->supplier;
+    }
+    
+    /**
+     * Add topService
+     *
+     * @param \AppBundle\Entity\ContractTopService $topService
+     *
+     * @return Contract
+     */
+    public function addTopService(\AppBundle\Entity\ContractTopService $topService)
+    {
+        $this->topServices[] = $topService;
+
+        $topService->setContract($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove topService
+     *
+     * @param \AppBundle\Entity\ContractTopService $topService
+     */
+    public function removeTopService(\AppBundle\Entity\ContractTopService $topService)
+    {
+        $this->topServices->removeElement($topService);
+    }
+
+    /**
+     * Get topServices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTopServices()
+    {
+        return $this->topServices;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Contract
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return Contract
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Add attachment
+     *
+     * @param \AppBundle\Entity\ContractAttachment $attachment
+     *
+     * @return Contract
+     */
+    public function addAttachment(\AppBundle\Entity\ContractAttachment $attachment)
+    {
+        $this->attachments[] = $attachment;
+
+        $attachment->setContract($this);
+        
+        return $this;
+    }
+
+    /**
+     * Remove attachment
+     *
+     * @param \AppBundle\Entity\ContractAttachment $attachment
+     */
+    public function removeAttachment(\AppBundle\Entity\ContractAttachment $attachment)
+    {
+        $this->attachments->removeElement($attachment);
+    }
+
+    /**
+     * Get attachments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
     }
 }

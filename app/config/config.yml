@@ -98,10 +98,16 @@ oneup_flysystem:
         users_adapter:
             local:
                 directory: %kernel.root_dir%/../web/uploads/users/images
+        contract_attachments:
+            local:
+                directory: %kernel.root_dir%/../web/uploads/contracts/attachments
     filesystems:
         users_images_fs:
             adapter: users_adapter
             mount: users_images_fs
+        contract_attachments_fs:
+            adapter: contract_attachments
+            mount: contract_attachments_fs
 
 vich_uploader:
     db_driver:  orm
@@ -110,4 +116,6 @@ vich_uploader:
         users_images:
             uri_prefix:         /uploads/users/images
             upload_destination: users_images_fs
-
+        contract_attachments:
+            uri_prefix:         /uploads/contracts/attachments
+            upload_destination: contract_attachments_fs

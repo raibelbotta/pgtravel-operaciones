@@ -1,0 +1,84 @@
+{% form_theme form 'Contracts/fields.html.twig' %}
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Identification info'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.supplier, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Dates info'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="form-group col-sm-4 col-xs-12">
+            {{ form_label(form.signedAt, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.signedAt, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-sm-4 col-xs-12">
+            {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.startAt, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-sm-4 col-xs-12">
+            {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.endAt, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Adittional info'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group col-xs-12 col-sm-6">
+            {{ form_label(form.notes, null, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Top services'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="collection" id="topservices" data-prototype="{{ form_row(form.topServices.vars.prototype)|e }}">
+            {{ form_row(form.topServices) }}
+        </div>
+        <div class="clearfix"></div>
+        <div class="pull-right">
+            <button type="button" class="btn btn-info btn-xs btn-add-item" title="{{ 'Add service'|trans }}"><i class="fa fa-plus-circle"></i></button>
+        </div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Attachments'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="collection" id="attachments" data-prototype="{{ form_row(form.attachments.vars.prototype)|e }}">
+            {{ form_row(form.attachments) }}
+        </div>
+        <div class="clearfix"></div>
+        <div class="pull-right">
+            <button type="button" class="btn btn-info btn-xs btn-add-item" title="{{ 'Add attachment'|trans }}"><i class="fa fa-plus-circle"></i></button>
+        </div>
+    </div>
+</div>

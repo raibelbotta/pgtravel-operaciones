@@ -16,37 +16,5 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            +(function() {
-                $('#contract').validate({
-                    errorPlacement: function(error, element) {
-                        if (!element.data('tooltipster-ns')) {
-                            element.tooltipster({
-                                trigger: 'custom',
-                                onlyOne: false,
-                                position: 'bottom-left',
-                                positionTracker: true
-                            });
-                        }
-                        element.tooltipster('update', $(error).text());
-                        element.tooltipster('show');
-                    },
-                    success: function (label, element) {
-                        $(element).tooltipster('hide');
-                    }
-                });
-            }());
-
-            +(function() {
-                var clickRemoveItem = function(event) {
-                    event.preventDefault();
-
-                    $(this).closest('.item').remove();
-                }
-
-                $('.btn-remove').on('click', clickRemoveItem);
-            }());
-        });
-    </script>
+    <script src="{{ asset('js/form-contract.js') }}"></script>
 {% endblock %}

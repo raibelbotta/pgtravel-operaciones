@@ -30,6 +30,27 @@ class Supplier
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="postal_address", type="text", nullable=true)
+     */
+    private $postalAddress;
+
+    /**
+     * @var \Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+     *
+     * @ORM\Column(name="fixed_phone", type="phone_number", nullable=true)
+     */
+    private $fixedPhone;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SupplierEmployee", mappedBy="supplier", cascade={"persist", "remove"})
+     */
+    private $employees;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Contract", mappedBy="supplier")
@@ -179,5 +200,87 @@ class Supplier
     public function getContracts()
     {
         return $this->contracts;
+    }
+
+    /**
+     * Set postalAddress
+     *
+     * @param string $postalAddress
+     *
+     * @return Supplier
+     */
+    public function setPostalAddress($postalAddress)
+    {
+        $this->postalAddress = $postalAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get postalAddress
+     *
+     * @return string
+     */
+    public function getPostalAddress()
+    {
+        return $this->postalAddress;
+    }
+
+    /**
+     * Set fixedPhone
+     *
+     * @param phone_number $fixedPhone
+     *
+     * @return Supplier
+     */
+    public function setFixedPhone($fixedPhone)
+    {
+        $this->fixedPhone = $fixedPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get fixedPhone
+     *
+     * @return phone_number
+     */
+    public function getFixedPhone()
+    {
+        return $this->fixedPhone;
+    }
+
+    /**
+     * Add employee
+     *
+     * @param \AppBundle\Entity\SupplierEmployee $employee
+     *
+     * @return Supplier
+     */
+    public function addEmployee(\AppBundle\Entity\SupplierEmployee $employee)
+    {
+        $this->employees[] = $employee;
+
+        return $this;
+    }
+
+    /**
+     * Remove employee
+     *
+     * @param \AppBundle\Entity\SupplierEmployee $employee
+     */
+    public function removeEmployee(\AppBundle\Entity\SupplierEmployee $employee)
+    {
+        $this->employees->removeElement($employee);
+    }
+
+    /**
+     * Get employees
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
     }
 }

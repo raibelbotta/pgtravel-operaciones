@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Oneup\FlysystemBundle\OneupFlysystemBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
 
             new AppBundle\AppBundle(),
         );

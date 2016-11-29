@@ -26,6 +26,14 @@ class Contract
     /**
      * @var string
      *
+     * @ORM\Column(name="model", type="string", length=100)
+     * @Assert\Regex("/hotel/")
+     */
+    private $model;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255)
      * @Assert\NotBlank
      */
@@ -37,6 +45,13 @@ class Contract
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="extra_conditions", type="text", nullable=true)
+     */
+    private $extraConditions;
 
     /**
      * @var string
@@ -89,6 +104,13 @@ class Contract
     private $attachments;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractFacility", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $facilities;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -111,16 +133,41 @@ class Contract
     {
         $this->topServices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hotelFacilities = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set model
+     *
+     * @param string $model
+     *
+     * @return Contract
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get model
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 
     /**
@@ -145,6 +192,54 @@ class Contract
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Contract
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return Contract
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 
     /**
@@ -290,7 +385,7 @@ class Contract
     {
         return $this->supplier;
     }
-    
+
     /**
      * Add topService
      *
@@ -301,8 +396,6 @@ class Contract
     public function addTopService(\AppBundle\Entity\ContractTopService $topService)
     {
         $this->topServices[] = $topService;
-
-        $topService->setContract($this);
 
         return $this;
     }
@@ -325,54 +418,6 @@ class Contract
     public function getTopServices()
     {
         return $this->topServices;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Contract
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set notes
-     *
-     * @param string $notes
-     *
-     * @return Contract
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-
-        return $this;
-    }
-
-    /**
-     * Get notes
-     *
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
     }
 
     /**
@@ -409,5 +454,65 @@ class Contract
     public function getAttachments()
     {
         return $this->attachments;
+    }
+
+    /**
+     * Add facility
+     *
+     * @param \AppBundle\Entity\ContractFacility $facility
+     *
+     * @return Contract
+     */
+    public function addFacility(\AppBundle\Entity\ContractFacility $facility)
+    {
+        $this->facilities[] = $facility;
+
+        $facility->setContract($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove facility
+     *
+     * @param \AppBundle\Entity\ContractFacility $facility
+     */
+    public function removeFacility(\AppBundle\Entity\ContractFacility $facility)
+    {
+        $this->facilities->removeElement($facility);
+    }
+
+    /**
+     * Get facilities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacilities()
+    {
+        return $this->facilities;
+    }
+
+    /**
+     * Set extraConditions
+     *
+     * @param string $extraConditions
+     *
+     * @return Contract
+     */
+    public function setExtraConditions($extraConditions)
+    {
+        $this->extraConditions = $extraConditions;
+
+        return $this;
+    }
+
+    /**
+     * Get extraConditions
+     *
+     * @return string
+     */
+    public function getExtraConditions()
+    {
+        return $this->extraConditions;
     }
 }

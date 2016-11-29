@@ -93,14 +93,9 @@ class ContractsController extends Controller
                 $record->getSignedAt() ? $record->getSignedAt()->format('Y-m-d') : '',
                 $record->getStartAt() ? $record->getStartAt()->format('Y-m-d') : '',
                 $record->getEndAt() ? $record->getEndAt()->format('Y-m-d') : '',
-                sprintf('<div class="btn-group">%s%s</div>',
-                    sprintf('<a href="%s" title="%s" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>',
-                            $this->generateUrl('app_contracts_edit', array('id' => $record->getId())),
-                            $translator->trans('Edit')),
-                    sprintf('<a href="%s" title="%s" class="btn btn-danger btn-xs btn-delete"><i class="fa fa-remove"></i></a>',
-                        $this->generateUrl('app_suppliers_delete', array('id' => $record->getId())),
-                        $translator->trans('Delete'))
-                )
+                $this->renderView('Contracts/_actions.html.twig', array(
+                    'record' => $record
+                ))
             );
         }, $list);
 
@@ -141,7 +136,7 @@ class ContractsController extends Controller
     }
 
     /**
-     * @Route("/{id}/edit")
+     * @Route("/{id}/edit", requirements={"id": "\d+"})
      * @Method({"get", "post"})
      * @ParamConverter("record", class="AppBundle\Entity\Contract")
      * @param Request $request
@@ -161,6 +156,16 @@ class ContractsController extends Controller
             $originalAttachments->add($attachment);
         }
 
+        $originalFacilities = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalRooms = array();
+        foreach ($record->getFacilities() as $facility) {
+            $originalFacilities[] = $facility;
+            $originalRooms[$facility->getId()] = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($facility->getRooms() as $room) {
+                $originalRooms[$facility->getId()][] = $room;
+            }
+        }
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -178,6 +183,20 @@ class ContractsController extends Controller
                 }
             }
 
+            foreach ($originalFacilities as $facility) {
+                if (false === $record->getFacilities()->contains($facility)) {
+                    $record->getFacilities()->removeElement($facility);
+                    $em->remove($facility);
+                } else {
+                    foreach ($originalRooms[$facility->getId()] as $room) {
+                        if (false === $facility->getRooms()->contains($room)) {
+                            $facility->getRooms()->removeElement($room);
+                            $em->remove($room);
+                        }
+                    }
+                }
+            }
+
             $em->flush();
 
             $translator = $this->container->get('translator');
@@ -188,6 +207,38 @@ class ContractsController extends Controller
         
         return $this->render('Contracts/edit.html.twig', array(
             'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/{id}/prices", requirements={"id": "\d+"})
+     * @ParamConverter("record", class="AppBundle\Entity\Contract")
+     * @Method({"get", "post"})
+     * @param Contract $record
+     * @param Request $request
+     * @return Response
+     */
+    public function pricesAction(Contract $record, Request $request)
+    {
+        return $this->render('Contracts/prices.html.twig', array('record' => $record));
+    }
+
+    /**
+     * @Route("/{id}/delete", requirements={"id": "\d+"})
+     * @Method({"post"})
+     * @ParamConverter("record", class="AppBundle\Entity\Contract")
+     * @param Contract $record
+     * @return JsonResponse
+     */
+    public function deleteAction(Contract $record)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($record);
+        $em->flush();
+
+        return new JsonResponse(array(
+            'result' => 'success'
         ));
     }
 }

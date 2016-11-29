@@ -1,3 +1,96 @@
+$(document).ready(function() {
+    +(function() {
+        $.fn.datepicker.defaults.autoclose = true;
+        $.fn.datepicker.defaults.format = 'dd/mm/yyyy';
+    }());
+
+    /**
+     * Chnage password modal script
+     */
+    +(function(){
+        $('#modalPassword button[type=button]:last').hide().on('click', function() {
+            $('#modalPassword form').submit();
+        });
+        
+        $.validator.addMethod('validpassword', function(value, element) {
+            return this.optional(element) || (/[A-Z]/.test(value) && /[0-9]/.test(value) && /[a-z]/.test(value) && value.length > 7);
+        }, 'Password strength is too low (include letters, capital letters and digits)');
+
+        $('#linkChangePassword').on('click', function(event) {
+            event.preventDefault();
+
+            $('#modalPassword').modal().on('hide.bs.modal', function(){
+                $(this).find('form').remove();
+            });
+            $('#modalPassword .modal-body').empty().load(app_user_changepassword_url, function() {
+                $('#modalPassword form').validate({
+                    messages: {
+                        'form[current_password]': {
+                            remote: 'Wrong password'
+                        }
+                    },
+                    rules: {
+                        'form[current_password]': {
+                            remote: {
+                                url: app_user_checkpassword_url,
+                                type: 'post',
+                                data: {
+                                    password: function() {
+                                        return $('#form_current_password').val();
+                                    }
+                                }
+                            }
+                        },
+                        'form[plainPassword][first]': 'validpassword',
+                        'form[plainPassword][second]': {
+                            equalTo: '#form_plainPassword_first'
+                        }
+                    },
+                    errorPlacement: function(error, element) {
+                        if (!element.data('tooltipster-ns')) {
+                            element.tooltipster({
+                                trigger: 'custom',
+                                onlyOne: false,
+                                position: 'bottom-left',
+                                positionTracker: true
+                            });
+                        }
+                        element.tooltipster('update', $(error).text());
+                        element.tooltipster('show');
+                    },
+                    success: function (label, element) {
+                        $(element).tooltipster('hide');
+                    },
+                    submitHandler: function() {
+                        $('#modalPassword form').ajaxSubmit({
+                            dataType: 'json',
+                            beforeSubmit: function() {
+                                $('#modalPassword button[type=button]:last').hide();
+                            },
+                            success: function(json) {
+                                if (json.result == 'success') {
+                                    $('#modalPassword .modal-body').empty().append($('<div/>').addClass('alert alert-success').text('Password changed successfully!'));
+                                } else {
+                                    $('#modalPassword .modal-body').empty().append($('<div/>').addClass('alert alert-warning').text('Password coold not be changed.'));
+                                }
+                                $('#modalPassword button[type=button]:first').text('Close');
+                            }
+                        });
+                    }
+                })
+                $('#modalPassword button[type=button]').show();
+            });
+        });
+    }());
+    
+    /**
+     * Elements with attribute title
+     */
+    +(function() {
+        $('[title]').tooltipster({theme: 'tooltipster-shadow'});
+    }());
+});
+
 /**
  * Resize function without multiple trigger
  * 

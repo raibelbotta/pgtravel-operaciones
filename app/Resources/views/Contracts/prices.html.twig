@@ -1,0 +1,63 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ record.name }} <small>{{ 'prices'|trans }}</small></h3>
+        </div>
+    </div>
+
+    <form id="prices" action="" method="post" role="form">
+        {% for facility in record.facilities %}
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ facility }}</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">{{ 'Room'|trans }}</th>
+                                <th rowspan="2">{{ 'Plan'|trans }}</th>
+                                {% for season in facility.seasons %}
+                                    <th class="text-center" colspan="4">{% trans with {'%from%': season.fromDate|date('d/m/Y'), '%to%': season.toDate|date('d/m/Y')} %}%%from%% to %%to%%{% endtrans %}</th>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                {% for season in facility.seasons %}
+                                    {% for cupo in ['Single', 'Double', 'Triple', '4th'] %}
+                                        <th class="text-center">{{ cupo }}</th>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for room in facility.rooms %}
+                                <tr>
+                                    <td{% if facility.activePlans|length > 1 %} rowspan="{{ facility.activePlans|length }}"{% endif %}>{{ room }}</td>
+                                    <td>{{ facility.activePlans|first }}</td>
+                                    {% for season in facility.seasons %}
+                                        {% for cupo in ['Single', 'Double', 'Triple', '4th'] %}
+                                            <td><input type="text" class="form-control input-sm"></td>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            {% for plan in facility.activePlans|slice(1) %}
+                                <tr>
+                                    <td>{{ plan }}</td>
+                                    {% for season in facility.seasons %}
+                                        {% for cupo in ['Single', 'Double', 'Triple', '4th'] %}
+                                            <td><input type="text" class="form-control input-sm"></td>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </form>
+{% endblock %}

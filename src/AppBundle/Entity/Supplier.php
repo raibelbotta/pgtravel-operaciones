@@ -261,6 +261,8 @@ class Supplier
     {
         $this->employees[] = $employee;
 
+        $employee->setSupplier($this);
+        
         return $this;
     }
 

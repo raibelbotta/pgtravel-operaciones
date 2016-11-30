@@ -11,14 +11,17 @@
         <div class="form-group col-xs-12 col-sm-4">
             {{ form_label(form.model, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.model, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.model) }}
         </div>
         <div class="form-group col-xs-12 col-sm-4">
             {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.name) }}
         </div>
         <div class="form-group col-xs-12 col-sm-4">
             {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.supplier, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.supplier) }}
         </div>
     </div>
 </div>
@@ -32,14 +35,17 @@
             <div class="form-group col-sm-4 col-xs-12">
                 {{ form_label(form.signedAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.signedAt, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.signedAt) }}
             </div>
             <div class="form-group col-sm-4 col-xs-12">
                 {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.startAt, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.startAt) }}
             </div>
             <div class="form-group col-sm-4 col-xs-12">
                 {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.endAt, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.endAt) }}
             </div>
         </div>
     </div>
@@ -53,14 +59,17 @@
         <div class="form-group col-xs-12 col-sm-6">
             {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
         </div>
         <div class="form-group col-xs-12 col-sm-6">
             {{ form_label(form.notes, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.notes) }}
         </div>
         <div class="form-group col-xs-12">
             {{ form_label(form.extraConditions, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.extraConditions) }}
+            {{ form_errors(form.extraConditions) }}
         </div>
     </div>
 </div>
@@ -94,7 +103,7 @@
         </div>
     </div>
 </div>
-<div class="x_panel visible-condition visible-condition-hotel">
+<div class="x_panel visible-condition visible-condition-hotel"{% if form.vars.data.model != 'hotel' %} style="display: none;"{% endif %}>
     <div class="x_title">
         <h2>{{ 'Facilities'|trans }}</h2>
         <div class="clearfix"></div>

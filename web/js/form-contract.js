@@ -95,9 +95,15 @@ $(document).ready(function() {
                 updateContainerIndexes($item);
              }
 
+             if ($item.hasClass('item-top-service')) {
+                $item.datepicker({
+                    inputs: $container.find('input:text.datepicker').toArray()
+                });
+             }
+
              if ($item.hasClass('input-daterange')) {
                 $item.datepicker({
-                    inputs: $item.find('input:text').toArray()
+                    inputs: $item.find('input:text.daterange').toArray()
                 });
                 $item.find('input:text:first').on('change', function() {
                     $(this).closest('.item').find('input:text:last').datepicker('setDate', $(this).val());
@@ -155,6 +161,12 @@ $(document).ready(function() {
 
         updateContainerIndexes();
 
+        $('.collection-topservices .input-daterange').each(function() {
+            var $container = $(this);
+            $container.datepicker({
+                inputs: $container.find('input:text.datepicker').toArray()
+            });
+        })
         $('.collection-sessions .input-daterange').each(function() {
             var $container = $(this);
             $container.datepicker({

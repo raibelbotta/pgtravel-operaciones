@@ -27,7 +27,7 @@ class Contract
      * @var string
      *
      * @ORM\Column(name="model", type="string", length=100)
-     * @Assert\Regex("/hotel/")
+     * @Assert\Regex("/hotel|taxi/")
      */
     private $model;
 
@@ -396,6 +396,8 @@ class Contract
     public function addTopService(\AppBundle\Entity\ContractTopService $topService)
     {
         $this->topServices[] = $topService;
+
+        $topService->setContract($this);
 
         return $this;
     }

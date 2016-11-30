@@ -136,7 +136,7 @@ class SuppliersController extends Controller
     }
 
     /**
-     * @Route("/{{id}/edit", requirements={"id": "\d+"})
+     * @Route("/{id}/edit", requirements={"id": "\d+"})
      * @Method({"get", "post"})
      * @ParamConverter("record", class="AppBundle\Entity\Supplier")
      * @param Supplier $record
@@ -147,9 +147,21 @@ class SuppliersController extends Controller
     {
         $form = $this->createForm(SupplierFormType::class, $record);
 
+        $originalEmployees = new \Doctrine\Common\Collections\ArrayCollection();
+        foreach ($record->getEmployees() as $employee) {
+            $originalEmployees[] = $employee;
+        }
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            foreach ($originalEmployees as $employee) {
+                if (false === $record->getEmployees()->contains($employee)) {
+                    $em->remove($employee);
+                }
+            }
+            
             $em->flush();
 
             $translator = $this->container->get('translator');

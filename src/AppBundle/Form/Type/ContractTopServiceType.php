@@ -23,12 +23,16 @@ class ContractTopServiceType extends AbstractType
                     'required' => false
                 ))
                 ->add('startAt', null, array(
+                    'format'    => 'dd/MM/yyyy',
                     'html5'     => false,
-                    'widget'    => 'single_text'
+                    'widget'    => 'single_text',
+                    'required'  => false
                 ))
                 ->add('endAt', null, array(
+                    'format'    => 'dd/MM/yyyy',
                     'html5'     => false,
-                    'widget'    => 'single_text'
+                    'widget'    => 'single_text',
+                    'required'  => false
                 ))
                 ->add('notes', TextareaType::class, array(
                     'required' => false

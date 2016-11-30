@@ -7,8 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 /**
@@ -33,17 +31,20 @@ class ContractFormType extends AbstractType
                 ->add('signedAt', null, array(
                     'format'    => 'dd/MM/yyyy',
                     'html5'     => false,
-                    'widget'    => 'single_text'
+                    'widget'    => 'single_text',
+                    'required'  => false
                 ))
                 ->add('startAt', null, array(
                     'format'    => 'dd/MM/yyyy',
                     'html5'     => false,
-                    'widget'    => 'single_text'
+                    'widget'    => 'single_text',
+                    'required'  => false
                 ))
                 ->add('endAt', null, array(
                     'format'    => 'dd/MM/yyyy',
                     'html5'     => false,
-                    'widget'    => 'single_text'
+                    'widget'    => 'single_text',
+                    'required'  => false
                 ))
                 ->add('extraConditions', CKEditorType::class, array(
                     'required' => false

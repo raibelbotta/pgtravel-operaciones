@@ -1,95 +1,214 @@
-$(document).ready(function() {
-    +(function() {
-        $.fn.datepicker.defaults.autoclose = true;
-        $.fn.datepicker.defaults.format = 'dd/mm/yyyy';
-    }());
+App = {
+    Main: function() {
+        var initDatepicker = function() {
+            $.fn.datepicker.defaults.autoclose = true;
+            $.fn.datepicker.defaults.format = 'dd/mm/yyyy';
+        }
 
-    /**
-     * Chnage password modal script
-     */
-    +(function(){
-        $('#modalPassword button[type=button]:last').hide().on('click', function() {
-            $('#modalPassword form').submit();
-        });
-        
-        $.validator.addMethod('validpassword', function(value, element) {
-            return this.optional(element) || (/[A-Z]/.test(value) && /[0-9]/.test(value) && /[a-z]/.test(value) && value.length > 7);
-        }, 'Password strength is too low (include letters, capital letters and digits)');
+        var initTooltipster = function() {
+            $('[title]').tooltipster({theme: 'tooltipster-shadow'});
+        }
 
-        $('#linkChangePassword').on('click', function(event) {
-            event.preventDefault();
-
-            $('#modalPassword').modal().on('hide.bs.modal', function(){
-                $(this).find('form').remove();
+        var initPasswordModal = function() {
+            $('#modalPassword button[type=button]:last').hide().on('click', function() {
+                $('#modalPassword form').submit();
             });
-            $('#modalPassword .modal-body').empty().load(app_user_changepassword_url, function() {
-                $('#modalPassword form').validate({
-                    messages: {
-                        'form[current_password]': {
-                            remote: 'Wrong password'
-                        }
-                    },
-                    rules: {
-                        'form[current_password]': {
-                            remote: {
-                                url: app_user_checkpassword_url,
-                                type: 'post',
-                                data: {
-                                    password: function() {
-                                        return $('#form_current_password').val();
-                                    }
-                                }
+            
+            $.validator.addMethod('validpassword', function(value, element) {
+                return this.optional(element) || (/[A-Z]/.test(value) && /[0-9]/.test(value) && /[a-z]/.test(value) && value.length > 7);
+            }, 'Password strength is too low (include letters, capital letters and digits)');
+
+            $('#linkChangePassword').on('click', function(event) {
+                event.preventDefault();
+
+                $('#modalPassword').modal().on('hide.bs.modal', function(){
+                    $(this).find('form').remove();
+                });
+                $('#modalPassword .modal-body').empty().load(app_user_changepassword_url, function() {
+                    $('#modalPassword form').validate({
+                        messages: {
+                            'form[current_password]': {
+                                remote: 'Wrong password'
                             }
                         },
-                        'form[plainPassword][first]': 'validpassword',
-                        'form[plainPassword][second]': {
-                            equalTo: '#form_plainPassword_first'
-                        }
-                    },
-                    errorPlacement: function(error, element) {
-                        if (!element.data('tooltipster-ns')) {
-                            element.tooltipster({
-                                trigger: 'custom',
-                                onlyOne: false,
-                                position: 'bottom-left',
-                                positionTracker: true
+                        rules: {
+                            'form[current_password]': {
+                                remote: {
+                                    url: app_user_checkpassword_url,
+                                    type: 'post',
+                                    data: {
+                                        password: function() {
+                                            return $('#form_current_password').val();
+                                        }
+                                    }
+                                }
+                            },
+                            'form[plainPassword][first]': 'validpassword',
+                            'form[plainPassword][second]': {
+                                equalTo: '#form_plainPassword_first'
+                            }
+                        },
+                        errorPlacement: function(error, element) {
+                            if (!element.data('tooltipster-ns')) {
+                                element.tooltipster({
+                                    trigger: 'custom',
+                                    onlyOne: false,
+                                    position: 'bottom-left',
+                                    positionTracker: true
+                                });
+                            }
+                            element.tooltipster('update', $(error).text());
+                            element.tooltipster('show');
+                        },
+                        success: function (label, element) {
+                            $(element).tooltipster('hide');
+                        },
+                        submitHandler: function() {
+                            $('#modalPassword form').ajaxSubmit({
+                                dataType: 'json',
+                                beforeSubmit: function() {
+                                    $('#modalPassword button[type=button]:last').hide();
+                                },
+                                success: function(json) {
+                                    if (json.result == 'success') {
+                                        $('#modalPassword .modal-body').empty().append($('<div/>').addClass('alert alert-success').text('Password changed successfully!'));
+                                    } else {
+                                        $('#modalPassword .modal-body').empty().append($('<div/>').addClass('alert alert-warning').text('Password coold not be changed.'));
+                                    }
+                                    $('#modalPassword button[type=button]:first').text('Close');
+                                }
                             });
                         }
-                        element.tooltipster('update', $(error).text());
-                        element.tooltipster('show');
+                    })
+                    $('#modalPassword button[type=button]').show();
+                });
+            });
+        }
+
+        return {
+            init: function() {
+                initTooltipster();
+                initDatepicker();
+                initPasswordModal();
+            }
+        }
+    }(),
+
+    Forms: function() {
+        var initCollectionControls = function() {
+            var clickRemoveItem = function(event) {
+                event.preventDefault();
+
+                $(this).closest('.item').remove();
+            }
+
+            var clickAddItem = function(event) {
+                var $container = $(this).parent().parent().find('.collection:first'),
+                    prototype = $container.data('prototype'),
+                    index = $container.data('index');
+
+                if ($container.length == 0 || typeof prototype == 'undefined' || typeof index == 'undefined') {
+                    return;
+                }
+
+                var $item = $(prototype.replace(/__name__/g, index));
+
+                 $container.data('index', index + 1);
+                 $container.append($item);
+
+                 $($item.find('input:text:visible, select:visible, textarea:visible')[0]).focus();
+
+                 $container.trigger('item-added.app', {
+                    index: index,
+                    item: $item
+                 });
+            }
+
+            $('body').on('click', '.btn-add-item', clickAddItem);
+            $('body').on('click', '.btn-remove-item', clickRemoveItem);
+
+            $('.collection').each(function() {
+                var $container = $(this);
+                $container.data('index', $container.find('>.item').length);
+            });
+        }
+
+        return {
+            init: function() {
+                initCollectionControls();
+            }
+        }
+    }(),
+    
+    FormSupplier: function() {
+        var initControls = function() {
+            $('form#supplier input[type=tel]').intlTelInput({
+                allowExtensions: true,
+                autoFormat: false,
+                autoHideDialCode: true,
+                autoPlaceholder: false,
+                defaultCountry: 'auto',
+                geoIpLookup: function(callback) {
+                    $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                        var countryCode = (resp && resp.country) ? resp.country : '';
+                        callback(countryCode);
+                    });
+                },
+                nationalMode: false,
+                numberType: 'MOBILE',
+                preferredCountries: ['cu'],
+                utilsScript: '/plugins/intl-tel-input/js/utils.js'
+            });
+
+            $('form#supplier .collection-employees').on('item-added.app', function(event, data) {
+                $(data.item).find('input[type=tel]').intlTelInput({
+                    allowExtensions: true,
+                    autoFormat: false,
+                    autoHideDialCode: true,
+                    autoPlaceholder: false,
+                    defaultCountry: 'auto',
+                    geoIpLookup: function(callback) {
+                        $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                            var countryCode = (resp && resp.country) ? resp.country : '';
+                            callback(countryCode);
+                        });
                     },
-                    success: function (label, element) {
-                        $(element).tooltipster('hide');
-                    },
-                    submitHandler: function() {
-                        $('#modalPassword form').ajaxSubmit({
-                            dataType: 'json',
-                            beforeSubmit: function() {
-                                $('#modalPassword button[type=button]:last').hide();
-                            },
-                            success: function(json) {
-                                if (json.result == 'success') {
-                                    $('#modalPassword .modal-body').empty().append($('<div/>').addClass('alert alert-success').text('Password changed successfully!'));
-                                } else {
-                                    $('#modalPassword .modal-body').empty().append($('<div/>').addClass('alert alert-warning').text('Password coold not be changed.'));
-                                }
-                                $('#modalPassword button[type=button]:first').text('Close');
-                            }
+                    nationalMode: false,
+                    numberType: 'MOBILE',
+                    preferredCountries: ['cu'],
+                    utilsScript: '/plugins/intl-tel-input/js/utils.js'
+                });
+            });
+        }
+
+        var initValidator = function() {
+            $('#supplier').validate({
+                errorPlacement: function(error, element) {
+                    if (!element.data('tooltipster-ns')) {
+                        element.tooltipster({
+                            trigger: 'custom',
+                            onlyOne: false,
+                            position: 'bottom-left',
+                            positionTracker: true
                         });
                     }
-                })
-                $('#modalPassword button[type=button]').show();
+                    element.tooltipster('update', $(error).text());
+                    element.tooltipster('show');
+                },
+                success: function (label, element) {
+                    $(element).tooltipster('hide');
+                }
             });
-        });
-    }());
-    
-    /**
-     * Elements with attribute title
-     */
-    +(function() {
-        $('[title]').tooltipster({theme: 'tooltipster-shadow'});
-    }());
-});
+        };
+
+        return {
+            init: function() {
+                initControls();
+                initValidator();
+            }
+        }
+    }()
+};
 
 /**
  * Resize function without multiple trigger

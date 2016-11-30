@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap-timepicker/bootstrap-timepicker.css') }}">
 
+    <!-- intl-tel-input -->
+    <link rel="stylesheet" href="{{ asset('plugins/intl-tel-input/css/intlTelInput.min.css') }}">
+
     {% block page_stylesheets %}{% endblock %}
 
     <!-- Custom Theme Style -->
@@ -332,6 +335,9 @@
     <script src="{{ asset('plugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-timepicker/bootstrap-timepicker.js') }}"></script>
 
+    <!-- intl-tel-input -->
+    <script src="{{ asset('plugins/intl-tel-input/js/intlTelInput.min.js') }}"></script>
+
     <script type="text/javascript">
         app_user_changepassword_url = '{{ path('app_user_changepassword') }}';
         app_user_checkpassword_url = '{{ path('app_user_checkpassword') }}';
@@ -339,6 +345,11 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('js/custom.min.js') }}"></script>
-    
+    <script>
+        $(document).ready(function() {
+            App.Main.init();
+        });
+    </script>
+
     {% block page_javascripts %}{% endblock %}
 {% endblock %}

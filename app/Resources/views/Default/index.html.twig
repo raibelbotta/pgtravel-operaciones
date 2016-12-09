@@ -1,1 +1,25 @@
 {% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="title_left">
+        <h3>{{ 'Operations calendar'}} <small>{{ 'click to view'|trans }}</small></h3>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div id="calendar"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+
+            });
+        });
+    </script>
+{% endblock %}

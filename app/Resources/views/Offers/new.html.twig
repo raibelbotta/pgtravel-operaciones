@@ -1,0 +1,39 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Offers'|trans }} <span>{{ 'new'|trans }}</span></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{ form_start(form, {'attr': {'role': 'form'}}) }}
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{{ 'Client'|trans }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                {{ form_label(form.client, null, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
+                                <a href="#" class="btn btn-xs bg-primary" style="position: absolute; top: 0; right: 0;" title="{{ 'Add direct client'|trans }}">
+                                    <i class="fa fa-plus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content"></div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

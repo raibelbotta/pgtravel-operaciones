@@ -85,7 +85,7 @@ class ContractsController extends Controller
         }
 
         $translator = $this->container->get('translator');
-        $data = array_map(function($record) use($translator) {
+        $data = array_map(function($record) {
             return array(
                 '<input type="checkbox" class="flat">',
                 $record->getName(),

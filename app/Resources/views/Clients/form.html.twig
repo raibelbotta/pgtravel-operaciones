@@ -1,0 +1,43 @@
+{% form_theme form 'Clients/fields.html.twig' %}
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Identification info'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="row">
+            <div class="form-group">
+                {{ form_label(form.fullName, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                <div class="col-sm-6 col-xs-12">
+                    {{ form_widget(form.fullName, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.fixedPhone, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                <div class="col-sm-6 col-xs-12">
+                    {{ form_widget(form.fixedPhone, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                <div class="col-sm-6 col-xs-12">
+                    {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Contacts'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        {{ form_row(form.contacts) }}
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary btn-xs btn-add-item" title="{{ 'Add item'|trans }}"><i class="fa fa-plus-circle"></i></button>
+        </div>
+    </div>
+</div>

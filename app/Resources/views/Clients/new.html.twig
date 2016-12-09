@@ -1,0 +1,105 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Clients'|trans }} <small>{{ 'new'|trans }}</small></h3>
+        </div>
+    </div>
+    {{ form_start(form, {'attr': {'role': 'form', 'id': 'client', 'class': 'form-horizontal'}}) }}
+        {{ include('Clients/form.html.twig') }}
+        <div class="pull-right">
+            <a href="{{ path('app_clients_index') }}" class="btn btn-default">{{ 'Cancel'|trans }}</a>
+            <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            +(function() {
+                $('.collection').each(function() {
+                    var $container = $(this),
+                        index = $container.find('> .item').length;
+                    $container.data('index', index);
+                });
+
+                $('body').on('click', '.btn-add-item', function(event) {
+                    event.preventDefault();
+
+                    var $container = $(this).parent().parent().find('.collection'),
+                        prototype = $container.data('prototype'),
+                        index = $container.data('index'),
+                        $item = $(prototype.replace(/__name__/g, index));
+
+                    $container.append($item);
+
+                    $container.data('index', index + 1);
+
+                    $item.find('input[type=tel]').intlTelInput({
+                        allowExtensions: true,
+                        autoFormat: false,
+                        autoHideDialCode: true,
+                        autoPlaceholder: false,
+                        defaultCountry: 'auto',
+                        geoIpLookup: function(callback) {
+                            $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                                var countryCode = (resp && resp.country) ? resp.country : '';
+                                callback(countryCode);
+                            });
+                        },
+                        nationalMode: false,
+                        numberType: 'MOBILE',
+                        preferredCountries: ['cu'],
+                        utilsScript: '{{ asset('plugins/intl-tel-input/js/utils.js') }}'
+                    });
+                });
+
+                $('body').on('click', '.btn-delete-item', function(event) {
+                    event.preventDefault();
+
+                    $(this).closest('.item').fadeOut(function() {
+                        $(this).remove();
+                    });
+                });
+            }());
+
+            $('input[type=tel]').intlTelInput({
+                allowExtensions: true,
+                autoFormat: false,
+                autoHideDialCode: true,
+                autoPlaceholder: false,
+                defaultCountry: 'auto',
+                geoIpLookup: function(callback) {
+                    $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                        var countryCode = (resp && resp.country) ? resp.country : '';
+                        callback(countryCode);
+                    });
+                },
+                nationalMode: false,
+                numberType: 'MOBILE',
+                preferredCountries: ['cu'],
+                utilsScript: '{{ asset('plugins/intl-tel-input/js/utils.js') }}'
+            });
+
+            $('form#client').validate({
+                errorPlacement: function(error, element) {
+                    if (!element.data('tooltipster-ns')) {
+                        element.tooltipster({
+                            trigger: 'custom',
+                            onlyOne: false,
+                            position: 'bottom-left',
+                            positionTracker: true
+                        });
+                    }
+                    element.tooltipster('update', $(error).text());
+                    element.tooltipster('show');
+                },
+                success: function (label, element) {
+                    $(element).tooltipster('hide');
+                }
+            });
+        });
+    </script>
+{% endblock %}

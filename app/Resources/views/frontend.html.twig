@@ -80,9 +80,9 @@
                                     <li>
                                         <a><i class="fa fa-cogs"></i> {{ 'Administration'|trans }} <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
+                                            <li><a href="{{ path('app_clients_index') }}">{{ 'Clients'|trans }}</a></li>
                                             <li><a href="{{ path('app_suppliers_index') }}">{{ 'Suppliers'|trans }}</a></li>
                                             <li><a href="{{ path('app_contracts_index') }}">{{ 'Contracts'|trans }}</a></li>
-                                            <li><a href="{{ path('app_clients_index') }}">{{ 'Clients'|trans }}</a></li>
                                             {% if is_granted('ROLE_SUPER_ADMIN') %}
                                                 <li><a href="{{ path('app_users_index') }}">{{ 'Users'|trans }}</a></li>
                                             {% endif %}

@@ -2,7 +2,9 @@
     <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-edit"></i><span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="{{ path('app_contracts_edit', {'id': record.id}) }}" title="{{ 'Contract parameters'|trans }}">{{ 'Parameters'|trans }}</a></li>
-        <li><a href="{{ path('app_contracts_prices', {'id': record.id}) }}" title="{{ 'Contract prices'|trans }}">{{ 'Prices'|trans }}</a></li>
+        {% if record.model == 'HOTEL' %}
+            <li><a href="{{ path('app_contracts_prices', {'id': record.id}) }}" title="{{ 'Contract prices'|trans }}">{{ 'Prices'|trans }}</a></li>
+        {% endif %}
     </ul>
     <a href="{{ path('app_contracts_delete', {'id': record.id}) }}" title="{{ 'Delete'|trans }}" class="btn btn-danger btn-xs btn-delete"><i class="fa fa-remove"></i></a>
 </div>

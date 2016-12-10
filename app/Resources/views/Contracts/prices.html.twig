@@ -15,44 +15,38 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content table-responsive">
-                    <table class="table">
+                    <table class="table table-striped table-condensed">
                         <thead>
                             <tr>
                                 <th rowspan="2">{{ 'Room'|trans }}</th>
                                 <th rowspan="2">{{ 'Plan'|trans }}</th>
                                 {% for season in facility.seasons %}
-                                    <th class="text-center" colspan="4">{% trans with {'%from%': season.fromDate|date('d/m/Y'), '%to%': season.toDate|date('d/m/Y')} %}%%from%% to %%to%%{% endtrans %}</th>
+                                    <th class="text-center" colspan="{{ cupos|length }}">{% trans with {'%from%': season.fromDate|date('d/m/Y'), '%to%': season.toDate|date('d/m/Y')} %}%%from%% to %%to%%{% endtrans %}</th>
                                 {% endfor %}
                             </tr>
                             <tr>
                                 {% for season in facility.seasons %}
-                                    {% for cupo in ['Single', 'Double', 'Triple', '4th'] %}
-                                        <th class="text-center">{{ cupo }}</th>
+                                    {% for cupo in cupos %}
+                                        <th class="text-center" style="min-width: 70px;">{{ cupo }}</th>
                                     {% endfor %}
                                 {% endfor %}
                             </tr>
                         </thead>
                         <tbody>
-                            {% for room in facility.rooms %}
-                                <tr>
-                                    <td{% if facility.activePlans|length > 1 %} rowspan="{{ facility.activePlans|length }}"{% endif %}>{{ room }}</td>
-                                    <td>{{ facility.activePlans|first }}</td>
-                                    {% for season in facility.seasons %}
-                                        {% for cupo in ['Single', 'Double', 'Triple', '4th'] %}
-                                            <td><input type="text" class="form-control input-sm"></td>
+                            {% for roomIndex, room in facility.rooms %}
+                                {% for planIndex, plan in facility.activePlans %}
+                                    <tr>
+                                        {% if planIndex == 0 %}
+                                            <td{% if facility.activePlans|length > 1 %} rowspan="{{ facility.activePlans|length }}"{% endif %}>{{ room }}</td>
+                                        {% endif %}
+                                        <td>{{ plan }}</td>
+                                        {% for season in facility.seasons %}
+                                            {% for cupo in cupos %}
+                                                <td><input type="text" class="form-control input-sm text-right updatable-ajax" data-params="contract:{{ record.id }}|room:{{ room.id }}|plan:{{ plan }}|season:{{ season.id }}|cupo:{{ cupo }}" value="{{ prices[room.id][plan][season.id][cupo] is defined ? prices[room.id][plan][season.id][cupo] : '' }}"></td>
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                            {% for plan in facility.activePlans|slice(1) %}
-                                <tr>
-                                    <td>{{ plan }}</td>
-                                    {% for season in facility.seasons %}
-                                        {% for cupo in ['Single', 'Double', 'Triple', '4th'] %}
-                                            <td><input type="text" class="form-control input-sm"></td>
-                                        {% endfor %}
-                                    {% endfor %}
-                                </tr>
+                                    </tr>
+                                {% endfor %}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -60,4 +54,46 @@
             </div>
         {% endfor %}
     </form>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        "use strict";
+        $(document).ready(function() {
+            $('body').on('change', 'input.updatable-ajax', function() {
+                var $input = $(this);
+
+                if ($input.data('saving')) {
+                    $input.data('saving').xhr.abort();
+                }
+
+                var id = Date.now(),
+                    paramsStr = $input.data('params'),
+                    lines = paramsStr.split('|'),
+                    params = {
+                        inputId: id,
+                        value: $input.val()
+                    };
+                $.each(lines, function(i, line) {
+                    var pair = line.split(':');
+                    params[pair[0]] = pair[1];
+                });
+
+                $input.css({borderColor: 'red'}).attr({'ajax-id': id});
+
+                var obj = {
+                    xhr: $.ajax('{{ path('app_contracts_setprice') }}', {
+                        data: params,
+                        dataType: 'json',
+                        method: 'POST',
+                        success: function(json) {
+                            $('input:text.updatable-ajax[ajax-id=' + json.inputId + ']').val(json.value).css({borderColor: ''}).removeAttr('ajax-id').removeData('saving');
+                        }
+                    })
+                };
+
+                $input.data('saving', obj);
+            });
+        });
+    </script>
 {% endblock %}

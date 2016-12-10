@@ -1,7 +1,8 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-#    parameter_name: value
+    app.hotel.cupos: [ 1P, 2P, 3P, 1P1CH, 2P1CH ]
+    app.hotel.plans: [ CP, TI, MAP, EP, AP, AI ]
 
 services:
     # KernelRequest listener
@@ -68,3 +69,19 @@ services:
         arguments: [ %fos_user.model.user.class% ]
         tags:
             - { name: form.type }
+    app.form.type.hotel_plan_type:
+        class: AppBundle\Form\Type\HotelPlansType
+        arguments: [ %app.hotel.plans% ]
+        tags:
+            - { name: form.type }
+
+    app.validator.constraints.cupos:
+        class: ValidCupoValidator
+        arguments: [ %app.hotel.cupos% ]
+        tags:
+            - { name: validator.constraint_validator, alias: validator_cupos }
+    app.validator.constraints.plans:
+        class: ValidPlanValidator
+        arguments: [ %app.hotel.plans% ]
+        tags:
+            - { name: validator.constraint_validator, alias: validator_plans }

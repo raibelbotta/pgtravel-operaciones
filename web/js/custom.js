@@ -6,7 +6,7 @@ App = {
         }
 
         var initTooltipster = function() {
-            $('[title]').tooltipster({theme: 'tooltipster-shadow'});
+            $('[title]:not(.sidebar-footer *)').tooltipster({theme: 'tooltipster-shadow'});
         }
 
         var initPasswordModal = function() {

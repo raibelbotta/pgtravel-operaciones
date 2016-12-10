@@ -213,14 +213,26 @@ class ContractsController extends Controller
     /**
      * @Route("/{id}/prices", requirements={"id": "\d+"})
      * @ParamConverter("record", class="AppBundle\Entity\Contract")
-     * @Method({"get", "post"})
+     * @Method({"get"})
      * @param Contract $record
-     * @param Request $request
      * @return Response
      */
-    public function pricesAction(Contract $record, Request $request)
+    public function pricesAction(Contract $record)
     {
-        return $this->render('Contracts/prices.html.twig', array('record' => $record));
+        $cupos = $this->container->getParameter('app.hotel.cupos');
+        $manager = $this->getDoctrine()->getManager();
+
+        $repo = $manager->getRepository('AppBundle:ContractHotelPrice');
+        $prices = array();
+        foreach ($repo->findBy(array('contract' => $record->getId())) as $price) {
+            $prices[$price->getRoom()->getId()][$price->getPlan()][$price->getSeason()->getId()][$price->getCupo()] = $price->getValue();
+        }
+
+        return $this->render('Contracts/prices.html.twig', array(
+            'record'    => $record,
+            'cupos'     => $cupos,
+            'prices'    => $prices
+        ));
     }
 
     /**
@@ -239,6 +251,48 @@ class ContractsController extends Controller
 
         return new JsonResponse(array(
             'result' => 'success'
+        ));
+    }
+
+    /**
+     * @Route("/set-price")
+     * @Method({"post"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function setPriceAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $price = $manager->getRepository('AppBundle:ContractHotelPrice')->findOneBy(array(
+            'contract' => $request->get('contract'),
+            'room' => $request->get('room'),
+            'plan' => $request->get('plan'),
+            'season' => $request->get('season'),
+            'cupo' => $request->get('cupo')
+        ));
+
+        if (!$price && $request->get('value')) {
+            $price = new \AppBundle\Entity\ContractHotelPrice();
+            $price
+                    ->setContract($manager->find('AppBundle:Contract', $request->get('contract')))
+                    ->setCupo($request->get('cupo'))
+                    ->setPlan($request->get('plan'))
+                    ->setRoom($manager->find('AppBundle:ContractFacilityRoom', $request->get('room')))
+                    ->setSeason($manager->find('AppBundle:ContractFacilitySeason', $request->get('season')))
+                    ->setValue($request->get('value'))
+                    ;
+            $manager->persist($price);
+        } elseif ($price && !$request->get('value')) {
+            $manager->remove($price);
+        } elseif ($price) {
+            $price->setValue($request->get('value'));
+        }
+
+        $manager->flush();
+
+        return new JsonResponse(array(
+            'inputId'   => $request->get('inputId'),
+            'value'     => $request->get('value') ? sprintf('%0.2f', $price->getValue()) : ''
         ));
     }
 }

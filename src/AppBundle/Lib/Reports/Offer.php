@@ -29,6 +29,7 @@ class Offer extends ContainerAwareReport
 
         $this->renderHeader();
         $this->renderBody();
+        $this->renderFooter();
 
         return $this->getPdfContent();
     }
@@ -36,15 +37,41 @@ class Offer extends ContainerAwareReport
     private function renderHeader()
     {
         $this->pdf->SetFontSize(14);
-        $this->pdf->Cell(0, 0, 'Offer', 0, 1, 'C');
+
+        $clientName = null !== $this->offer->getClient() ? (string) $this->offer->getClient() : $this->offer->getDirectClientFullName();
+
+        $this->pdf->Write(0, sprintf('Offer for %s from PGTRAVEL', $clientName), false, false, 'C', 1);
+
+        $this->pdf->Ln(4);
+
+        return $this;
     }
 
     private function renderBody()
     {
         $this->pdf->SetFontSize(10);
 
-        $this->pdf->Cell($w, $h, $txt, $border, $ln, $align);
+        foreach ($this->offer->getServices() as $service) {
+            $serviceName = $service->getDescription() ?: $service->getName();
+
+            $h = $this->getRowHeight(array(
+                array(150, $serviceName),
+                array(0, $service->getStartAt()->format('d/m/Y'))
+            ));
+
+            $this->pdf->MultiCell(150, $h, $serviceName, 1, 'J', false, 0);
+            $this->pdf->MultiCell(0, $h, $service->getStartAt()->format('d/m/Y'), 1, 'L', false, 1);
+        }
+
+        $this->pdf->Ln(4);
 
         return $this;
+    }
+
+    private function renderFooter()
+    {
+        $this->pdf->SetFontSize(13);
+        $this->pdf->Cell(160, 0, '', 0, 0);
+        $this->pdf->Cell(0, 0, $this->offer->getClientCharge(), 1, 1, 'R');
     }
 }

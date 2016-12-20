@@ -99,6 +99,11 @@ class ClientContact
      */
     private $updatedAt;
 
+    public function __toString()
+    {
+        return $this->getFullName();
+    }
+
     /**
      * Get id
      *

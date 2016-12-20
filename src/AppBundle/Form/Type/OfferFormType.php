@@ -6,7 +6,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * OfferFormType
@@ -15,11 +19,112 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class OfferFormType extends AbstractType
 {
+    /**
+     * @var EntityManager
+     */
+    private $manager;
+
+    public function __construct(EntityManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('client')
-                ->add('name');
+                ->add('clientType', ChoiceType::class, array(
+                    'choices' => array(
+                        'Registered' => 'registered',
+                        'Direct'    => 'direct'
+                    ),
+                    'choices_as_values' => true,
+                    'expanded' => true
+                ))
+                ->add('client', null, array(
+                    'required' => false
+                ))
+                ->add('directClientFullName', null, array(
+                    'required' => false
+                ))
+                ->add('notificationLine', NotificationLineType::class, array(
+                    'required' => false
+                ))
+                ->add('name')
+                ->add('travelerNames', TextareaType::class, array(
+                    'required' => false
+                ))
+                ->add('services', CollectionType::class, array(
+                    'entry_type' => OfferServiceType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false
+                ))
+                ->add('administrativeCharges', CollectionType::class, array(
+                    'entry_type' => OfferAdministrativeChargeType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false
+                ))
+                ;
+
+        $manager = $this->manager;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use($manager) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            $qb = $manager->getRepository('AppBundle:ClientContact')->createQueryBuilder('cc')
+                    ->join('cc.client', 'c')
+                    ->orderBy('cc.fullName');
+            $andX = $qb->expr()->andX();
+
+            if (null === $data->getId() || null === $data->getClient()) {
+                $andX->add($qb->expr()->isNull('cc.id'));
+            } else {
+                $andX->add($qb->expr()->eq('c.id', $qb->expr()->literal($data->getClient()->getId())));
+            }
+
+            $form->add('notificationContact', null, array(
+                'query_builder' => $qb->where($andX)
+            ));
+        });
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($manager) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            if ('direct' === $data['clientType']) {
+                $form->add('notificationContact', ChoiceType::class, array(
+                    'required' => false
+                ));
+                $data['client'] = '';
+
+                $form
+                        ->remove('directClientFullName')
+                        ->add('directClientFullName', null, array(
+                            'required' => true
+                        ));
+                $event->setData($data);
+            } else {
+                $qb = $manager->getRepository('AppBundle:ClientContact')->createQueryBuilder('cc')
+                        ->join('cc.client', 'c')
+                        ->orderBy('cc.fullName');
+                $andX = $qb->expr()->andX($qb->expr()->eq('c.id', $qb->expr()->literal($data['client'])));
+
+                $form
+                        ->add('notificationContact', null, array(
+                            'query_builder' => $qb->where($andX)
+                        ))
+                        ->remove('client')
+                        ->add('client', null, array(
+                            'required' => true
+                        ))
+                        ;
+                
+                $data['directClientFullName'] = '';
+                $event->setData($data);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

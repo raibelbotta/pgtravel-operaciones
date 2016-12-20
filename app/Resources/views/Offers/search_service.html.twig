@@ -1,0 +1,183 @@
+    <ul class="nav nav-tabs" role="tablist">
+        {% for key, model in models %}
+            <li{{ key == 'hotel' ? ' class="active"' : '' }} role="presentation"><a href="#tab-{{ key }}" aria-controls="tab-{{ key }}" role="tab" data-toggle="tab">{{ model|trans }}</a></li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" role="tabpanel" id="tab-hotel" style="padding: 16px;">
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">{{ 'From'|trans }}</label>
+                    <input type="text" class="form-control input-sm datepicker datepicker-first">
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">{{ 'To'|trans }}</label>
+                    <input type="text" class="form-control input-sm datepicker datepicker-first">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label>{{ 'Hotel'|trans }}</label>
+                    <select class="form-control input-sm hotel">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="">{{ 'Pax'|trans }}</label>
+                    <select name="" class="form-control input-sm pax">
+                        <option value=""></option>
+                        {% for cupo in cupos %}
+                            <option value="{{ cupo }}">{{ cupo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label>{{ 'Quantity'|trans }}</label>
+                    <input type="number" class="form-control input-sm quantity" value="1">
+                </div>
+            </div>
+            <div class="row" style="display: none;">
+                <div class="col-xs-12">
+                    <div class="table-responsive"></div>
+                </div>
+            </div>
+        </div>
+        {% for key, model in models if key != 'hotel' %}
+            <div class="tab-pane" role="tabpanel" id="tab-{{ key }}" style="padding: 16px;">
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="" class="control-label">From</label>
+                        <input type="text" name="" id="" class="form-control input-sm datepicker">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="" class="control-label">To</label>
+                        <input type="text" name="" id="" class="form-control input-sm datepicker">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Quantity'|trans }}</label>
+                        <input type="number" class="form-control quantity" value="1">
+                    </div>
+                </div>
+                <div class="row" style="display: none;">
+                    <div class="table-responsive"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#searchServiceModal input:text.datepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        //hotel stuff
+        +(function($) {
+            $('#searchServiceModal #tab-hotel input:text.datepicker').on('dp.change', function() {
+                $('#tab-hotel').find('select.hotel').empty();
+                $('#tab-hotel').find('select.pax').val('');
+                $(this).closest('.tab-pane').find('.table-responsive').empty().closest('.row').hide();                
+
+                var $dates = $('#searchServiceModal #tab-hotel input:text.datepicker'),
+                    data = {
+                        from: $($dates[0]).val(),
+                        to: $($dates[1]).val()
+                    };
+
+                $.ajax('{{ path('app_offers_searchservicebymodel', {'model': 'hotel'}) }}', {
+                    data: data,
+                    dataType: 'json',
+                    method: 'POST',
+                    success: function(json) {
+                        var $s = $('#tab-hotel select.hotel');
+                        $s.empty().append($('<option value=""></option>'));
+                        $.each(json.hotels, function() {
+                            $s.append($('<option/>').prop('value', this.id).text(this.text).data('supplier', this.supplier.id));
+                        });
+                    }
+                });
+            });
+
+            $('#tab-hotel').find('select.pax, select.hotel, input.quantity').on('change', function() {
+                $(this).closest('.tab-pane').find('.table-responsive').empty().closest('.row').hide();
+
+                var $hotel = $('#tab-hotel select.hotel'),
+                    $pax = $('#tab-hotel select.pax'),
+                    $quantity = $('#tab-hotel input.quantity'),
+                    $dates = $('#searchServiceModal #tab-hotel input:text.datepicker');
+
+                if (!$pax.val() || !$quantity.val()) {
+                    return;
+                }
+
+                var data = {
+                    hotel: $hotel.val(),
+                    pax: $pax.val(),
+                    quantity: $quantity.val(),
+                    from: $($dates[0]).val(),
+                    to: $($dates[1]).val()
+                }
+
+                $(this).closest('.tab-pane').find('.table-responsive').append($('<p>{{ 'Loading prices list...'|trans }}</p>')).load('{{ path('app_offers_gethotelprices') }}', data, function(html) {
+
+                    $('#tab-hotel table').dataTable({order: [[3, 'desc']]});
+                    $('#tab-hotel table button.btn-select-price').on('click', function() {
+                        var $item = $(this).closest('.modal').data('item');
+                        $item.find('[name*="[supplier]"]').val($(this).data('service-supplier'));
+                        $item.find('[name*="[name]"]').val($(this).data('service-name'));
+                        $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
+                        $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge'));
+                        $item.find('[name*="[clientPrice]"]').val($(this).data('client-charge'));
+                        $item.find('[name*="[startAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:first').val() + ' 08:00');
+                        $item.find('[name*="[endAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:last').val() + ' 08:00');
+                        $item.find('[name*="[description]"]').val($(this).data('client-description'));
+
+                        $(this).closest('.modal').modal('hide');
+                    });
+                }).closest('.row').show();
+            });
+        }(jQuery));
+
+        +(function($) {
+            $('#searchServiceModal .tab-pane:not(#tab-hotel)').each(function() {
+                var $pane = $(this);
+
+                $pane.find('.table-responsive').parent().hide();
+                $pane.find('input.datepicker, input.quantity').on('dp.change', function() {
+                    var $dates = $(this).closest('.tab-pane').find('input.datepicker');
+                    if (!$($dates[0]).val() || !$($dates[1]).val()) {
+                        return;
+                    }
+
+                    var data = {
+                        from: $($dates[0]).val(),
+                        to: $($dates[1]).val(),
+                        model: $(this).closest('.tab-pane').attr('id').replace(/^tab\-/, ''),
+                        quantity: 1
+                    }
+
+                    $(this).closest('.tab-pane').find('.table-responsive').parent().show();
+                    $(this).closest('.tab-pane').find('.table-responsive').empty().append($('<p>{{ 'Loading prices list...'|trans }}</p>')).load('{{ path('app_offers_getserviceprices') }}', data, function(html) {
+                        $(this).find('table').dataTable();
+                        $(this).find('table button.btn-select-price').on('click', function() {
+                            var $item = $(this).closest('.modal').data('item');
+                            $item.find('[name*="[supplier]"]').val($(this).data('service-supplier'));
+                            $item.find('[name*="[name]"]').val($(this).data('service-name'));
+                            $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
+                            $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge'));
+                            $item.find('[name*="[clientPrice]"]').val($(this).data('client-charge'));
+                            $item.find('[name*="[startAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:first').val() + ' 08:00');
+                            $item.find('[name*="[endAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:last').val() + ' 08:00');
+                            $item.find('[name*="[description]"]').val($(this).data('client-description'));
+
+                            $(this).closest('.modal').modal('hide');
+                        });
+                    });
+                });
+            });
+        }(jQuery));
+    });
+</script>

@@ -67,5 +67,18 @@
         "branch-alias": {
             "dev-master": "2.8-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "tcpdf/tcpdf",
+                "version": "6.2.11",
+                "dist": {
+                    "url": "http://www.smarty.net/files/Smarty-3.1.7.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
 }

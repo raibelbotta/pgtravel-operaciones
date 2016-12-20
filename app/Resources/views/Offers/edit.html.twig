@@ -1,0 +1,53 @@
+{% extends 'frontend.html.twig' %}
+
+{% block page_stylesheets %}
+    <link href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/dist/css/select2.min.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Offers'|trans }} <small>{{ 'edit'|trans }}</small></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            {{ form_start(form, {'attr': {'role': 'form', 'id': 'reservation'}}) }}
+                {{ include('Offers/form.html.twig') }}
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+                    <a href="{{ path('app_offers_index') }}" class="btn btn-default">{{ 'Cancel'|trans }}</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <div class="modal fade in" id="searchServiceModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{ 'Search service'|trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">{{ 'Close'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script src="{{ asset('plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('plugins/select2/dist/js/select2.full.min.js') }}"></script>
+    <script>
+        url_getclientcontact = '{{ path('app_offers_getclientcontacts') }}';
+        url_searchservice = '{{ path('app_offers_searchservice') }}';
+    </script>
+    <script src="{{ asset('js/form-offer.js') }}"></script>
+{% endblock %}

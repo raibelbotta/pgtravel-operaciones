@@ -12,24 +12,23 @@
 
 {% block stylesheets %}
     <!-- Bootstrap -->
-    <link href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}">
     <!-- Font Awesome -->
-    <link href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}">
     <!-- NProgress -->
     <link rel="stylesheet" href="{{ asset('plugins/nprogress/nprogress.css') }}">
     <!-- tooltipster -->
     <link rel="stylesheet" href="{{ asset('plugins/tooltipster/css/tooltipster.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/tooltipster/css/tooltipster-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/tooltipster/css/themes/tooltipster-shadow.css') }}">
-    <!-- bootstrap-datepicker -->
-    <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/bootstrap-timepicker/bootstrap-timepicker.css') }}">
-
+    <!-- bootstrap-date`timepicker -->
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}">
     <!-- intl-tel-input -->
     <link rel="stylesheet" href="{{ asset('plugins/intl-tel-input/css/intlTelInput.min.css') }}">
-
     <!-- fullcalendar -->
     <link rel="stylesheet" href="{{ asset('plugins/fullcalendar-3.0.1/fullcalendar.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/flat/green.css') }}">
 
     {% block page_stylesheets %}{% endblock %}
 
@@ -261,20 +260,24 @@
     <!-- NProgress -->
     <script src="{{ asset('plugins/nprogress/nprogress.js') }}"></script>
     
-    <script src="{{ asset('plugins/jquery.form.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('plugins/jquery.form.js') }}"></script>
     <script src="{{ asset('plugins/tooltipster/js/jquery.tooltipster.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 
-    <!-- bootstrap-datepicker -->
-    <script src="{{ asset('plugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap-timepicker/bootstrap-timepicker.js') }}"></script>
+    <!-- moment.js -->
+    <script src="{{ asset('plugins/moment/moment.js') }}"></script>
+
+    <!-- bootstrap-datetimepicker -->
+    <script src="{{ asset('plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
 
     <!-- intl-tel-input -->
     <script src="{{ asset('plugins/intl-tel-input/js/intlTelInput.min.js') }}"></script>
 
     <!-- fullcalendar -->
-    <script src="{{ asset('plugins/fullcalendar-3.0.1/lib/moment.min.js') }}"></script>
     <script src="{{ asset('plugins/fullcalendar-3.0.1/fullcalendar.min.js') }}"></script>
+
+    <!-- iCheck -->
+    <script src="{{ asset('plugins/iCheck/icheck.min.js') }}"></script>
 
     <script type="text/javascript">
         app_user_changepassword_url = '{{ path('app_user_changepassword') }}';
@@ -282,7 +285,7 @@
     </script>
 
     <!-- Custom Theme Scripts -->
-    <script src="{{ asset('js/custom.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
     <script>
         $(document).ready(function() {
             App.Main.init();

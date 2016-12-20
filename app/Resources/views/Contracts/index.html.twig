@@ -21,6 +21,7 @@
                             <tr>
                                 <th width="26">&nbsp;</th>
                                 <th>{{ 'Name'|trans }}</th>
+                                <th>{{ 'Type'|trans }}</th>
                                 <th>{{ 'Supplier'|trans }}</th>
                                 <th>{{ 'Sign date'|trans }}</th>
                                 <th>{{ 'Start date'|trans }}</th>
@@ -56,15 +57,21 @@
 
             $datatable.dataTable({
                 'order': [[ 1, 'asc' ]],
-                'columnDefs': [
+                aoColumns: [
                     {
-                        orderable: false,
                         sortable: false,
-                        targets: [0, 2]
+                        searchable: false
                     },
+                    {name: 'name'},
+                    {name: 'model'},
+                    {name: 'supplier'},
+                    {name: 'signedAt'},
+                    {name: 'startAt'},
+                    {name: 'endAt'},
                     {
-                        name: 'name',
-                        targets: [1]
+                        sortable: false,
+                        searchable: false,
+                        width: 80
                     }
                 ],
                 serverSide: true,

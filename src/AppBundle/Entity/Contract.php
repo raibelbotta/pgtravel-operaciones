@@ -27,7 +27,6 @@ class Contract
      * @var string
      *
      * @ORM\Column(name="model", type="string", length=100)
-     * @Assert\Regex("/hotel|taxi/")
      */
     private $model;
 

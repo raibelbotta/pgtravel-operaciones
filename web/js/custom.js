@@ -1,12 +1,17 @@
 App = {
     Main: function() {
-        var initDatepicker = function() {
-            $.fn.datepicker.defaults.autoclose = true;
-            $.fn.datepicker.defaults.format = 'dd/mm/yyyy';
-        }
-
         var initTooltipster = function() {
             $('[title]:not(.sidebar-footer *)').tooltipster({theme: 'tooltipster-shadow'});
+        }
+
+        var initiCheck = function() {
+            // iCheck
+            if ($("input.flat")[0]) {
+                $('input.flat').iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            };
         }
 
         var initPasswordModal = function() {
@@ -88,7 +93,7 @@ App = {
         return {
             init: function() {
                 initTooltipster();
-                initDatepicker();
+                initiCheck();
                 initPasswordModal();
             }
         }
@@ -398,19 +403,6 @@ $(document).ready(function() {
     }
 });
 // /Switchery
-
-// iCheck
-$(document).ready(function() {
-    if ($("input.flat")[0]) {
-        $(document).ready(function () {
-            $('input.flat').iCheck({
-                checkboxClass: 'icheckbox_flat-green',
-                radioClass: 'iradio_flat-green'
-            });
-        });
-    }
-});
-// /iCheck
 
 // Table
 $('table input').on('ifChecked', function () {

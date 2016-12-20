@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    +(function() {
+    +(function($) {
         $('#contract_form_model').on('change', function() {
             var model = $(this).val();
             $('.visible-condition').each(function() {
@@ -12,17 +12,40 @@ $(document).ready(function() {
             });
         });
 
-        $('#contract_form_signedAt').datepicker({
-            clearBtn: true,
-            todayHighlight: true
+        $('#contract_form_signedAt').parent().datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#contract_form_startAt').parent().datetimepicker({
+            format: 'DD/MM/YYYY HH:mm'
+        });
+        $('#contract_form_endAt').parent().datetimepicker({
+            useCurrent: false,
+            format: 'DD/MM/YYYY HH:MM'
+        });
+        $('#contract_form_startAt').parent().on('dp.change', function(event) {
+             $('#contract_form_endAt').parent().data('DateTimePicker').minDate(event.date);
+        });
+        $('#contract_form_endAt').parent().on('dp.change', function(event) {
+            $('#contract_form_startAt').parent().data('DateTimePicker').maxDate(event.date);
         });
 
-        $('#contract-dates .input-daterange').datepicker({
-            clearBtn: true,
-            inputs: [ $('#contract_form_startAt'), $('#contract_form_endAt') ],
-            todayHighlight: true
+        $('.item-top-service').each(function() {
+            var $controls = $(this).find('.datetimepicker');
+            $($controls[0]).datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+            $($controls[1]).datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+                useCurrent: false
+            });
+            $($controls[0]).on("dp.change", function(event) {
+                $($controls[1]).data("DateTimePicker").minDate(event.date);
+            });
+            $($controls[1]).on("dp.change", function(event) {
+                $($controls[0]).data("DateTimePicker").maxDate(event.date);
+            });
         });
-    }());
+    }(jQuery));
 
     +(function() {
         $('#contract').validate({
@@ -96,17 +119,34 @@ $(document).ready(function() {
              }
 
              if ($item.hasClass('item-top-service')) {
-                $item.datepicker({
-                    inputs: $container.find('input:text.datepicker').toArray()
+                var $controls = $item.find('.datetimepicker');
+                $($controls[0]).datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+                $($controls[1]).datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                    useCurrent: false
+                });
+                $($controls[0]).on("dp.change", function(event) {
+                    $($controls[1]).data("DateTimePicker").minDate(event.date);
+                });
+                $($controls[1]).on("dp.change", function(event) {
+                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
                 });
              }
 
-             if ($item.hasClass('input-daterange')) {
-                $item.datepicker({
-                    inputs: $item.find('input:text.daterange').toArray()
+             if ($item.hasClass('item-facility-season')) {
+                var $controls = $item.find('.datetimepicker');
+                $($controls[0]).on('dp.change', function(e) {
+                    $($controls[1]).data('DateTimePicker').minDate(e.date);
+                }).datetimepicker({
+                    format: 'DD/MM/YYYY'
                 });
-                $item.find('input:text:first').on('change', function() {
-                    $(this).closest('.item').find('input:text:last').datepicker('setDate', $(this).val());
+                $($controls[1]).on("dp.change", function(event) {
+                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
+                }).datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    useCurrent: false
                 });
              }
 
@@ -161,19 +201,36 @@ $(document).ready(function() {
 
         updateContainerIndexes();
 
-        $('.collection-topservices .input-daterange').each(function() {
-            var $container = $(this);
-            $container.datepicker({
-                inputs: $container.find('input:text.datepicker').toArray()
+        $('.item-top-service').each(function() {
+            var $controls = $(this).find('.datetimepicker');
+            $($controls[0]).datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
             });
-        })
-        $('.collection-sessions .input-daterange').each(function() {
-            var $container = $(this);
-            $container.datepicker({
-                inputs: $container.find('input:text').toArray()
+            $($controls[1]).datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+                useCurrent: false
             });
-            $container.find('input:text:first').on('change', function() {
-                $(this).closest('.item').find('input:text:last').datepicker('setDate', $(this).val());
+            $($controls[0]).on("dp.change", function(event) {
+                $($controls[1]).data("DateTimePicker").minDate(event.date);
+            });
+            $($controls[1]).on("dp.change", function(event) {
+                $($controls[0]).data("DateTimePicker").maxDate(event.date);
+            });
+        });
+        $('.item-facility-season').each(function() {
+            var $controls = $(this).find('.datetimepicker');
+            $($controls[0]).datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+            $($controls[1]).datetimepicker({
+                format: 'DD/MM/YYYY',
+                useCurrent: false
+            });
+            $($controls[0]).on('dp.change', function(event) {
+                $($controls[1]).data('DateTimePicker').minDate(event.date);
+            });
+            $($controls[1]).on("dp.change", function(event) {
+                $($controls[0]).data("DateTimePicker").maxDate(event.date);
             });
         });
     }());

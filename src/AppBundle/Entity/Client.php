@@ -67,6 +67,12 @@ class Client
      * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
+
+    public function __toString()
+    {
+        return $this->getFullName();
+    }
+
     /**
      * Constructor
      */

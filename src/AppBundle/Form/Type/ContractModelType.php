@@ -21,8 +21,13 @@ class ContractModelType extends AbstractType
     {
         $resolver->setDefaults(array(
             'choices' => array(
-                'HOTEL' => 'hotel',
-                'TAXI' => 'taxi'
+                'Hotel'         => 'hotel',
+                'Transport'     => 'transport',
+                'Car rental'    => 'car-rental',
+                'Restaurant'    => 'restaurant',
+                'Optionals'     => 'optionals',
+                'Guide'         => 'guide',
+                'Other'         => 'other'
             ),
             'choices_as_values' => true
         ));

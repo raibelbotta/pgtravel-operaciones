@@ -48,6 +48,22 @@ class Reservation
      * @ORM\Column(name="direct_client_full_name", type="string", length=255, nullable=true)
      */
     private $directClientFullName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notification_line", type="string", length=20, nullable=true)
+     * @Assert\Regex("/|sms|email|phone-call/")
+     */
+    private $notificationLine;
+
+    /**
+     * @var ClientContact
+     *
+     * @ORM\ManyToOne(targetEntity="ClientContact")
+     * @ORM\JoinColumn(nullable=true, onDelete="set null")
+     */
+    private $notificationContact;
     
     /**
      * @var string
@@ -63,6 +79,20 @@ class Reservation
      * @ORM\Column(name="traveler_names", type="text", nullable=true)
      */
     private $travelerNames;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ReservationService", mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $services;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ReservationAdministrativeCharge", mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $administrativeCharges;
 
     /**
      * @var \DateTime
@@ -83,6 +113,17 @@ class Reservation
     public function __construct()
     {
         $this->state = 'offer';
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->administrativeAharges = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getClientType()
+    {
+        return null === $this->getId() ? 'registered' : (null !== $this->client ? 'registered' : 'direct');
+    }
+
+    public function setClientType($value)
+    {
     }
 
     /**
@@ -261,5 +302,125 @@ class Reservation
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set notificationLine
+     *
+     * @param string $notificationLine
+     *
+     * @return Reservation
+     */
+    public function setNotificationLine($notificationLine)
+    {
+        $this->notificationLine = $notificationLine;
+
+        return $this;
+    }
+
+    /**
+     * Get notificationLine
+     *
+     * @return string
+     */
+    public function getNotificationLine()
+    {
+        return $this->notificationLine;
+    }
+
+    /**
+     * Set notificationContact
+     *
+     * @param \AppBundle\Entity\ClientContact $notificationContact
+     *
+     * @return Reservation
+     */
+    public function setNotificationContact(\AppBundle\Entity\ClientContact $notificationContact = null)
+    {
+        $this->notificationContact = $notificationContact;
+
+        return $this;
+    }
+
+    /**
+     * Get notificationContact
+     *
+     * @return \AppBundle\Entity\ClientContact
+     */
+    public function getNotificationContact()
+    {
+        return $this->notificationContact;
+    }
+
+    /**
+     * Add service
+     *
+     * @param \AppBundle\Entity\ReservationService $service
+     *
+     * @return Reservation
+     */
+    public function addService(\AppBundle\Entity\ReservationService $service)
+    {
+        $this->services[] = $service;
+
+        $service->setReservation($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param \AppBundle\Entity\ReservationService $service
+     */
+    public function removeService(\AppBundle\Entity\ReservationService $service)
+    {
+        $this->services->removeElement($service);
+    }
+
+    /**
+     * Get services
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * Add administrativeCharge
+     *
+     * @param \AppBundle\Entity\ReservationAdministrativeCharge $administrativeCharge
+     *
+     * @return Reservation
+     */
+    public function addAdministrativeCharge(\AppBundle\Entity\ReservationAdministrativeCharge $administrativeCharge)
+    {
+        $this->administrativeCharges[] = $administrativeCharge;
+
+        $administrativeCharge->setReservation($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove administrativeCharge
+     *
+     * @param \AppBundle\Entity\ReservationAdministrativeCharge $administrativeCharge
+     */
+    public function removeAdministrativeCharge(\AppBundle\Entity\ReservationAdministrativeCharge $administrativeCharge)
+    {
+        $this->administrativeCharges->removeElement($administrativeCharge);
+    }
+
+    /**
+     * Get administrativeCharges
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdministrativeCharges()
+    {
+        return $this->administrativeCharges;
     }
 }

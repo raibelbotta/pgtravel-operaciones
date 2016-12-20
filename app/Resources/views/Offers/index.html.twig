@@ -1,5 +1,10 @@
 {% extends 'frontend.html.twig' %}
 
+{% block page_stylesheets %}
+    <link href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-xs-12">
@@ -14,7 +19,9 @@
                         <thead>
                             <tr>
                                 <th>{{ 'Name'|trans }}</th>
-                                <th width="60">{{ 'Actions'|trans }}</th>
+                                <th>{{ 'Client'|trans }}</th>
+                                <th>{{ 'Date'|trans }}</th>
+                                <th width="100">{{ 'Actions'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -29,6 +36,7 @@
     <script src="{{ asset('plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
+
     <script type="text/javascript">
         $(document).ready(function() {
             {% if app.session.flashBag.has('notice') %}
@@ -43,16 +51,25 @@
             var $table = $('#datatable-offers');
 
             $table.dataTable({
-                'order': [[ 1, 'asc' ]],
+                'order': [[ 2, 'desc' ]],
                 'columnDefs': [
                     {
-                        orderable: false,
+                        searchable: false,
                         sortable: false,
-                        targets: [1]
+                        targets: [3]
                     },
                     {
                         name: 'name',
                         targets: [0]
+                    },
+                    {
+                        name: 'client',
+                        targets: [1]
+                    },
+                    {
+                        name: 'startAt',
+                        searchable: false,
+                        targets: [2]
                     }
                 ],
                 serverSide: true,
@@ -62,32 +79,57 @@
                 }
             });
 
-            $table.on('draw.dt', function() {
-                $(this).find('a.btn-delete').on('click', function(event) {
-                    event.preventDefault();
+            $('body').on('click', 'a.btn-delete', function(event) {
+                event.preventDefault();
 
-                    var url = $(this).attr('href'),
-                        $a = $(this);
+                var url = $(this).attr('href'),
+                    $a = $(this);
 
-                    swal({
-                        title: '{{ 'Confirm remove'|trans }}',
-                        text: '{{ 'The record will be removed. Are you sure you want to continue?'|trans }}',
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d9534f'
-                    }, function(isConfirmed) {
-                        if (isConfirmed) {
-                            $a.closest('td').text('{{ 'Removing...'|trans }}').closest('tr').addClass('row-removing');
-                            $.ajax(url, {
-                                dataType: 'json',
-                                method: 'post',
-                                success: function(json) {
-                                    $table.find('tr.row-removing').remove();
-                                    $table.dataTable().api().draw(false);
-                                }
-                            });
-                        }
-                    });
+                swal({
+                    title: '{{ 'Confirm remove'|trans }}',
+                    text: '{{ 'The record will be removed. Are you sure you want to continue?'|trans }}',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d9534f'
+                }, function(isConfirmed) {
+                    if (isConfirmed) {
+                        $a.closest('td').text('{{ 'Removing...'|trans }}').closest('tr').addClass('row-removing');
+                        $.ajax(url, {
+                            dataType: 'json',
+                            method: 'post',
+                            success: function(json) {
+                                $table.find('tr.row-removing').remove();
+                                $table.dataTable().api().draw(false);
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('body').on('click', 'a.btn-promote', function(event) {
+                event.preventDefault();
+
+                var url = $(this).attr('href'),
+                    $a = $(this);
+
+                swal({
+                    title: '{{ 'Confirm move'|trans }}',
+                    text: '{{ 'The record will be moved to the official operation. Are you sure you want to continue?'|trans }}',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d9534f'
+                }, function(isConfirmed) {
+                    if (isConfirmed) {
+                        $a.closest('td').text('{{ 'Moving...'|trans }}').closest('tr').addClass('row-promoting');
+                        $.ajax(url, {
+                            dataType: 'json',
+                            method: 'post',
+                            success: function(json) {
+                                $table.find('tr.row-promoting').remove();
+                                $table.dataTable().api().draw(false);
+                            }
+                        });
+                    }
                 });
             });
         });

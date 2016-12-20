@@ -85,10 +85,26 @@ class ContractsController extends Controller
         }
 
         $translator = $this->container->get('translator');
-        $data = array_map(function($record) {
+
+        $getModelName = function(Contract $record) {
+            $models = array(
+                'Hotel'         => 'hotel',
+                'Transport'     => 'transport',
+                'Car rental'    => 'car-rental',
+                'Restaurant'    => 'restaurant',
+                'Optionals'     => 'optionals',
+                'Guide'         => 'guide',
+                'Other'         => 'other'
+            );
+
+            return array_search($record->getModel(), $models);
+        };
+
+        $data = array_map(function($record) use($getModelName) {
             return array(
                 '<input type="checkbox" class="flat">',
                 $record->getName(),
+                $getModelName($record),
                 (string) $record->getSupplier(),
                 $record->getSignedAt() ? $record->getSignedAt()->format('Y-m-d') : '',
                 $record->getStartAt() ? $record->getStartAt()->format('Y-m-d') : '',
@@ -116,6 +132,7 @@ class ContractsController extends Controller
     public function newAction(Request $request)
     {
         $record = new Contract();
+        $record->setModel('other');
         $form = $this->createForm(ContractFormType::class, $record);
 
         $form->handleRequest($request);

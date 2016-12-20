@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block contract_top_service_row %}
-    <div class="row item item-top-service input-daterange">
+    <div class="row item item-top-service">
         <div class="form-group col-xs-12 col-sm-10">
             {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
@@ -37,12 +37,18 @@
         </div>
         <div class="form-group col-xs-12 col-sm-6">
             {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.startAt, {'attr': {'class': 'form-control datepicker'}}) }}
+            <div class="input-group datetimepicker">
+                {{ form_widget(form.startAt, {'attr': {'class': 'form-control'}}) }}
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
             {{ form_errors(form.startAt) }}
         </div>
         <div class="form-group col-xs-12 col-sm-6">
             {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.endAt, {'attr': {'class': 'form-control datepicker'}}) }}
+            <div class="input-group datetimepicker">
+                {{ form_widget(form.endAt, {'attr': {'class': 'form-control'}}) }}
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
             {{ form_errors(form.endAt) }}
         </div>
         <div class="form-group col-xs-12 col-sm-6">
@@ -142,15 +148,23 @@
 {% endblock %}
 
 {% block contract_facility_season_row %}
-    <div class="col-sm-6 col-xs-12 item input-daterange">
+    <div class="col-sm-6 col-xs-12 item item-facility-season">
         <div class="row">
             <div class="form-group col-sm-6 col-xs-12">
                 {{ form_label(form.fromDate, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.fromDate, {'attr': {'class': 'form-control'}}) }}
+                <div class="input-group datetimepicker">
+                    {{ form_widget(form.fromDate, {'attr': {'class': 'form-control'}}) }}
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                {{ form_errors(form.fromDate) }}
             </div>
             <div class="form-group col-sm-6 col-xs-12">
                 {{ form_label(form.toDate, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.toDate, {'attr': {'class': 'form-control'}}) }}
+                <div class="input-group datetimepicker">
+                    {{ form_widget(form.toDate, {'attr': {'class': 'form-control'}}) }}
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                {{ form_errors(form.toDate) }}
             </div>
         </div>
         <div class="row">

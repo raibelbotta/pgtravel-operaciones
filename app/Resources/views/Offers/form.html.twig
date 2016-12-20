@@ -1,0 +1,86 @@
+{% form_theme form 'Offers/fields.html.twig' %}
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Client'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="row">
+            <div class="form-group col-sm-6 col-xs-12">
+                {{ form_label(form.clientType, null, {'label_attr': {'class': 'control-label'}}) }}
+                <div>
+                    <label>
+                        {{ form_widget(form.clientType[0], {'attr': {'class': 'flat'}}) }}
+                        {{ 'Registered'|trans }}
+                    </label>
+                    <label>
+                        {{ form_widget(form.clientType[1], {'attr': {'class': 'flat'}}) }}
+                        {{ 'Direct'|trans }}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
+                {{ form_label(form.client, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                {{ form_label(form.directClientFullName, null, {'label_attr': {'class': 'control-label'}})}}
+                {{ form_widget(form.directClientFullName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group col-sm-2 col-xs-12">
+                {{ form_label(form.notificationLine, null, {'labl_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.notificationLine, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
+                {{ form_label(form.notificationContact, null, {'labl_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.notificationContact, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Booking data'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="row">
+            <div class="form-group col-sm-12">
+                {{ form_label(form.name, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                {{ form_label(form.travelerNames, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                {{ form_widget(form.travelerNames, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>
+            {{ 'Services'|trans }}
+            <input type="hidden" name="servicesCounter" value="{{ form.services.vars.data|length }}">
+        </h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        {{ form_row(form.services, {'attr': {'counter': '[name=servicesCounter]'}}) }}
+        <div class="pull-right"><button title="{{ 'Add service'|trans }}" class="btn btn-default btn-xs btn-add-item" type="button" data-collection="#{{ form.services.vars.id }}"><i class="fa fa-plus-circle"></i></button></div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Administrative charges'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        {{ form_row(form.administrativeCharges) }}
+        <div class="pull-right"><button title="{{ 'Add charge'|trans }}" class="btn btn-default btn-xs btn-add-item" type="button" data-collection="#{{ form.administrativeCharges.vars.id }}"><i class="fa fa-plus-circle"></i></button></div>
+    </div>
+</div>

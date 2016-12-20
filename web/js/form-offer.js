@@ -157,7 +157,7 @@ $(document).ready(function() {
                 sum2 += parseFloat($(this).find('input[name*="[price]"]').val());
             });
 
-            $('#offer_form_clientCharge').val((new Number(sum * 0.25 + sum + sum2)).toFixed(2));
+            $('#offer_form_clientCharge').val((new Number(sum * 0.3 + sum + sum2)).toFixed(2));
         });
     }(jQuery));
 

@@ -5,6 +5,18 @@ parameters:
     app.hotel.plans: [ CP, MAP, EP, AP, AI ]
     app.reservation.notification_lines: [ sms, email, "phone-call" ]
 
+    app.administrative_services:
+        - { name: Office, price: 5 }
+        - { name: Internet and phone, price: 10 }
+        - { name: Transportation, price 10 }
+        - { name: Room, price: 30 }
+        - { name: Board, price: 30 }
+        - { name: Currency exchange, price: 120 }
+        - { name: Wire fee, price: 30 }
+        - { name: Miscelaneas Expenses, price: 50 }
+        - { name: Bonus, price: 20 }
+        - { name: Parking, price: 5 }
+
 services:
     # KernelRequest listener
     extension.listener:
@@ -96,3 +108,7 @@ services:
         arguments: [ %app.hotel.plans% ]
         tags:
             - { name: validator.constraint_validator, alias: validator_plans }
+    app.lib.reports.report_factory:
+        class: AppBundle\Lib\Reports\ReportFactory
+        arguments: [ "@service_container" ]
+    report_factory: '@app.lib.reports.report_factory'

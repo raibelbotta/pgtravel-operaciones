@@ -124,6 +124,18 @@ class OffersController extends Controller
     public function newAction(Request $request)
     {
         $offer = new Reservation();
+
+        foreach ($this->container->getParameter('app.administrative_services') as $k) {
+            $service = new \AppBundle\Entity\ReservationAdministrativeCharge();
+            $service
+                    ->setName($k['name'])
+                    ->setFactor(0)
+                    ->setBase($k['price'])
+                    ->setPrice(0)
+                    ;
+            $offer->addAdministrativeCharge($service);
+        }
+
         $form = $this->createForm(OfferFormType::class, $offer);
 
         $form->handleRequest($request);
@@ -425,6 +437,23 @@ class OffersController extends Controller
     }
 
     /**
+     * @Route("/{id}/send-client-version", requirements={"id": "\d+"})
+     * @Method({"get"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @param Reservation $record
+     * @return Response
+     */
+    public function sendClientVersionAction(Reservation $record)
+    {
+        $report = $this->container->get('report_factory')->createReport(\AppBundle\Lib\Reports\Offer::class, array(
+            'offer' => $record
+        ));
+
+        return new \AppBundle\Lib\Reports\ReportResponse($report);
+    }
+
+    /**
+     * @todo Revisar si este método se utiliza, sino, borrar
      * @Route("/filter-top-services")
      * @Method({"post"})
      */

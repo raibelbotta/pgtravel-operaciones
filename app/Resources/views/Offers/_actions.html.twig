@@ -1,6 +1,6 @@
 <div class="btn-group">
     <a href="{{ path('app_offers_edit', {'id': record.id}) }}" class="btn btn-primary btn-xs" title="{{ 'Edit'|trans }}"><i class="fa fa-edit"></i></a>
-    <a href="javascript:{}" class="btn btn-xs btn-default" title="{{ 'Send to client'|trans }}"><i class="fa fa-envelope"></i></a>
+    <a href="{{ path('app_offers_sendclientversion', {'id': record.id}) }}" target="_blank" class="btn btn-xs btn-default btn-send" title="{{ 'Send to client'|trans }}"><i class="fa fa-envelope"></i></a>
     <a href="{{ path('app_offers_promote', {'id': record.id}) }}" class="btn btn-default btn-xs btn-promote" title="{{ 'Promote'|trans }}"><i class="fa fa-arrow-right"></i></a>
     <a href="{{ path('app_offers_delete', {'id': record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></a>
 </div>

@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block collection_row %}
-    <div id="{{ form.vars.id }}" class="collection"{% if form.vars.prototype is defined %} data-prototype="{{ form_row(form.vars.prototype)|e}}"{% endif %} data-index="{{ form|length }}" data-counter="{{ attr.counter|default('') }}">
+    <div id="{{ form.vars.id }}"{% if form.vars.prototype is defined %} class="collection"{% if form.vars.prototype is defined %} data-prototype="{{ form_row(form.vars.prototype)|e}}"{% endif %} data-index="{{ form|length }}" data-counter="{{ attr.counter|default('') }}"{% endif %}>
         {% for child in form %}
             {{ form_row(child) }}
         {% endfor %}
@@ -38,13 +38,9 @@
                 {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.pax, {'attr': {'class': 'form-control input-sm text-right'}}) }}
             </div>
-            <div class="col-sm-2 col-xs-6 form-group">
+            <div class="col-sm-4 col-xs-6 form-group">
                 {{ form_label(form.supplierPrice, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.supplierPrice, {'attr': {'class': 'form-control input-sm text-right'}}) }}
-            </div>
-            <div class="col-sm-2 col-xs-6 form-group">
-                {{ form_label(form.clientPrice, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.clientPrice, {'attr': {'class': 'form-control input-sm text-right'}}) }}
             </div>
         </div>
         <div class="row">
@@ -86,13 +82,26 @@
 {% block offer_administrative_charge_row %}
     <div class="item item-administrative-charge">
         <div class="row">
-            <div class="col-xs-8 form-group">
+            <div class="col-sm-6 col-xs-12 form-group">
                 {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.name, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col-sm-2 col-xs-4 form-group">
+                {{ form_label(form.factor, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.factor, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+            </div>
+            <div class="col-sm-2 col-xs-4 form-group">
+                {{ form_label(form.base, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.base, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+            </div>
+            <div class="col-xs-2 col-xs-4 form-group">
                 {{ form_label(form.price, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.price, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-default btn-calc-ads"><i class="fa fa-refresh"></i></button>
+                    </span>
+                    {{ form_widget(form.price, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+                </div>
             </div>
         </div>
         <div class="row">
@@ -102,11 +111,6 @@
             </div>
         </div>
         {{ form_rest(form) }}
-        <div class="row">
-            <div class="col-xsm-12">
-                <button class="btn btn-danger btn-block btn-xs btn-remove-item" type="button" title="{{ 'Remove charge'|trans }}"><i class="fa fa-trash"></i></button>
-            </div>
-        </div>
         <hr>
     </div>
 {% endblock %}

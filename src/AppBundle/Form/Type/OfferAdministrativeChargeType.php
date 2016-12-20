@@ -18,6 +18,10 @@ class OfferAdministrativeChargeType extends AbstractType
     {
         $builder
                 ->add('name')
+                ->add('factor', null, array(
+                    'label' => 'Pax'
+                ))
+                ->add('base')
                 ->add('price')
                 ->add('notes', TextareaType::class, array(
                     'required' => false

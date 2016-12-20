@@ -40,6 +40,20 @@ class ReservationAdministrativeCharge
     private $name;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $factor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $base;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
@@ -221,5 +235,53 @@ class ReservationAdministrativeCharge
     public function getReservation()
     {
         return $this->reservation;
+    }
+
+    /**
+     * Set factor
+     *
+     * @param integer $factor
+     *
+     * @return ReservationAdministrativeCharge
+     */
+    public function setFactor($factor)
+    {
+        $this->factor = $factor;
+
+        return $this;
+    }
+
+    /**
+     * Get factor
+     *
+     * @return integer
+     */
+    public function getFactor()
+    {
+        return $this->factor;
+    }
+
+    /**
+     * Set base
+     *
+     * @param string $base
+     *
+     * @return ReservationAdministrativeCharge
+     */
+    public function setBase($base)
+    {
+        $this->base = $base;
+
+        return $this;
+    }
+
+    /**
+     * Get base
+     *
+     * @return string
+     */
+    public function getBase()
+    {
+        return $this->base;
     }
 }

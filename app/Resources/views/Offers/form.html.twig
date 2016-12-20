@@ -48,9 +48,13 @@
     </div>
     <div class="x_content">
         <div class="row">
-            <div class="form-group col-sm-12">
+            <div class="form-group col-sm-8 col-xs-12">
                 {{ form_label(form.name, null, {'label_attr': {'class': 'cotrol-label'}}) }}
                 {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group col-sm-4 col-xs-12">
+                {{ form_label(form.offerSummaryFile, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.offerSummaryFile, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="row">
@@ -81,6 +85,24 @@
     </div>
     <div class="x_content">
         {{ form_row(form.administrativeCharges) }}
-        <div class="pull-right"><button title="{{ 'Add charge'|trans }}" class="btn btn-default btn-xs btn-add-item" type="button" data-collection="#{{ form.administrativeCharges.vars.id }}"><i class="fa fa-plus-circle"></i></button></div>
+    </div>
+</div>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>{{ 'Charges'|trans }}</h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-8 form-group">
+                {{ form_label(form.clientCharge, null, {'label_attr': {'class': 'control-label'}}) }}
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" id="btnRecalc" title="{{ 'Calc'|trans }}"><i class="fa fa-refresh"></i></button>
+                    </span>
+                    {{ form_widget(form.clientCharge, {'attr': {'class': 'form-control text-right'}}) }}
+                </div>
+            </div>
+        </div>
     </div>
 </div>

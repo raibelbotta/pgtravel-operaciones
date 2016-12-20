@@ -54,6 +54,11 @@ $(document).ready(function() {
 
             $item.find('input:text:first').focus();
 
+            //hide error if there is
+            if ($container.closest('div.x_panel').find('h2').data('tooltipster-ns')) {
+                $container.closest('div.x_panel').find('h2').tooltipster('hide');
+            }
+
             $('body').animate({
                 scrollTop: $item.offset().top
             }, 500);
@@ -139,4 +144,32 @@ $(document).ready(function() {
             $('#searchServiceModal .modal-body').empty().append($('<p>Cargando datos...</p>')).load(url_searchservice);
         });
     }());
+
+    +(function($) {
+        $('#btnRecalc').on('click', function() {
+            var sum = new Number(0);
+            $('.item-service').each(function() {
+                sum += parseFloat($(this).find('input[name*="[supplierPrice]"]').val());
+            });
+
+            var sum2 = new Number(0);
+            $('.item-administrative-charge').each(function() {
+                sum2 += parseFloat($(this).find('input[name*="[price]"]').val());
+            });
+
+            $('#offer_form_clientCharge').val((new Number(sum * 0.25 + sum + sum2)).toFixed(2));
+        });
+    }(jQuery));
+
+    +(function($) {
+        $('body').on('click', 'button.btn-calc-ads', function() {
+            var $item = $(this).closest('.item'),
+                $pax = $item.find('input[name*="[factor]"]'),
+                $base = $item.find('input[name*="[base]"]'),
+                $price = $item.find('input[name*="[price]"]'),
+                price = (new Number(parseFloat($pax.val() ? $pax.val() : 0) * parseFloat($base.val() ? $base.val() : 0))).toFixed(2);
+
+            $price.val(price);
+        });
+    }(jQuery));
 });

@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 /**
  * OfferFormType
@@ -61,9 +62,13 @@ class OfferFormType extends AbstractType
                 ))
                 ->add('administrativeCharges', CollectionType::class, array(
                     'entry_type' => OfferAdministrativeChargeType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true,
                     'by_reference' => false
+                ))
+                ->add('offerSummaryFile', VichFileType::class, array(
+                    'required' => false
+                ))
+                ->add('clientCharge', null, array(
+                    'required' => true
                 ))
                 ;
 

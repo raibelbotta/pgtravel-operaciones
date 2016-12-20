@@ -130,7 +130,6 @@
                         $item.find('[name*="[name]"]').val($(this).data('service-name'));
                         $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
                         $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge'));
-                        $item.find('[name*="[clientPrice]"]').val($(this).data('client-charge'));
                         $item.find('[name*="[startAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:first').val() + ' 08:00');
                         $item.find('[name*="[endAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:last').val() + ' 08:00');
                         $item.find('[name*="[description]"]').val($(this).data('client-description'));
@@ -168,7 +167,6 @@
                             $item.find('[name*="[name]"]').val($(this).data('service-name'));
                             $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
                             $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge'));
-                            $item.find('[name*="[clientPrice]"]').val($(this).data('client-charge'));
                             $item.find('[name*="[startAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:first').val() + ' 08:00');
                             $item.find('[name*="[endAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:last').val() + ' 08:00');
                             $item.find('[name*="[description]"]').val($(this).data('client-description'));

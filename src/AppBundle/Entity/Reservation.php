@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Reservation
  *
  * @ORM\Table(name="reservation")
  * @ORM\Entity
+ * @Vich\Uploadable
  */
 class Reservation
 {
@@ -95,6 +98,28 @@ class Reservation
     private $administrativeCharges;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="offer_summary_filename", type="string", length=255, nullable=true)
+     */
+    private $offerSummaryFilename;
+
+    /**
+     * @var File
+     *
+     * @Vich\UploadableField(mapping="offer_summaries", fileNameProperty="offerSummaryFilename")
+     * @Assert\File()
+     */
+    private $offerSummaryFile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="client_charge", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $clientCharge;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -115,6 +140,27 @@ class Reservation
         $this->state = 'offer';
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
         $this->administrativeAharges = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @param File $file
+     * @return Reservation
+     */
+    public function setOfferSummaryFile(File $file)
+    {
+        $this->offerSummaryFile = $file;
+
+        $this->updatedAt = new \DateTime('now');
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getOfferSummaryFile()
+    {
+        return $this->offerSummaryFile;
     }
 
     public function getClientType()
@@ -454,5 +500,53 @@ class Reservation
     public function getAdministrativeCharges()
     {
         return $this->administrativeCharges;
+    }
+
+    /**
+     * Set offerSummaryFilename
+     *
+     * @param string $offerSummaryFilename
+     *
+     * @return Reservation
+     */
+    public function setOfferSummaryFilename($offerSummaryFilename)
+    {
+        $this->offerSummaryFilename = $offerSummaryFilename;
+
+        return $this;
+    }
+
+    /**
+     * Get offerSummaryFilename
+     *
+     * @return string
+     */
+    public function getOfferSummaryFilename()
+    {
+        return $this->offerSummaryFilename;
+    }
+
+    /**
+     * Set clientCharge
+     *
+     * @param string $clientCharge
+     *
+     * @return Reservation
+     */
+    public function setClientCharge($clientCharge)
+    {
+        $this->clientCharge = $clientCharge;
+
+        return $this;
+    }
+
+    /**
+     * Get clientCharge
+     *
+     * @return string
+     */
+    public function getClientCharge()
+    {
+        return $this->clientCharge;
     }
 }

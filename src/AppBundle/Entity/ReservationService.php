@@ -62,13 +62,6 @@ class ReservationService
     private $supplierPrice;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="client_price", type="decimal", precision=10, scale=2)
-     */
-    private $clientPrice;
-
-    /**
      * @var Supplier
      *
      * @ORM\ManyToOne(targetEntity="Supplier")
@@ -226,30 +219,6 @@ class ReservationService
     public function getSupplierPrice()
     {
         return $this->supplierPrice;
-    }
-
-    /**
-     * Set clientPrice
-     *
-     * @param string $clientPrice
-     *
-     * @return ReservationService
-     */
-    public function setClientPrice($clientPrice)
-    {
-        $this->clientPrice = $clientPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get clientPrice
-     *
-     * @return string
-     */
-    public function getClientPrice()
-    {
-        return $this->clientPrice;
     }
 
     /**

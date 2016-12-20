@@ -23,7 +23,6 @@ class OfferServiceType extends AbstractType
                 ))
                 ->add('pax')
                 ->add('supplierPrice')
-                ->add('clientPrice')
                 ->add('supplier', null, array(
                     'required' => false
                 ))

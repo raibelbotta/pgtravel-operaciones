@@ -103,6 +103,9 @@ oneup_flysystem:
         contract_attachments:
             local:
                 directory: %kernel.root_dir%/../web/uploads/contracts/attachments
+        offer_summaries:
+            local:
+                directory: %kernel.root_dir%/../web/uploads/offers
     filesystems:
         users_images_fs:
             adapter: users_adapter
@@ -110,6 +113,9 @@ oneup_flysystem:
         contract_attachments_fs:
             adapter: contract_attachments
             mount: contract_attachments_fs
+        offer_summaries_fs:
+            adapter: offer_summaries
+            mount: offer_summaries_fs
 
 vich_uploader:
     db_driver:  orm
@@ -118,6 +124,12 @@ vich_uploader:
         users_images:
             uri_prefix:         /uploads/users/images
             upload_destination: users_images_fs
+            namer:              vich_uploader.namer_uniqid
         contract_attachments:
             uri_prefix:         /uploads/contracts/attachments
             upload_destination: contract_attachments_fs
+            namer:              vich_uploader.namer_uniqid
+        offer_summaries:
+            uri_prefix:         /uploads/offers
+            upload_destination: offer_summaries_fs
+            namer:              vich_uploader.namer_uniqid

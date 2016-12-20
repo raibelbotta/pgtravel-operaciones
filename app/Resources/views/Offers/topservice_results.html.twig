@@ -16,7 +16,7 @@
                 <td class="text-right">{{ '%0.2f'|format(service.price) }}</td>
                 <td class="text-right">{{ '%0.2f'|format(service.price * quantity) }}</td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-success btn-xs btn-select-price" data-service-name="{{ '{1} %service%|]2,Inf[ %service% x %quantity%'|transchoice(quantity, {'%service%': service.name, '%quantity%': quantity}) }}" data-supplier-charge="{{ '%0.2f'|format(service.price * quantity) }}" data-client-charge="{{ '%0.2f'|format((service.price * quantity) + service.price * quantity * 0.25) }}" data-service-supplier="{{ service.contract.supplier.id }}" data-client-description="{% trans with {'%quantity%': quantity, '%service%': service.name} %}%%service%% x %%quantity%%{% endtrans %}"><i class="fa fa-check"></i></button>
+                    <button type="button" class="btn btn-success btn-xs btn-select-price" data-service-name="{{ '{1} %service%|]2,Inf[ %service% x %quantity%'|transchoice(quantity, {'%service%': service.name, '%quantity%': quantity}) }}" data-supplier-charge="{{ '%0.2f'|format(service.price * quantity) }}" data-service-supplier="{{ service.contract.supplier.id }}" data-client-description="{% trans with {'%quantity%': quantity, '%service%': service.name} %}%%service%% x %%quantity%%{% endtrans %}"><i class="fa fa-check"></i></button>
                 </td>
             </tr>
         {% endfor %}

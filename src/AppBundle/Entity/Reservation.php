@@ -126,6 +126,38 @@ class Reservation
     {
     }
 
+    public function getStartAt()
+    {
+        if (0 === $this->services->count()) {
+            return null;
+        }
+
+        $startAt = $this->services[0]->getStartAt();
+        for ($i = 1; $i < $this->services->count(); $i++) {
+            if ($startAt > $this->services[$i]->getStartAt()) {
+                $startAt = $this->services[$i]->getStartAt();
+            }
+        }
+
+        return $startAt;
+    }
+
+    public function getEndAt()
+    {
+        if (0 === $this->services->count()) {
+            return null;
+        }
+
+        $endAt = $this->services[0]->getEndAt();
+        for ($i = 1; $i < $this->services->count(); $i++) {
+            if ($endAt < $this->services[$i]->getEndAt()) {
+                $endAt = $this->services[$i]->getEndAt();
+            }
+        }
+
+        return $endAt;
+    }
+
     /**
      * Get id
      *

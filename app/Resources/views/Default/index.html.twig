@@ -18,7 +18,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#calendar').fullCalendar({
-
+                events: {{ events|json_encode|raw }}
             });
         });
     </script>

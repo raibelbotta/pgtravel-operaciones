@@ -17,6 +17,22 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('Default/index.html.twig');
+        $from = new \DateTime('first day of this month');
+        $to = new \DateTime('last day of this month');
+
+        $manager = $this->getDoctrine()->getManager();
+        $query = $manager->createQuery('SELECT e FROM AppBundle:Reservation e WHERE e.state = :state')
+                ->setParameter('state', \AppBundle\Entity\Reservation::STATE_RESERVATION)
+                ;
+        
+        return $this->render('Default/index.html.twig', array(
+            'events' => array_map(function(\AppBundle\Entity\Reservation $record) {
+                return array(
+                    'title' => $record->getName(),
+                    'start' => $record->getStartAt()->format('Y-m-d'),
+                    'end' => $record->getEndAt()->format('Y-m-d')
+                );
+            }, $query->getResult())
+        ));
     }
 }

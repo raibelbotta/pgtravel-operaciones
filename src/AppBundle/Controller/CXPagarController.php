@@ -52,6 +52,7 @@ class CXPagarController extends Controller
 
         $andX = $qb->expr()->andX(
                 $qb->expr()->eq('r.state', $qb->expr()->literal(Reservation::STATE_RESERVATION)),
+                $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false)),
                 $qb->expr()->eq('r.isPaid', $qb->expr()->literal(true))
                 );
 

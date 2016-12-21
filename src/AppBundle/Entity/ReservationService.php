@@ -102,6 +102,13 @@ class ReservationService
     /**
      * @var bool
      *
+     * @ORM\Column(name="is_notified", type="boolean", options={"default": false})
+     */
+    private $isNotified;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="is_paid", type="boolean", options={"default": false})
      */
     private $isPaid;
@@ -139,6 +146,7 @@ class ReservationService
     public function __construct()
     {
         $this->isPaid = false;
+        $this->isNotified = false;
     }
 
     /**
@@ -509,5 +517,29 @@ class ReservationService
     public function getPaidAt()
     {
         return $this->paidAt;
+    }
+
+    /**
+     * Set isNotified
+     *
+     * @param boolean $isNotified
+     *
+     * @return ReservationService
+     */
+    public function setIsNotified($isNotified)
+    {
+        $this->isNotified = $isNotified;
+
+        return $this;
+    }
+
+    /**
+     * Get isNotified
+     *
+     * @return boolean
+     */
+    public function getIsNotified()
+    {
+        return $this->isNotified;
     }
 }

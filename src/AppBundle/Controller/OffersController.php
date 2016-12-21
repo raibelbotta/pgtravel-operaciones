@@ -203,6 +203,24 @@ class OffersController extends Controller
     }
 
     /**
+     * @Route("/{id}/cancel", requirements={"id": "\d+"})
+     * @Method({"post"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @return JsonResponse
+     */
+    public function cancelAction(Reservation $record)
+    {
+        $record->setIsCancelled(true);
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->flush();
+
+        return new JsonResponse(array(
+            'result' => 'success'
+        ));
+    }
+
+    /**
      * @Route("/{id}/delete", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")

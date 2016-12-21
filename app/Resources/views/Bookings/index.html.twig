@@ -100,7 +100,32 @@
                     checkboxClass: 'icheckbox_flat-green'
                 });
 
-                $(this).find('a.btn-delete').on('click', function(event) {
+                $(this).find('.btn-cancel').on('click', function(event) {
+                    event.preventDefault();
+
+                    var $a = $(this), url = $a.attr('href');
+
+                    swal({
+                        title: '{{ 'Confirm operation'|trans }}',
+                        text: '{{ 'The record will be cancelled. Are you sure you want to continue?'|trans }}',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d9534f'
+                    }, function(isConfirmed) {
+                        if (isConfirmed) {
+                            $a.closest('td').text('{{ 'Updating...'|trans }}').closest('tr').addClass('row-removing');
+                            $.ajax(url, {
+                                dataType: 'json',
+                                method: 'post',
+                                success: function(json) {
+                                    $datatable.dataTable().api().draw(false);
+                                }
+                            });
+                        }
+                    });
+                });
+
+                $(this).find('a.btn-remove').on('click', function(event) {
                     event.preventDefault();
 
                     var url = $(this).attr('href'),

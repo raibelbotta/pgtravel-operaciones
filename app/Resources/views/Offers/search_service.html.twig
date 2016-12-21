@@ -142,39 +142,41 @@
 
         +(function($) {
             $('#searchServiceModal .tab-pane:not(#tab-hotel)').each(function() {
-                var $pane = $(this);
+                var $pane = $(this),
+                    onChange = function() {
+                        var $dates = $(this).closest('.tab-pane').find('input.datepicker');
+                        if (!$($dates[0]).val() || !$($dates[1]).val()) {
+                            return;
+                        }
+
+                        var data = {
+                            from: $($dates[0]).val(),
+                            to: $($dates[1]).val(),
+                            model: $(this).closest('.tab-pane').attr('id').replace(/^tab\-/, ''),
+                            quantity: 1
+                        }
+
+                        $(this).closest('.tab-pane').find('.table-responsive').parent().show();
+                        $(this).closest('.tab-pane').find('.table-responsive').empty().append($('<p>{{ 'Loading prices list...'|trans }}</p>')).load('{{ path('app_offers_getserviceprices') }}', data, function(html) {
+                            $(this).find('table').dataTable();
+                            $(this).find('table button.btn-select-price').on('click', function() {
+                                var $item = $(this).closest('.modal').data('item');
+                                $item.find('[name*="[supplier]"]').val($(this).data('service-supplier'));
+                                $item.find('[name*="[name]"]').val($(this).data('service-name'));
+                                $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
+                                $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge'));
+                                $item.find('[name*="[startAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:first').val() + ' 08:00');
+                                $item.find('[name*="[endAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:last').val() + ' 08:00');
+                                $item.find('[name*="[description]"]').val($(this).data('client-description'));
+
+                                $(this).closest('.modal').modal('hide');
+                            });
+                        });
+                    }
 
                 $pane.find('.table-responsive').parent().hide();
-                $pane.find('input.datepicker, input.quantity').on('dp.change', function() {
-                    var $dates = $(this).closest('.tab-pane').find('input.datepicker');
-                    if (!$($dates[0]).val() || !$($dates[1]).val()) {
-                        return;
-                    }
-
-                    var data = {
-                        from: $($dates[0]).val(),
-                        to: $($dates[1]).val(),
-                        model: $(this).closest('.tab-pane').attr('id').replace(/^tab\-/, ''),
-                        quantity: 1
-                    }
-
-                    $(this).closest('.tab-pane').find('.table-responsive').parent().show();
-                    $(this).closest('.tab-pane').find('.table-responsive').empty().append($('<p>{{ 'Loading prices list...'|trans }}</p>')).load('{{ path('app_offers_getserviceprices') }}', data, function(html) {
-                        $(this).find('table').dataTable();
-                        $(this).find('table button.btn-select-price').on('click', function() {
-                            var $item = $(this).closest('.modal').data('item');
-                            $item.find('[name*="[supplier]"]').val($(this).data('service-supplier'));
-                            $item.find('[name*="[name]"]').val($(this).data('service-name'));
-                            $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
-                            $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge'));
-                            $item.find('[name*="[startAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:first').val() + ' 08:00');
-                            $item.find('[name*="[endAt]"]').val($(this).closest('.tab-pane').find('input.datepicker:last').val() + ' 08:00');
-                            $item.find('[name*="[description]"]').val($(this).data('client-description'));
-
-                            $(this).closest('.modal').modal('hide');
-                        });
-                    });
-                });
+                $pane.find('input.quantity').on('change', onChange);
+                $pane.find('input.datepicker').on('dp.change', onChange);
             });
         }(jQuery));
     });

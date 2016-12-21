@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Reservation;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Form\Type\ReservationFormType;
 
 /**
  * Description of BookingsController
@@ -122,7 +123,7 @@ class BookingsController extends Controller
      */
     public function editAction(Reservation $record, Request $request)
     {
-        $form = $this->createForm(Form::class, $record);
+        $form = $this->createForm(ReservationFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -137,5 +138,39 @@ class BookingsController extends Controller
         return $this->render('Bookings/edit.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("/{id}/cancel", requirements={"id": "\d+"})
+     * @Method({"post"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @return JsonResponse
+     */
+    public function cancelAction(Reservation $record)
+    {
+        $record->setIsCancelled(true);
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->flush();
+
+        return new JsonResponse(array(
+            'result' => 'success'
+        ));
+    }
+
+    /**
+     * @Route("/{id}/delete", requirements={"id": "\d+"})
+     * @Method({"post"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @param Reservation $record
+     * @return JsonResponse
+     */
+    public function deleteAction(Reservation $record)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($record);
+        $manager->flush();
+
+        return new JsonResponse(array('result' => 'success'));
     }
 }

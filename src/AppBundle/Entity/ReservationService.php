@@ -100,6 +100,27 @@ class ReservationService
     private $supplierNotes;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_paid", type="boolean", options={"default": false})
+     */
+    private $isPaid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pay_notes", type="text", nullable=true)
+     */
+    private $payNotes;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="paid_at", type="datetime", nullable=true)
+     */
+    private $paidAt;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -114,6 +135,11 @@ class ReservationService
      * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
+
+    public function __construct()
+    {
+        $this->isPaid = false;
+    }
 
     /**
      * Get id
@@ -411,5 +437,77 @@ class ReservationService
     public function getSupplier()
     {
         return $this->supplier;
+    }
+
+    /**
+     * Set isPaid
+     *
+     * @param boolean $isPaid
+     *
+     * @return ReservationService
+     */
+    public function setIsPaid($isPaid)
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    /**
+     * Get isPaid
+     *
+     * @return boolean
+     */
+    public function getIsPaid()
+    {
+        return $this->isPaid;
+    }
+
+    /**
+     * Set payNotes
+     *
+     * @param string $payNotes
+     *
+     * @return ReservationService
+     */
+    public function setPayNotes($payNotes)
+    {
+        $this->payNotes = $payNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get payNotes
+     *
+     * @return string
+     */
+    public function getPayNotes()
+    {
+        return $this->payNotes;
+    }
+
+    /**
+     * Set paidAt
+     *
+     * @param \DateTime $paidAt
+     *
+     * @return ReservationService
+     */
+    public function setPaidAt($paidAt)
+    {
+        $this->paidAt = $paidAt;
+
+        return $this;
+    }
+
+    /**
+     * Get paidAt
+     *
+     * @return \DateTime
+     */
+    public function getPaidAt()
+    {
+        return $this->paidAt;
     }
 }

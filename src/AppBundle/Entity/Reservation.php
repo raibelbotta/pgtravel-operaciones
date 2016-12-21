@@ -120,6 +120,34 @@ class Reservation
     private $clientCharge;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_cancelled", type="boolean", options={"default": false})
+     */
+    private $isCancelled;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_paid", type="boolean", options={"default": false})
+     */
+    private $isPaid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pay_notes", type="text", nullable=true)
+     */
+    private $payNotes;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="paid_at", type="datetime", nullable=true)
+     */
+    private $paidAt;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -140,6 +168,8 @@ class Reservation
         $this->state = 'offer';
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
         $this->administrativeAharges = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->isPaid = false;
+        $this->isCancelled = false;
     }
 
     /**
@@ -548,5 +578,101 @@ class Reservation
     public function getClientCharge()
     {
         return $this->clientCharge;
+    }
+
+    /**
+     * Set isPaid
+     *
+     * @param boolean $isPaid
+     *
+     * @return Reservation
+     */
+    public function setIsPaid($isPaid)
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    /**
+     * Get isPaid
+     *
+     * @return boolean
+     */
+    public function getIsPaid()
+    {
+        return $this->isPaid;
+    }
+
+    /**
+     * Set isCancelled
+     *
+     * @param boolean $isCancelled
+     *
+     * @return Reservation
+     */
+    public function setIsCancelled($isCancelled)
+    {
+        $this->isCancelled = $isCancelled;
+
+        return $this;
+    }
+
+    /**
+     * Get isCancelled
+     *
+     * @return boolean
+     */
+    public function getIsCancelled()
+    {
+        return $this->isCancelled;
+    }
+
+    /**
+     * Set payNotes
+     *
+     * @param string $payNotes
+     *
+     * @return Reservation
+     */
+    public function setPayNotes($payNotes)
+    {
+        $this->payNotes = $payNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get payNotes
+     *
+     * @return string
+     */
+    public function getPayNotes()
+    {
+        return $this->payNotes;
+    }
+
+    /**
+     * Set paidAt
+     *
+     * @param \DateTime $paidAt
+     *
+     * @return Reservation
+     */
+    public function setPaidAt($paidAt)
+    {
+        $this->paidAt = $paidAt;
+
+        return $this;
+    }
+
+    /**
+     * Get paidAt
+     *
+     * @return \DateTime
+     */
+    public function getPaidAt()
+    {
+        return $this->paidAt;
     }
 }

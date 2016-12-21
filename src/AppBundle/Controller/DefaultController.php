@@ -21,8 +21,11 @@ class DefaultController extends Controller
         $to = new \DateTime('last day of this month');
 
         $manager = $this->getDoctrine()->getManager();
-        $query = $manager->createQuery('SELECT e FROM AppBundle:Reservation e WHERE e.state = :state')
-                ->setParameter('state', \AppBundle\Entity\Reservation::STATE_RESERVATION)
+        $query = $manager->createQuery('SELECT e FROM AppBundle:Reservation e WHERE e.state = :state AND e.isCancelled = :false')
+                ->setParameters(array(
+                    'state' => \AppBundle\Entity\Reservation::STATE_RESERVATION,
+                    'false' => false
+                ))
                 ;
         
         return $this->render('Default/index.html.twig', array(

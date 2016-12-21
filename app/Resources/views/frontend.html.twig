@@ -75,25 +75,29 @@
                         <div class="menu_section">
                             <h3>General</h3>
                             <ul class="nav side-menu">
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <li>
-                                        <a><i class="fa fa-cogs"></i> {{ 'Administration'|trans }} <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="{{ path('app_clients_index') }}">{{ 'Clients'|trans }}</a></li>
-                                            <li><a href="{{ path('app_suppliers_index') }}">{{ 'Suppliers'|trans }}</a></li>
-                                            <li><a href="{{ path('app_contracts_index') }}">{{ 'Contracts'|trans }}</a></li>
-                                            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                                <li><a href="{{ path('app_users_index') }}">{{ 'Users'|trans }}</a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </li>
-                                {% endif %}
                                 <li>
-                                    <a><i class="fa fa-tachometer"></i> {{ 'Operation'|trans }} <span class="fa fa-chevron-down"></span></a>
+                                    <a href="#"><i class="fa fa-cogs"></i> {{ 'Administration'|trans }} <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ path('app_clients_index') }}">{{ 'Clients'|trans }}</a></li>
+                                        <li><a href="{{ path('app_suppliers_index') }}">{{ 'Suppliers'|trans }}</a></li>
+                                        <li><a href="{{ path('app_contracts_index') }}">{{ 'Contracts'|trans }}</a></li>
+                                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                            <li><a href="{{ path('app_users_index') }}">{{ 'Users'|trans }}</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-tachometer"></i> {{ 'Operation'|trans }} <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ path('app_offers_index') }}">{{ 'Offers'|trans }}</a></li>
                                         <li><a href="#">{{ 'Booking list'|trans }}</a></li>
-                                        <li><a href="#">Cobros y pagos</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-bank"></i> {{ 'Banking'|trans }}<span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ path('app_cxcobrar_index') }}">Cuentas por cobrar</a></li>
+                                        <li><a href="{{ path('app_cxpagar_index') }}">Cuentas por pagar</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -101,6 +105,7 @@
                     </div>
                     <!-- /sidebar menu -->
 
+                    {#
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small">
                         <a data-toggle="tooltip" data-placement="top" title="Settings">
@@ -117,9 +122,10 @@
                         </a>
                     </div>
                     <!-- /menu footer buttons -->
+                    #}
                 </div>
             </div>
-
+            
             <!-- top navigation -->
             <div class="top_nav">
                 <div class="nav_menu">
@@ -129,7 +135,7 @@
                         </div>
 
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="">
+                            <li>
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <img src="{{ asset('images/img.jpg') }}" alt="">{{ app.user.email }}
                                     <span class=" fa fa-angle-down"></span>
@@ -144,6 +150,7 @@
                                 </ul>
                             </li>
 
+                            {#
                             <li role="presentation" class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                                     <i class="fa fa-envelope-o"></i>
@@ -208,6 +215,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            #}
                         </ul>
                     </nav>
                 </div>

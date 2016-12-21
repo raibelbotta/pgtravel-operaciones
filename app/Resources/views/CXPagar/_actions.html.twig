@@ -1,0 +1,9 @@
+<div class="text-center">
+    <div class="btn-group">
+        {% if not record.isPaid %}
+            <a href="{{ path('app_cxpagar_changestate', {'id': record.id}) }}" class="btn btn-default btn-xs btn-success btn-change-state"><i class="fa fa-check"></i></a>
+        {% else %}
+            <a href="{{ path('app_cxpagar_viewstate', {'id': record.id}) }}" class="btn btn-default btn-xs btn-view" data-cancel-url="{{ path('app_cxpagar_changestate', {'id': record.id}) }}" ><i class="fa fa-eye"></i></a>
+        {% endif %}
+    </div>
+</div>

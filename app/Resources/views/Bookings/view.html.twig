@@ -1,0 +1,149 @@
+<table class="table">
+    <tbody>
+        <tr>
+            <th>{{ 'Client name'|trans }}</th>
+            <td>
+                {%- if record.client is not empty -%}
+                    {{ record.client }}
+                {%- else -%}
+                    {{ record.directClientFullName }}
+                {%- endif -%}
+            </td>
+        </tr>
+        {% if record.client is not empty %}
+            <tr>
+                <th>{{ 'Requested by'|trans }}</th>
+                <td>{{ record.notificationContact }}</td>
+            </tr>
+        {% endif %}
+        {% if record.notificationLine is not empty %}
+            <tr>
+                <th>{{ 'Requested using'|trans }}</th>
+                <td>{{ record.notificationLine }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th>{{ 'Travelers'|trans }}</th>
+            <td>{{ record.travelerNames }}</td>
+        </tr>
+        {% if record.offerSummaryFilename is not empty %}
+            <tr>
+                <th>{{ 'Summary'|trans }}</th>
+                <td>
+                    <a href="{{ vich_uploader_asset(record, 'offerSummaryFile') }}" target="_blank" class="btn btn-default btn-sm">
+                        <i class="fa fa-download"></i>
+                        {{ 'Download'|trans }}    
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th>{{ 'Client charge'|trans }}</th>
+            <td>{{ '%0.2f'|format(record.clientCharge) }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'Creation date'|trans }}</th>
+            <td>{{ record.createdAt|date('d/m/Y H:i') }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'Updation date'|trans }}</th>
+            <td>{{ record.updatedAt|date('d/m/Y H:i') }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'Is paid'|trans }}</th>
+            <td>{{ record.isPaid ? 'Yes' : 'No' }}</td>
+        </tr>
+        {% if record.isPaid %}
+            <tr>
+                <th>{{ 'Pay date'|trans }}</th>
+                <td>{{ record.paidAt }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Pay notes'|trans }}</th>
+                <td>{{ record.payNotes }}</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<section style="background-color: #dedede; padding: 6px;">
+    <div class="x_panel">
+        <div class="x_header">
+            <h3 class="x_title">Services</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Pax</th>
+                        <th>Supplier</th>
+                        <th>Price</th>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in record.services %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.description }}</td>
+                            <td>{{ service.pax }}</td>
+                            <td>{{ service.supplier }}</td>
+                            <td>{{ service.supplierPrice }}</td>
+                            <td>{{ service.startAt|date('d/m/Y H:i') }}</td>
+                            <td>{{ service.endAt|date('d/m/Y H:i') }}</td>
+                        </tr>
+                        {% if service.internalNotes is not empty %}
+                            <tr style="font-size: 0.85em;">
+                                <td colspan="7">
+                                    <strong>{{ 'Internal notes'|trans }}</strong><br>
+                                    {{ service.internalNotes }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if service.isPaid %}
+                            <tr style="font-size: 0.85em;">
+                                <td colspan="7">
+                                    {% trans with {'%date%': service.paidAt|date('d/m/Y'), '%notes%': service.payNotes} %}Paid at %%date%% with following notes<br>%%notes%%{% endtrans %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_header">
+            <h3 class="x_title">{{ 'Administrative charges'|trans }}</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Notes</th>
+                        <th>Pax</th>
+                        <th>Price</th>
+                        <th>Charge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in record.administrativeCharges %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.notes }}</td>
+                            <td class="text-right">{{ service.factor }}</td>
+                            <td class="text-right">{{ service.base }}</td>
+                            <td class="text-right">{{ service.price }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

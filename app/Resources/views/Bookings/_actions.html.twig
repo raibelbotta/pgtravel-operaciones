@@ -1,0 +1,7 @@
+<div class="btn-group">
+    {% if not record.isCancelled %}
+        <a href="{{ path('app_bookings_view', {'id': record.id}) }}" class="btn btn-xs btn-default btn-view" role="button" title="{{ 'View'|trans }}" data-edit-url="{{ path('app_bookings_edit', {'id': record.id}) }}"><i class="fa fa-eye"></i></a>
+        <a href="#" class="btn btn-xs btn-info btn-view" role="button" title="{{ 'Cancel'|trans }}"><i class="fa fa-ban"></i></a>
+    {% endif %}
+    <a href="#" class="btn btn-xs btn-danger btn-remove" role="button" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></a>
+</div>

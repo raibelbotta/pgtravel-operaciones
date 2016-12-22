@@ -23,9 +23,6 @@ class OfferAdministrativeChargeType extends AbstractType
                 ))
                 ->add('base')
                 ->add('price')
-                ->add('notes', TextareaType::class, array(
-                    'required' => false
-                ))
                 ;
     }
 

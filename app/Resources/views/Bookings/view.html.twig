@@ -55,17 +55,19 @@
         </tr>
         <tr>
             <th>{{ 'Is paid'|trans }}</th>
-            <td>{{ record.isPaid ? 'Yes' : 'No' }}</td>
+            <td>{{ record.paidAt is not empty ? 'Yes' : 'No' }}</td>
         </tr>
-        {% if record.isPaid %}
+        {% if record.paidAt is not empty %}
             <tr>
                 <th>{{ 'Pay date'|trans }}</th>
                 <td>{{ record.paidAt|date('d/m/Y') }}</td>
             </tr>
-            <tr>
-                <th>{{ 'Pay notes'|trans }}</th>
-                <td>{{ record.payNotes }}</td>
-            </tr>
+            {% if record.payNotes is not empty %}
+                <tr>
+                    <th>{{ 'Pay notes'|trans }}</th>
+                    <td>{{ record.payNotes }}</td>
+                </tr>
+            {% endif %}
         {% endif %}
     </tbody>
 </table>
@@ -108,7 +110,7 @@
                                 </td>
                             </tr>
                         {% endif %}
-                        {% if service.isPaid %}
+                        {% if service.paidAt is not empty %}
                             <tr style="font-size: 0.85em;">
                                 <td colspan="7">
                                     {% trans with {'%date%': service.paidAt|date('d/m/Y'), '%notes%': service.payNotes} %}Paid at %%date%% with following notes<br>%%notes%%{% endtrans %}

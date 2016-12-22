@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 /**
@@ -51,7 +50,11 @@ class OfferFormType extends AbstractType
                     'required' => false
                 ))
                 ->add('name')
-                ->add('travelerNames', TextareaType::class, array(
+                ->add('travelerNames', null, array(
+                    'required' => false
+                ))
+                ->add('fliesData', null, array(
+                    'label' => 'Arrival and departure flies',
                     'required' => false
                 ))
                 ->add('services', CollectionType::class, array(

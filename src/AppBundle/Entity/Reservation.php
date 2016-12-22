@@ -84,6 +84,14 @@ class Reservation
     private $travelerNames;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="flies_data", type="text", nullable=true)
+     * @Assert\Length(max=32000)
+     */
+    private $fliesData;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ReservationService", mappedBy="reservation", cascade={"persist", "remove"})
@@ -719,5 +727,29 @@ class Reservation
     public function getOperator()
     {
         return $this->operator;
+    }
+
+    /**
+     * Set fliesData
+     *
+     * @param string $fliesData
+     *
+     * @return Reservation
+     */
+    public function setFliesData($fliesData)
+    {
+        $this->fliesData = $fliesData;
+
+        return $this;
+    }
+
+    /**
+     * Get fliesData
+     *
+     * @return string
+     */
+    public function getFliesData()
+    {
+        return $this->fliesData;
     }
 }

@@ -54,9 +54,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 form-group">
+                    <div class="col-sm-6 col-xs-12 form-group">
                         {{ form_label(form.travelerNames, null, {'label_attr': {'class': 'cotrol-label'}}) }}
                         {{ form_widget(form.travelerNames, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12 form-group">
+                        {{ form_label(form.fliesData, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                        {{ form_widget(form.fliesData, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
             </div>

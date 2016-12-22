@@ -58,6 +58,10 @@ class ReservationFormType extends AbstractType
                 ->add('travelerNames', TextareaType::class, array(
                     'required' => false
                 ))
+                ->add('fliesData', null, array(
+                    'label' => 'Arrival and departure flies',
+                    'required' => false
+                ))
                 ->add('services', CollectionType::class, array(
                     'entry_type' => OfferServiceType::class,
                     'allow_add' => true,

@@ -1,7 +1,7 @@
 <div class="text-center">
     <div class="btn-group">
         {% if not record.isNotified %}
-            <a href="{{ path('app_notifications_changestate', {'id': record.id}) }}" class="btn btn-xs btn-info btn-change-state" title="{{ 'Change'|trans }}"><i class="fa fa-check"></i></a>
+            <a href="{{ path('app_notifications_changestate', {'id': record.id}) }}" class="btn btn-xs btn-info btn-change-state" title="{{ 'Confirm'|trans }}"><i class="fa fa-check"></i></a>
         {% endif %}
     </div>
 </div>

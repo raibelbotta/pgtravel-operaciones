@@ -43,6 +43,7 @@ class CXPagarController extends Controller
         $qb = $manager->getRepository('AppBundle:ReservationService')
                 ->createQueryBuilder('rs')
                 ->join('rs.reservation', 'r')
+                ->join('rs.supplier', 's')
                 ;
 
         $search = $request->get('search');

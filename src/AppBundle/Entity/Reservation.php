@@ -180,9 +180,11 @@ class Reservation
 
     public function __construct()
     {
-        $this->state = 'offer';
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
         $this->administrativeAharges = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payAttachments = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        $this->state = 'offer';
         $this->isPaid = false;
         $this->isCancelled = false;
     }

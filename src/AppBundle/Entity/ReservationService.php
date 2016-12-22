@@ -107,6 +107,14 @@ class ReservationService
     private $isNotified;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="supplier_reference", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $supplierReference;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="is_paid", type="boolean", options={"default": false})
@@ -541,5 +549,29 @@ class ReservationService
     public function getIsNotified()
     {
         return $this->isNotified;
+    }
+
+    /**
+     * Set supplierReference
+     *
+     * @param string $supplierReference
+     *
+     * @return ReservationService
+     */
+    public function setSupplierReference($supplierReference)
+    {
+        $this->supplierReference = $supplierReference;
+
+        return $this;
+    }
+
+    /**
+     * Get supplierReference
+     *
+     * @return string
+     */
+    public function getSupplierReference()
+    {
+        return $this->supplierReference;
     }
 }

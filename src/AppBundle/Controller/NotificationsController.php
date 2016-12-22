@@ -11,12 +11,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Reservation;
 use AppBundle\Entity\ReservationService;
+use AppBundle\Form\Type\ConfirmServiceFormType;
 
 /**
  * Description of NotificationsController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/notifications")
+ * @Route("/service-confirm")
  */
 class NotificationsController extends Controller
 {
@@ -51,6 +52,9 @@ class NotificationsController extends Controller
         $qb = $manager->getRepository('AppBundle:ReservationService')
                 ->createQueryBuilder('rs')
                 ->join('rs.reservation', 'r')
+                ->leftJoin('r.client', 'c')
+                ->leftJoin('r.operator', 'u')
+                ->leftJoin('rs.supplier', 's')
                 ;
 
         $search = $request->get('search');
@@ -63,8 +67,8 @@ class NotificationsController extends Controller
 
         $andX = $qb->expr()->andX(
                 $qb->expr()->eq('r.state', $qb->expr()->literal(Reservation::STATE_RESERVATION)),
-                $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false)),
-                $qb->expr()->gte('rs.startAt', $qb->expr()->literal(date('Y/m/d')))
+                $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false))/*,
+                $qb->expr()->gte('rs.startAt', $qb->expr()->literal(date('Y/m/d')))*/
                 );
 
         if (isset($filter['state']) && $filter['state']) {
@@ -72,15 +76,54 @@ class NotificationsController extends Controller
         }
 
         if (is_array($search) && isset($search['value']) && $search['value']) {
-
+            $andX->add($qb->expr()->orX(
+                    $qb->expr()->like('r.name', $qb->expr()->literal(sprintf('%%%s%%', $search['value']))),
+                    $qb->expr()->orX(
+                            $qb->expr()->andX(
+                                    $qb->expr()->isNull('r.client'),
+                                    $qb->expr()->like('r.directClientFullName', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
+                                    )
+                            ),
+                            $qb->expr()->andX(
+                                    $qb->expr()->isNotNull('r.client'),
+                                    $qb->expr()->like('c.fullName', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
+                                    ),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('r.operator'),
+                            $qb->expr()->orX(
+                                    $qb->expr()->like('u.firstName', $qb->expr()->literal(sprintf('%%%s%%', $search['value']))),
+                                    $qb->expr()->like('u.lastName', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
+                                    )
+                            ),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('rs.supplier'),
+                            $qb->expr()->like('s.fullName', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
+                            ),
+                    $qb->expr()->like('rs.name', $qb->expr()->literal('%' . $search['value'] . '%')),
+                    $qb->expr()->like('rs.supplierReference', $qb->expr()->literal('%' . $search['value'] . '%'))
+                    ));
         }
 
         $qb->where($andX);
 
         if ($orders) {
             $column = call_user_func(function($name) {
-                if ($name == 'service') {
+                if ('name' === $name) {
+                    return 'r.name';
+                } elseif ('operator' === $name) {
+                    return 'u.firstName';
+                } elseif ('client' === $name) {
+                    return 'c.fullName';
+                } elseif ('supplier' === $name) {
+                    return 's.name';
+                } elseif ('service' === $name) {
                     return 'rs.name';
+                } elseif ('startAt' === $name) {
+                    return 'rs.startAt';
+                } elseif ('endAt' === $name) {
+                    return 'rs.endAt';
+                } elseif ('reference' === $name) {
+                    return 'rs.supplierReference';
                 }
                 return null;
             }, $columns[$orders[0]['column']]['name']);
@@ -104,10 +147,14 @@ class NotificationsController extends Controller
         $twig = $this->container->get('twig');
         $data = array_map(function($record) use($twig) {
             return array(
-                $record->getSupplier()->getName(),
+                $record->getReservation()->getName(),
+                null !== $record->getReservation()->getOperator() ? (string) $record->getReservation()->getOperator() : '',
+                null !== $record->getReservation()->getClient() ? (string) $record->getReservation()->getClient() : $record->getReservation()->getDirectClientFullName(),
+                null !== $record->getSupplier() ? $record->getSupplier()->getName() : '',
                 $record->getName(),
                 $record->getStartAt()->format('d/m/Y'),
                 $record->getEndAt()->format('d/m/Y'),
+                $record->getSupplierReference(),
                 $twig->render('Notifications/_actions.html.twig', array('record' => $record))
             );
         }, $list);
@@ -125,29 +172,26 @@ class NotificationsController extends Controller
      * @Method({"get", "post"})
      * @ParamConverter("record", class="AppBundle\Entity\ReservationService")
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
     public function changeStateAction(ReservationService $record, Request $request)
     {
-        if (!$record->getIsNotified()) {
-            $record
-                    ->setIsNotified(true)
-                    ;
-        } else {
-            $record
-                    ->setIsNotified(false)
-                    ;
-        }
+        $form = $this->createForm(ConfirmServiceFormType::class, $record);
 
-        $manager = $this->getDoctrine()->getManager();
-        $manager->flush();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $record->setIsNotified(true);
 
-        if ($request->isXmlHttpRequest()) {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
+
             return new JsonResponse(array(
                 'result' => 'success'
             ));
-        } else {
-            return $this->redirect($this->generateUrl('app_notifications_index'));
         }
+
+        return $this->render('Notifications/confirm.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }

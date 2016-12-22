@@ -107,6 +107,11 @@ services:
         arguments: [  '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.confirm_service_form_type:
+        class: AppBundle\Form\Type\ConfirmServiceFormType
+        arguments: [  '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.validator.constraints.cupos:
         class: ValidCupoValidator

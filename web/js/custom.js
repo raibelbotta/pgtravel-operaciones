@@ -354,13 +354,13 @@ $(document).ready(function() {
 
 // Panel toolbox
 $(document).ready(function() {
-    $('.collapse-link').on('click', function() {
+    $('body').on('click', '.collapse-link', function() {
         var $BOX_PANEL = $(this).closest('.x_panel'),
             $ICON = $(this).find('i'),
             $BOX_CONTENT = $BOX_PANEL.find('.x_content');
         
         // fix for some div with hardcoded fix class
-        if ($BOX_PANEL.attr('style')) {
+        if ($BOX_PANEL.css('style')) {
             $BOX_CONTENT.slideToggle(200, function(){
                 $BOX_PANEL.removeAttr('style');
             });

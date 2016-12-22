@@ -5,7 +5,8 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 /**
  * Description of OfferAdministrativeChargeType
@@ -18,12 +19,20 @@ class OfferAdministrativeChargeType extends AbstractType
     {
         $builder
                 ->add('name')
-                ->add('factor', null, array(
-                    'label' => 'Pax'
-                ))
                 ->add('base')
                 ->add('price')
                 ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            $label = in_array($data->getName(), array('Room', 'Board')) ? 'Number of nights' : 'Pax';
+
+            $form->add('factor', null, array(
+                'label' => $label
+            ));
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

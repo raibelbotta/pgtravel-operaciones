@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Supplier
@@ -26,6 +27,7 @@ class Supplier
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
@@ -33,8 +35,17 @@ class Supplier
      * @var string
      *
      * @ORM\Column(name="postal_address", type="text", nullable=true)
+     * @Assert\Length(max=32000)
      */
     private $postalAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bank_accounts", type="text", nullable=true)
+     * @Assert\Length(max=32000)
+     */
+    private $bankAccounts;
 
     /**
      * @var \Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
@@ -284,5 +295,29 @@ class Supplier
     public function getEmployees()
     {
         return $this->employees;
+    }
+
+    /**
+     * Set bankAccounts
+     *
+     * @param string $bankAccounts
+     *
+     * @return Supplier
+     */
+    public function setBankAccounts($bankAccounts)
+    {
+        $this->bankAccounts = $bankAccounts;
+
+        return $this;
+    }
+
+    /**
+     * Get bankAccounts
+     *
+     * @return string
+     */
+    public function getBankAccounts()
+    {
+        return $this->bankAccounts;
     }
 }

@@ -23,6 +23,10 @@ class SupplierFormType extends AbstractType
                 ->add('fixedPhone', PhoneNumberType::class, array(
                     'required' => false
                 ))
+                ->add('bankAccounts', null, array(
+                    'label' => 'Bank data',
+                    'required' => false
+                ))
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
                 ))

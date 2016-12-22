@@ -10,6 +10,10 @@
                 {%- endif -%}
             </td>
         </tr>
+        <tr>
+            <th>{{ 'Representant'|trans }}</th>
+            <td>{{ record.operator }}</td>
+        </tr>
         {% if record.client is not empty %}
             <tr>
                 <th>{{ 'Requested by'|trans }}</th>
@@ -56,7 +60,7 @@
         {% if record.isPaid %}
             <tr>
                 <th>{{ 'Pay date'|trans }}</th>
-                <td>{{ record.paidAt }}</td>
+                <td>{{ record.paidAt|date('d/m/Y') }}</td>
             </tr>
             <tr>
                 <th>{{ 'Pay notes'|trans }}</th>

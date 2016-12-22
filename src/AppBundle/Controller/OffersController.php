@@ -13,6 +13,9 @@ use AppBundle\Entity\Reservation;
 use AppBundle\Form\Type\OfferFormType;
 
 /**
+ * Description of OffersController
+ *
+ * @author Raibel Botta <raibelbotta@gmail.com>
  * @Route("/offers")
  */
 class OffersController extends Controller
@@ -124,6 +127,7 @@ class OffersController extends Controller
     public function newAction(Request $request)
     {
         $offer = new Reservation();
+        $offer->setOperator($this->getUser());
 
         foreach ($this->container->getParameter('app.administrative_services') as $k) {
             $service = new \AppBundle\Entity\ReservationAdministrativeCharge();

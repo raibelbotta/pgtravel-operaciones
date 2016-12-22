@@ -7,7 +7,7 @@
     </div>
     <div class="x_content">
         <div class="row">
-            <div class="form-group col-sm-6 col-xs-12">
+            <div class="form-group col-sm-3 col-xs-3">
                 {{ form_label(form.clientType, null, {'label_attr': {'class': 'control-label'}}) }}
                 <div>
                     <label>
@@ -19,6 +19,10 @@
                         {{ 'Direct'|trans }}
                     </label>
                 </div>
+            </div>
+            <div class="col-xs-3 form-group col-sm-3">
+                {{ form_label(form.operator, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.operator, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
                 {{ form_label(form.client, null, {'label_attr': {'class': 'control-label'}}) }}

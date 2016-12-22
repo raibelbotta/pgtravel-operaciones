@@ -155,6 +155,14 @@ class Reservation
     private $payAttachments;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(onDelete="set null")
+     */
+    private $operator;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -715,5 +723,29 @@ class Reservation
     public function getPayAttachments()
     {
         return $this->payAttachments;
+    }
+
+    /**
+     * Set operator
+     *
+     * @param \AppBundle\Entity\User $operator
+     *
+     * @return Reservation
+     */
+    public function setOperator(\AppBundle\Entity\User $operator = null)
+    {
+        $this->operator = $operator;
+
+        return $this;
+    }
+
+    /**
+     * Get operator
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getOperator()
+    {
+        return $this->operator;
     }
 }

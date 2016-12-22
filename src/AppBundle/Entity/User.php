@@ -129,6 +129,11 @@ class User extends BaseUser
         return $this->imageFile;
     }
 
+    public function __toString()
+    {
+        return $this->getFullName();
+    }
+
     /**
      * Set firstName
      *

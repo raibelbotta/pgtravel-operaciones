@@ -70,6 +70,10 @@ class OfferFormType extends AbstractType
                 ->add('clientCharge', null, array(
                     'required' => true
                 ))
+                ->add('operator', OperatorType::class, array(
+                    'label'=> 'Representant',
+                    'required' => false
+                ))
                 ;
 
         $manager = $this->manager;

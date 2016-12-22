@@ -74,6 +74,10 @@ class ReservationFormType extends AbstractType
                 ->add('clientCharge', null, array(
                     'required' => true
                 ))
+                ->add('operator', OperatorType::class, array(
+                    'label' => 'Representant',
+                    'required' => false
+                ))
                 ;
     }
 

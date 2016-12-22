@@ -67,6 +67,21 @@ class User extends BaseUser
     private $imageFile;
 
     /**
+     * @var \Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+     * 
+     * @ORM\Column(name="mobile_phone", type="phone_number", nullable=true)
+     */
+    private $mobilePhone;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="postal_address", type="text", nullable=true)
+     * @Assert\Length(max=32000)
+     */
+    private $postalAddress;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -256,5 +271,53 @@ class User extends BaseUser
     public function getGender()
     {
         return $this->gender;
+    }
+
+    /**
+     * Set mobilePhone
+     *
+     * @param phone_number $mobilePhone
+     *
+     * @return User
+     */
+    public function setMobilePhone($mobilePhone)
+    {
+        $this->mobilePhone = $mobilePhone;
+
+        return $this;
+    }
+
+    /**
+     * Get mobilePhone
+     *
+     * @return phone_number
+     */
+    public function getMobilePhone()
+    {
+        return $this->mobilePhone;
+    }
+
+    /**
+     * Set postalAddress
+     *
+     * @param string $postalAddress
+     *
+     * @return User
+     */
+    public function setPostalAddress($postalAddress)
+    {
+        $this->postalAddress = $postalAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get postalAddress
+     *
+     * @return string
+     */
+    public function getPostalAddress()
+    {
+        return $this->postalAddress;
     }
 }

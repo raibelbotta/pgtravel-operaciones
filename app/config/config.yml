@@ -106,6 +106,9 @@ oneup_flysystem:
         offer_summaries:
             local:
                 directory: %kernel.root_dir%/../web/uploads/offers
+        pay_attachments:
+            local:
+                directory: %kernel.root_dir%/../web/uploads/pay_attachments
     filesystems:
         users_images_fs:
             adapter: users_adapter
@@ -116,6 +119,9 @@ oneup_flysystem:
         offer_summaries_fs:
             adapter: offer_summaries
             mount: offer_summaries_fs
+        pay_attachments_fs:
+            adapter: pay_attachments
+            mount: pay_attachments_fs
 
 vich_uploader:
     db_driver:  orm
@@ -132,4 +138,8 @@ vich_uploader:
         offer_summaries:
             uri_prefix:         /uploads/offers
             upload_destination: offer_summaries_fs
+            namer:              vich_uploader.namer_uniqid
+        pay_attachments:
+            uri_prefix:         /uploads/pay_attachments
+            upload_destination: pay_attachments_fs
             namer:              vich_uploader.namer_uniqid

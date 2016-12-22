@@ -4,6 +4,8 @@ namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Description of ProfileFormType
@@ -22,6 +24,12 @@ class ProfileFormType extends BaseType
                 ->add('firstName')
                 ->add('lastName')
                 ->add('gender', GenderType::class)
+                ->add('mobilePhone', PhoneNumberType::class, array(
+                    'required' => false
+                ))
+                ->add('postalAddress', TextareaType::class, array(
+                    'required' => false
+                ))
                 ;
     }
 }

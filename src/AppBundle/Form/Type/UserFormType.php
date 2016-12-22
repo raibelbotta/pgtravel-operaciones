@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 /**
  * Description of UserFormType
@@ -37,6 +39,12 @@ class UserFormType extends AbstractType
                     ),
                     'choices_as_values' => true,
                     'label' => 'Access control'
+                ))
+                ->add('mobilePhone', PhoneNumberType::class, array(
+                    'required' => false
+                ))
+                ->add('postalAddress', TextareaType::class, array(
+                    'required' => false
                 ))
                 ;
 

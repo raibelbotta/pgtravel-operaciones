@@ -148,6 +148,13 @@ class Reservation
     private $paidAt;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ReservationPayAttachment", mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $payAttachments;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -674,5 +681,39 @@ class Reservation
     public function getPaidAt()
     {
         return $this->paidAt;
+    }
+
+    /**
+     * Add payAttachment
+     *
+     * @param \AppBundle\Entity\ReservationPayAttachment $payAttachment
+     *
+     * @return Reservation
+     */
+    public function addPayAttachment(\AppBundle\Entity\ReservationPayAttachment $payAttachment)
+    {
+        $this->payAttachments[] = $payAttachment;
+
+        return $this;
+    }
+
+    /**
+     * Remove payAttachment
+     *
+     * @param \AppBundle\Entity\ReservationPayAttachment $payAttachment
+     */
+    public function removePayAttachment(\AppBundle\Entity\ReservationPayAttachment $payAttachment)
+    {
+        $this->payAttachments->removeElement($payAttachment);
+    }
+
+    /**
+     * Get payAttachments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayAttachments()
+    {
+        return $this->payAttachments;
     }
 }

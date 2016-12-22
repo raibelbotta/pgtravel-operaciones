@@ -68,7 +68,8 @@ class OfferFormType extends AbstractType
                     'by_reference' => false
                 ))
                 ->add('offerSummaryFile', VichFileType::class, array(
-                    'required' => false
+                    'required' => false,
+                    'label' => 'Travel itinerary document'
                 ))
                 ->add('clientCharge', null, array(
                     'required' => true

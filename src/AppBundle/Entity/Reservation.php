@@ -127,11 +127,11 @@ class Reservation
     private $isCancelled;
 
     /**
-     * @var bool
+     * @var \DateTime
      *
-     * @ORM\Column(name="is_paid", type="boolean", options={"default": false})
+     * @ORM\Column(name="paid_at", type="datetime", nullable=true)
      */
-    private $isPaid;
+    private $paidAt;
 
     /**
      * @var string
@@ -139,13 +139,6 @@ class Reservation
      * @ORM\Column(name="pay_notes", type="text", nullable=true)
      */
     private $payNotes;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="paid_at", type="datetime", nullable=true)
-     */
-    private $paidAt;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -185,7 +178,6 @@ class Reservation
         $this->payAttachments = new \Doctrine\Common\Collections\ArrayCollection();
         
         $this->state = 'offer';
-        $this->isPaid = false;
         $this->isCancelled = false;
     }
 
@@ -598,30 +590,6 @@ class Reservation
     }
 
     /**
-     * Set isPaid
-     *
-     * @param boolean $isPaid
-     *
-     * @return Reservation
-     */
-    public function setIsPaid($isPaid)
-    {
-        $this->isPaid = $isPaid;
-
-        return $this;
-    }
-
-    /**
-     * Get isPaid
-     *
-     * @return boolean
-     */
-    public function getIsPaid()
-    {
-        return $this->isPaid;
-    }
-
-    /**
      * Set isCancelled
      *
      * @param boolean $isCancelled
@@ -703,6 +671,8 @@ class Reservation
     public function addPayAttachment(\AppBundle\Entity\ReservationPayAttachment $payAttachment)
     {
         $this->payAttachments[] = $payAttachment;
+
+        $payAttachment->setReservation($this);
 
         return $this;
     }

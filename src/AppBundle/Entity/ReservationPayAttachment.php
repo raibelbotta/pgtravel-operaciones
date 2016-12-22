@@ -44,7 +44,7 @@ class ReservationPayAttachment
     /**
      * @var File
      * 
-     * @VIch\UploadableField(mapping="pay_attachments", filenameProperty="filename")
+     * @Vich\UploadableField(mapping="pay_attachments", filenameProperty="filename")
      * @Assert\File
      */
     private $file;
@@ -72,17 +72,28 @@ class ReservationPayAttachment
      */
     private $updatedAt;
 
+    /**
+     * @param File $file
+     * @return \AppBundle\Entity\ReservationPayAttachment
+     */
     public function setFile(File $file)
     {
         $this->file = $file;
 
         if (null !== $file) {
             $this->updatedAt = new \DateTime('now');
+
+            if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                $this->originalFilename = $file->getClientOriginalName();
+            }
         }
 
         return $this;
     }
 
+    /**
+     * @return type
+     */
     public function getFile()
     {
         return $this->file;

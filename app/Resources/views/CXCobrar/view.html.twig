@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <button class="close" type="button" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">{{ 'Pay data'|trans }}</h4>
+</div>
+<div class="modal-body">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{{ 'Paid at'|trans }}</th>
+                <td>{{ record.paidAt|date('d/m/Y H:i') }}</td>
+            </tr>
+            {% if record.payNotes is not empty %}
+                <tr>
+                    <th>{{ 'Notes'|trans }}</th>
+                    <td>{{ record.payNotes }}</td>
+                </tr>
+            {% endif %}
+            {% if record.payAttachments|length > 0 %}
+                <tr>
+                    <th>{{ 'Attachments'|trans }}</th>
+                    <td>
+                        {% for key, attachment in record.payAttachments %}
+                            <a href="{{ path('app_cxcobrar_downloadattachment', {'id': attachment.id, 'filename': attachment.originalFilename}) }}" target="_blank" class="btn btn-default btn-block btn-xs">
+                                <i class="fa fa-download"></i>
+                                {{ attachment.originalFilename }}
+                            </a>
+                        {% endfor %} 
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <a href="#" class="btn btn-danger">{{ 'Cancel pay'|trans }}</a>
+    <button class="btn btn-default" data-dismiss="modal">{{ 'Close'|trans }}</button>
+</div>

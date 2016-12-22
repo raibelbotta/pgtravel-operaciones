@@ -1,0 +1,14 @@
+{% block _pay_reservation_form_payAttachments_row %}
+    {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+    <div class="row collection" data-prototype="{{ form_row(form.vars.prototype)|e }}" id="{{ form.vars.id }}">
+        {% for child in form %}
+            {{ form_row(child) }}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block reservation_pay_attachment_row %}
+    <div class="col-xs-6 item">
+        {{ form_widget(form.file) }}
+    </div>
+{% endblock %}

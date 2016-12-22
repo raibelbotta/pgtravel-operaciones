@@ -115,13 +115,6 @@ class ReservationService
     private $supplierReference;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_paid", type="boolean", options={"default": false})
-     */
-    private $isPaid;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="pay_notes", type="text", nullable=true)
@@ -456,27 +449,27 @@ class ReservationService
     }
 
     /**
-     * Set isPaid
+     * Set paidAt
      *
-     * @param boolean $isPaid
+     * @param \DateTime $paidAt
      *
      * @return ReservationService
      */
-    public function setIsPaid($isPaid)
+    public function setPaidAt($paidAt)
     {
-        $this->isPaid = $isPaid;
+        $this->paidAt = $paidAt;
 
         return $this;
     }
 
     /**
-     * Get isPaid
+     * Get paidAt
      *
-     * @return boolean
+     * @return \DateTime
      */
-    public function getIsPaid()
+    public function getPaidAt()
     {
-        return $this->isPaid;
+        return $this->paidAt;
     }
 
     /**
@@ -501,30 +494,6 @@ class ReservationService
     public function getPayNotes()
     {
         return $this->payNotes;
-    }
-
-    /**
-     * Set paidAt
-     *
-     * @param \DateTime $paidAt
-     *
-     * @return ReservationService
-     */
-    public function setPaidAt($paidAt)
-    {
-        $this->paidAt = $paidAt;
-
-        return $this;
-    }
-
-    /**
-     * Get paidAt
-     *
-     * @return \DateTime
-     */
-    public function getPaidAt()
-    {
-        return $this->paidAt;
     }
 
     /**

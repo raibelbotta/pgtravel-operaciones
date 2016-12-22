@@ -1,0 +1,30 @@
+{% form_theme form 'CXCobrar/fields.html.twig' %}
+
+{{ form_start(form, {'action': path('app_cxcobrar_changestate', {'id': form.vars.data.id}), 'attr': {'role': 'form'}}) }}
+    <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'Mark as paid'|trans }}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12">
+                {{ form_label(form.payNotes, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.payNotes, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                {{ form_row(form.payAttachments) }}
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default btn-xs btn-add-item" title="{{ 'Add attachment'|trans }}">
+                        <i class="fa fa-plus-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Cancel'|trans }}</button>
+    </div>
+{{ form_end(form) }}

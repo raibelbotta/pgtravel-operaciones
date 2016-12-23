@@ -122,6 +122,14 @@ class ReservationService
     private $payNotes;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ReservationServicePayAttachment",
+     *      mappedBy="service", cascade={"persist", "remove"})
+     */
+    private $payAttachments;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="paid_at", type="datetime", nullable=true)
@@ -542,5 +550,41 @@ class ReservationService
     public function getSupplierReference()
     {
         return $this->supplierReference;
+    }
+
+    /**
+     * Add payAttachment
+     *
+     * @param \AppBundle\Entity\ReservationServicePayAttachment $payAttachment
+     *
+     * @return ReservationService
+     */
+    public function addPayAttachment(\AppBundle\Entity\ReservationServicePayAttachment $payAttachment)
+    {
+        $this->payAttachments[] = $payAttachment;
+
+        $payAttachment->setService($this);
+        
+        return $this;
+    }
+
+    /**
+     * Remove payAttachment
+     *
+     * @param \AppBundle\Entity\ReservationServicePayAttachment $payAttachment
+     */
+    public function removePayAttachment(\AppBundle\Entity\ReservationServicePayAttachment $payAttachment)
+    {
+        $this->payAttachments->removeElement($payAttachment);
+    }
+
+    /**
+     * Get payAttachments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayAttachments()
+    {
+        return $this->payAttachments;
     }
 }

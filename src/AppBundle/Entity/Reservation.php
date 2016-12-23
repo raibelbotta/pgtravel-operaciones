@@ -189,6 +189,11 @@ class Reservation
         $this->isCancelled = false;
     }
 
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
+
     /**
      * @param File $file
      * @return Reservation

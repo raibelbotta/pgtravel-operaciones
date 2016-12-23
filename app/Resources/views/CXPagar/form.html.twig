@@ -1,0 +1,51 @@
+{% form_theme form 'CXPagar/fields.html.twig' %}
+
+{{ form_start(form, {'action': path('app_cxpagar_changestate', {'id': form.vars.data.id}), 'attr': {'role': 'form'}}) }}
+    <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'Mark as paid'|trans }}</h4>
+    </div>
+    <div class="modal-body">
+        <table class="table">
+            <tr>
+                <th>{{ 'Supplier'|trans }}</th>
+                <td>{{ form.vars.data.supplier}}</td>
+            </tr>
+            <tr>
+                <th>Service</th>
+                <td>{{ form.vars.data.name }}</td>
+            </tr>
+            <tr>
+                <th>Booking</th>
+                <td>{{ form.vars.data.reservation.name }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'From - To '|trans }}</th>
+                <td>{{ form.vars.data.startAt|date('d/m/Y H:i') }} - {{ form.vars.data.endAt|date('d/m/Y H:i') }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Charge'|trans }}</th>
+                <td>{{ '%0.2f'|format(form.vars.data.supplierPrice) }}</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>{{ form_widget(form.payNotes, {'attr': {'class': 'form-control'}}) }}</td>
+            </tr>
+            <tr>
+                <th>
+                    {{ 'Attachments'|trans }}
+                    <button type="button" class="btn btn-xs btn-default btn-add-item" title="{{ 'Add attachment'|trans }}">
+                        <i class="fa fa-plus-circle"></i>
+                    </button>
+                </th>
+                <td>
+                    {{ form_row(form.payAttachments) }}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Cancel'|trans }}</button>
+    </div>
+{{ form_end(form) }}

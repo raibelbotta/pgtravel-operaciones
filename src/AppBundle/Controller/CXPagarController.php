@@ -214,7 +214,7 @@ class CXPagarController extends Controller
      * @Method({"get"})
      * @ParamConverter("record", class="AppBundle\Entity\ReservationService")
      */
-    public function cancelPayAction(Reservation $record)
+    public function cancelPayAction(ReservationService $record)
     {
         $manager = $this->getDoctrine()->getManager();
         $record

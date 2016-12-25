@@ -28,6 +28,23 @@ $(document).ready(function() {
         format: 'DD/MM/YYYY HH:mm'
     });
 
+    $('#offer_form_directClientMobilePhone').intlTelInput({
+        allowExtensions: true,
+        autoFormat: false,
+        autoHideDialCode: true,
+        autoPlaceholder: false,
+        defaultCountry: 'auto',
+        geoIpLookup: function(callback) {
+            $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                var countryCode = (resp && resp.country) ? resp.country : '';
+                callback(countryCode);
+            });
+        },
+        nationalMode: false,
+        numberType: 'MOBILE',
+        preferredCountries: ['ca', 'us', 'gb'],
+        utilsScript: phone_util_script_url
+    });
     //collection stuff
     +(function() {
         $('body').on('click', '.btn-add-item', function(event) {

@@ -11,6 +11,7 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityManager;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 /**
  * Description of ReservationFormType
@@ -47,6 +48,20 @@ class ReservationFormType extends AbstractType
                     'query_builder' => $qb->where($andX),
                     'required' => false
                 ));
+            } else {
+                $form
+                        ->add('directClientEmail', null, array(
+                            'label' => 'Email',
+                            'required' => false
+                        ))
+                        ->add('directClientPostalAddress', null, array(
+                            'label' => 'Postal address',
+                            'required' => false
+                        ))
+                        ->add('directClientMobilePhone', PhoneNumberType::class, array(
+                            'label' => 'Mobile phone',
+                            'required' => false
+                        ));
             }
         });
 

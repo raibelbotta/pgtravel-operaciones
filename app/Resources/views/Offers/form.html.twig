@@ -25,16 +25,27 @@
                 {{ form_widget(form.operator, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
-                {{ form_label(form.client, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_label(form.client, null, {'required': true, 'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
-                {{ form_label(form.directClientFullName, null, {'label_attr': {'class': 'control-label'}})}}
+                {{ form_label(form.directClientFullName, null, {'required': true, 'label_attr': {'class': 'control-label'}})}}
                 {{ form_widget(form.directClientFullName, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="form-group col-sm-2 col-xs-12">
                 {{ form_label(form.notificationLine, null, {'labl_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.notificationLine, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group col-sm-6 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                {{ form_label(form.directClientEmail, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.directClientEmail, {'attr': {'class': 'form-control'}}) }}
+            </div><div class="form-group col-sm-6 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                {{ form_label(form.directClientMobilePhone, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.directClientMobilePhone, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class=" form-group col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                {{ form_label(form.directClientPostalAddress, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.directClientPostalAddress, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="row">

@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Doctrine\ORM\EntityManager;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
@@ -44,6 +45,19 @@ class OfferFormType extends AbstractType
                     'required' => false
                 ))
                 ->add('directClientFullName', null, array(
+                    'label' => 'Full name',
+                    'required' => false
+                ))
+                ->add('directClientEmail', null, array(
+                    'label' => 'Email',
+                    'required' => false
+                ))
+                ->add('directClientPostalAddress', null, array(
+                    'label' => 'Postal address',
+                    'required' => false
+                ))
+                ->add('directClientMobilePhone', PhoneNumberType::class, array(
+                    'label' => 'Mobile phone',
                     'required' => false
                 ))
                 ->add('notificationLine', NotificationLineType::class, array(
@@ -135,6 +149,10 @@ class OfferFormType extends AbstractType
                         ;
                 
                 $data['directClientFullName'] = '';
+                $data['directClientEmail'] = '';
+                $data['directClientPostalAddress'] = '';
+                $data['directClientMobilePhone'] = '';
+
                 $event->setData($data);
             }
         });

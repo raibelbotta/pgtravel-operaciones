@@ -29,7 +29,8 @@
         "liip/imagine-bundle": "^1.6",
         "oneup/flysystem-bundle": "^1.5",
         "knplabs/knp-paginator-bundle": "^2.5",
-        "jms/i18n-routing-bundle": "^2.0"
+        "jms/i18n-routing-bundle": "^2.0",
+        "symfony/assetic-bundle": "^2.8"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

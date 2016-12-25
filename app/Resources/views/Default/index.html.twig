@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="title_left">
-        <h3>{{ 'Operations calendar'}} <small>{{ 'click to view'|trans }}</small></h3>
+        <h3>{{ 'Operations calendar'}} <small>{{ 'click on event to view'|trans }}</small></h3>
     </div>
     <div class="x_panel">
         <div class="x_title">
@@ -18,7 +18,18 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#calendar').fullCalendar({
-                events: {{ events|json_encode|raw }}
+                events: function(start, end, timeone, callback) {
+                    $.ajax('{{ path('app_default_getevents') }}', {
+                        dataType: 'json',
+                        data: {
+                            start: start.unix(),
+                            end: end.unix()
+                        },
+                        success: function(json) {
+                            callback(json.events);
+                        }
+                    });
+                }
             });
         });
     </script>

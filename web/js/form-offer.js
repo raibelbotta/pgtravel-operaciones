@@ -3,13 +3,20 @@ $(document).ready(function() {
         var value = $(this).val();
         if (value === 'direct') {
             $('.block-clienttype.block-clienttype-direct').show();
+            $('.block-clienttype:not(.block-clienttype-direct)').find('input:text, select').each(function() {
+                if ($(this).data('tooltipster-ns')) {
+                    $(this).tooltipster('hide');
+                }
+            });
             $('.block-clienttype:not(.block-clienttype-direct)').hide();
         } else if (value === 'registered') {
             $('.block-clienttype.block-clienttype-registered').show();
+            $('.block-clienttype:not(.block-clienttype-registered)').find('input:text, select').each(function() {
+                if ($(this).data('tooltipster-ns')) {
+                    $(this).tooltipster('hide');
+                }
+            });
             $('.block-clienttype:not(.block-clienttype-registered)').hide();
-            if ($('input#offer_form_directClientFullName').data('tooltipster-ns')) {
-                $('input#offer_form_directClientFullName').tooltipster('hide');
-            }
         }
     });
 

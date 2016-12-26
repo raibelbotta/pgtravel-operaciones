@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Reservation;
@@ -144,11 +145,14 @@ class OffersController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('jumpToOperation')->getData()) {
+                $$offer->setState(Reservation::STATE_RESERVATION);
+            }
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($form->getData());
             $manager->flush();
 
-            return $this->redirect($this->generateUrl('app_offers_index'));
+            return $this->redirect($this->generateUrl($form->get('jumpToOperation')->getData() ? 'app_bookings_index' : 'app_offers_index'));
         }
 
         return $this->render('Offers/new.html.twig', array(
@@ -498,6 +502,32 @@ class OffersController extends Controller
                     )
                 );
             }, $builder->getQuery()->getResult())
+        ));
+    }
+
+    /**
+     * @Route("/{id}/download-itinerary-document", requirements={"id": "\d+"})
+     * @Method({"get"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @return BinaryFileResponse
+     */
+    public function downloadItineraryDocumentAction(Reservation $record)
+    {
+        if (null === $record->getOfferSummaryFilename()) {
+            throw $this->createNotFoundException('This record has no itinerary document');
+        }
+
+        $filename = $this->container->getParameter('kernel.root_dir') .
+                '/../web/uploads/offers/' . $record->getOfferSummaryFilename();
+
+        return new BinaryFileResponse($filename, 200, array(
+            'Content-Description' => 'File transfer',
+            'Content-Disposition' => sprintf('attachment; filename="%s"', $record->getOfferSummaryOriginalFilename()),
+            'Content-Type' => 'application/octect-stream',
+            'Expires' => 0,
+            'Cache-Control' => 'must-revalidate',
+            'Pragma' => 'public',
+            'Content-length' => filesize($filename)
         ));
     }
 }

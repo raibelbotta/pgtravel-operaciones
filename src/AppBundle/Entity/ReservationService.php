@@ -55,11 +55,25 @@ class ReservationService
     private $pax;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="nights", type="integer", nullable=true)
+     */
+    private $nights;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="provider_price", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="supplier_price", type="decimal", precision=10, scale=2)
      */
     private $supplierPrice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="supplierCharge", type="decimal", precision=10, scale=2)
+     */
+    private $supplierCharge;
 
     /**
      * @var Supplier
@@ -586,5 +600,53 @@ class ReservationService
     public function getPayAttachments()
     {
         return $this->payAttachments;
+    }
+
+    /**
+     * Set nights
+     *
+     * @param integer $nights
+     *
+     * @return ReservationService
+     */
+    public function setNights($nights)
+    {
+        $this->nights = $nights;
+
+        return $this;
+    }
+
+    /**
+     * Get nights
+     *
+     * @return integer
+     */
+    public function getNights()
+    {
+        return $this->nights;
+    }
+
+    /**
+     * Set supplierCharge
+     *
+     * @param string $supplierCharge
+     *
+     * @return ReservationService
+     */
+    public function setSupplierCharge($supplierCharge)
+    {
+        $this->supplierCharge = $supplierCharge;
+
+        return $this;
+    }
+
+    /**
+     * Get supplierCharge
+     *
+     * @return string
+     */
+    public function getSupplierCharge()
+    {
+        return $this->supplierCharge;
     }
 }

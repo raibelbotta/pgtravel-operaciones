@@ -44,14 +44,14 @@ class ReservationAdministrativeCharge
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $factor;
+    private $nights;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $base;
+    private $pax;
 
     /**
      * @var string
@@ -63,9 +63,9 @@ class ReservationAdministrativeCharge
     /**
      * @var string
      *
-     * @ORM\Column(name="notes", type="text", nullable=true)
+     * @ORM\Column(name="total", type="decimal", precision=10, scale=2)
      */
-    private $notes;
+    private $total;
 
     /**
      * @var \DateTime
@@ -83,6 +83,11 @@ class ReservationAdministrativeCharge
      */
     private $updatedAt;
 
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
+
     /**
      * Get id
      *
@@ -92,6 +97,7 @@ class ReservationAdministrativeCharge
     {
         return $this->id;
     }
+
 
     /**
      * Set name
@@ -115,6 +121,54 @@ class ReservationAdministrativeCharge
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set nights
+     *
+     * @param integer $nights
+     *
+     * @return ReservationAdministrativeCharge
+     */
+    public function setNights($nights)
+    {
+        $this->nights = $nights;
+
+        return $this;
+    }
+
+    /**
+     * Get nights
+     *
+     * @return integer
+     */
+    public function getNights()
+    {
+        return $this->nights;
+    }
+
+    /**
+     * Set pax
+     *
+     * @param integer $pax
+     *
+     * @return ReservationAdministrativeCharge
+     */
+    public function setPax($pax)
+    {
+        $this->pax = $pax;
+
+        return $this;
+    }
+
+    /**
+     * Get pax
+     *
+     * @return integer
+     */
+    public function getPax()
+    {
+        return $this->pax;
     }
 
     /**
@@ -142,27 +196,27 @@ class ReservationAdministrativeCharge
     }
 
     /**
-     * Set notes
+     * Set total
      *
-     * @param string $notes
+     * @param string $total
      *
      * @return ReservationAdministrativeCharge
      */
-    public function setNotes($notes)
+    public function setTotal($total)
     {
-        $this->notes = $notes;
+        $this->total = $total;
 
         return $this;
     }
 
     /**
-     * Get notes
+     * Get total
      *
      * @return string
      */
-    public function getNotes()
+    public function getTotal()
     {
-        return $this->notes;
+        return $this->total;
     }
 
     /**
@@ -235,53 +289,5 @@ class ReservationAdministrativeCharge
     public function getReservation()
     {
         return $this->reservation;
-    }
-
-    /**
-     * Set factor
-     *
-     * @param integer $factor
-     *
-     * @return ReservationAdministrativeCharge
-     */
-    public function setFactor($factor)
-    {
-        $this->factor = $factor;
-
-        return $this;
-    }
-
-    /**
-     * Get factor
-     *
-     * @return integer
-     */
-    public function getFactor()
-    {
-        return $this->factor;
-    }
-
-    /**
-     * Set base
-     *
-     * @param string $base
-     *
-     * @return ReservationAdministrativeCharge
-     */
-    public function setBase($base)
-    {
-        $this->base = $base;
-
-        return $this;
-    }
-
-    /**
-     * Get base
-     *
-     * @return string
-     */
-    public function getBase()
-    {
-        return $this->base;
     }
 }

@@ -104,12 +104,17 @@ services:
             - { name: form.type }
     app.form.type.operator_type:
         class: AppBundle\Form\Type\OperatorType
-        arguments: [  '@doctrine.orm.entity_manager' ]
+        arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
     app.form.type.confirm_service_form_type:
         class: AppBundle\Form\Type\ConfirmServiceFormType
-        arguments: [  '@doctrine.orm.entity_manager' ]
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+    app.form.type.offer_service_type:
+        class: AppBundle\Form\Type\OfferServiceType
+        arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
 
@@ -126,4 +131,4 @@ services:
     app.lib.reports.report_factory:
         class: AppBundle\Lib\Reports\ReportFactory
         arguments: [ "@service_container" ]
-    report_factory: '@app.lib.reports.report_factory'
+    report.factory: '@app.lib.reports.report_factory'

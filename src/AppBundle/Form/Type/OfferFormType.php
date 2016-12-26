@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManager;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * OfferFormType
@@ -114,6 +115,13 @@ class OfferFormType extends AbstractType
             $form->add('notificationContact', null, array(
                 'query_builder' => $qb->where($andX)
             ));
+
+            if (null === $data->getId()) {
+                $form->add('jumpToOperation', CheckboxType::class, array(
+                    'mapped' => false,
+                    'required' => false
+                ));
+            }
         });
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($manager) {

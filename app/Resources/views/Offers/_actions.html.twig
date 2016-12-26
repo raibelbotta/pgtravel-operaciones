@@ -1,8 +1,18 @@
 <div class="btn-group">
     {% if not record.isCancelled %}
         <a href="{{ path('app_offers_edit', {'id': record.id}) }}" class="btn btn-primary btn-xs" title="{{ 'Edit'|trans }}"><i class="fa fa-edit"></i></a>
-        <a href="{{ path('app_offers_sendclientversion', {'id': record.id}) }}" target="_blank" class="btn btn-xs btn-default btn-send" title="{{ 'Send to client'|trans }}"><i class="fa fa-envelope"></i></a>
-        <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-default btn-xs btn-promote" title="{{ 'Promote'|trans }}"><i class="fa fa-arrow-right"></i></a>
+        <button type="button" title="{{ 'Download offer documents'|trans }}" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-download"></i>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            {% if record.offerSummaryFilename is not empty %}
+                <li><a href="{{ path('app_offers_downloaditinerarydocument', {'id': record.id, 'filename': record.offerSummaryOriginalFilename}) }}" target="_blank">{{ record.offerSummaryOriginalFilename }}</a></li>
+            {% endif %}
+            <li><a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'pdf'}) }}" target="_blank">{{ 'Costing (pdf)'|trans }}</a></li>
+            <li><a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'xls'}) }}" target="_blank">{{ 'Costing (xls)'|trans }}</a></li>
+        </ul>
+        <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-xs btn-promote bg-marron" title="{{ 'Promote'|trans }}"><i class="fa fa-check"></i></a>
         <a href="{{ path('app_offers_cancel', {'id': record.id}) }}" role="button" class="btn btn-info btn-xs btn-cancel" title="{{ 'Cancel'|trans }}"><i class="fa fa-ban"></i></a>
     {% endif %}
     <a href="{{ path('app_offers_delete', {'id': record.id}) }}" role="button" class="btn btn-danger btn-xs btn-delete" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></a>

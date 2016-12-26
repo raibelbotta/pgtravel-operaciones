@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of OfferServiceType
@@ -14,6 +15,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
  */
 class OfferServiceType extends AbstractType
 {
+    /**
+     * @var EntityManager
+     */
+    private $manager;
+
+    public function __construct(EntityManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -24,7 +35,8 @@ class OfferServiceType extends AbstractType
                 ->add('pax')
                 ->add('supplierPrice')
                 ->add('supplier', null, array(
-                    'required' => false
+                    'required' => false,
+                    'query_builder' => $this->getSupplierQueryBuilder()
                 ))
                 ->add('startAt', null, array(
                     'format'    => 'dd/MM/yyyy HH:mm',
@@ -34,7 +46,6 @@ class OfferServiceType extends AbstractType
                 ->add('endAt', null, array(
                     'format'    => 'dd/MM/yyyy HH:mm',
                     'html5'     => false,
-                    'required'  => false,
                     'widget'    => 'single_text'
                 ))
                 ->add('internalNotes', TextareaType::class, array(
@@ -49,5 +60,15 @@ class OfferServiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('data_class', 'AppBundle\Entity\ReservationService');
+    }
+
+    private function getSupplierQueryBuilder()
+    {
+        $queryBuilder = $this->manager->getRepository('AppBundle:Supplier')
+                ->createQueryBuilder('s')
+                ->orderBy('s.name')
+                ;
+
+        return $queryBuilder;
     }
 }

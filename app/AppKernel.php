@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Vich\UploaderBundle\VichUploaderBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
 
             new AppBundle\AppBundle(),
         );

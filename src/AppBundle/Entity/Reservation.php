@@ -55,6 +55,29 @@ class Reservation
     /**
      * @var string
      *
+     * @ORM\Column(name="direct_client_email", type="string", length=255, nullable=true)
+     * @Assert\Email
+     */
+    private $directClientEmail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="direct_client_mobile_phone", type="phone_number", nullable=true)
+     */
+    private $directClientMobilePhone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="direct_client_postal_address", type="text", nullable=true)
+     * @Assert\Length(max=32000)
+     */
+    private $directClientPostalAddress;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="notification_line", type="string", length=20, nullable=true)
      * @Assert\Regex("/|sms|email|phone-call/")
      */
@@ -119,6 +142,13 @@ class Reservation
      * @Assert\File()
      */
     private $offerSummaryFile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="offer_summary_original_filename", type="string", length=255, nullable=true)
+     */
+    private $offerSummaryOriginalFilename;
 
     /**
      * @var string
@@ -202,7 +232,13 @@ class Reservation
     {
         $this->offerSummaryFile = $file;
 
-        $this->updatedAt = new \DateTime('now');
+        if (null !== $file ) {
+            $this->updatedAt = new \DateTime('now');
+
+            if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                $this->offerSummaryOriginalFilename = $file->getClientOriginalName();
+            }
+        }
 
         return $this;
     }
@@ -756,5 +792,101 @@ class Reservation
     public function getFliesData()
     {
         return $this->fliesData;
+    }
+
+    /**
+     * Set directClientEmail
+     *
+     * @param string $directClientEmail
+     *
+     * @return Reservation
+     */
+    public function setDirectClientEmail($directClientEmail)
+    {
+        $this->directClientEmail = $directClientEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get directClientEmail
+     *
+     * @return string
+     */
+    public function getDirectClientEmail()
+    {
+        return $this->directClientEmail;
+    }
+
+    /**
+     * Set directClientMobilePhone
+     *
+     * @param phone_number $directClientMobilePhone
+     *
+     * @return Reservation
+     */
+    public function setDirectClientMobilePhone($directClientMobilePhone)
+    {
+        $this->directClientMobilePhone = $directClientMobilePhone;
+
+        return $this;
+    }
+
+    /**
+     * Get directClientMobilePhone
+     *
+     * @return phone_number
+     */
+    public function getDirectClientMobilePhone()
+    {
+        return $this->directClientMobilePhone;
+    }
+
+    /**
+     * Set directClientPostalAddress
+     *
+     * @param string $directClientPostalAddress
+     *
+     * @return Reservation
+     */
+    public function setDirectClientPostalAddress($directClientPostalAddress)
+    {
+        $this->directClientPostalAddress = $directClientPostalAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get directClientPostalAddress
+     *
+     * @return string
+     */
+    public function getDirectClientPostalAddress()
+    {
+        return $this->directClientPostalAddress;
+    }
+
+    /**
+     * Set offerSummaryOriginalFilename
+     *
+     * @param string $offerSummaryOriginalFilename
+     *
+     * @return Reservation
+     */
+    public function setOfferSummaryOriginalFilename($offerSummaryOriginalFilename)
+    {
+        $this->offerSummaryOriginalFilename = $offerSummaryOriginalFilename;
+
+        return $this;
+    }
+
+    /**
+     * Get offerSummaryOriginalFilename
+     *
+     * @return string
+     */
+    public function getOfferSummaryOriginalFilename()
+    {
+        return $this->offerSummaryOriginalFilename;
     }
 }

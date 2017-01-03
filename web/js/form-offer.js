@@ -31,9 +31,11 @@ $(document).ready(function() {
         });
     });
 
+    /*
     $('#offer_form_services').find('.datepicker').datetimepicker({
         format: 'DD/MM/YYYY HH:mm'
     });
+    */
 
     $('#offer_form_directClientMobilePhone').intlTelInput({
         allowExtensions: true,
@@ -52,8 +54,30 @@ $(document).ready(function() {
         preferredCountries: ['ca', 'us', 'gb'],
         utilsScript: phone_util_script_url
     });
+
     //collection stuff
     +(function() {
+        var linkDatepickers = function(item) {
+            var dps = $(item).find('input.datepicker');
+            $(dps[0]).parent().datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+            $(dps[1]).parent().datetimepicker({
+                format: 'D/MM/YYYY HH:mm',
+                useCurrent: false
+            });
+            $(dps[0]).parent().on('dp.change', function(e) {
+                $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
+            });
+            $(dps[1]).parent().on("dp.change", function(e) {
+                $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
+            });
+        }
+
+        $('.item.item-service').each(function() {
+            linkDatepickers(this);
+        });
+
         $('body').on('click', '.btn-add-item', function(event) {
             var $btn = $(this);
             if ($btn.is('a')) {
@@ -72,9 +96,7 @@ $(document).ready(function() {
             }
             $container.append($item);
 
-            $item.find('.datepicker').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm'
-            });
+            linkDatepickers($item);
 
             $item.find('input:text:first').focus();
 
@@ -90,6 +112,7 @@ $(document).ready(function() {
 
         $('body').on('click', '.btn-remove-item', function(event) {
             var $btn = $(this);
+
             if ($btn.is('a')) {
                 event.preventDefault();
             }
@@ -123,7 +146,7 @@ $(document).ready(function() {
                 element.tooltipster('update', $(error).text());
                 element.tooltipster('show');
             },
-            ignore: '',
+            ignore: ':hidden:not(input[name="servicesCounter"])',
             messages: {
                 'servicesCounter': {
                     min: 'Add a service at least'
@@ -146,7 +169,8 @@ $(document).ready(function() {
                             return $('#offer_form_clientType_0').prop('checked') === true;
                         }
                     }
-                }
+                },
+                'offer_form[percentApplied][plus]': 'number'
             },
             success: function (label, element) {
                 var $element = $(element);
@@ -170,30 +194,81 @@ $(document).ready(function() {
     }());
 
     +(function($) {
-        $('#btnRecalc').on('click', function() {
-            var sum = new Number(0);
-            $('.item-service').each(function() {
-                sum += parseFloat($(this).find('input[name*="[supplierPrice]"]').val());
+        var getFloat = function(val) {
+            return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+        };
+
+        var updateTotalExpenses = function() {
+            var total = new Number(0);
+            $('.item-service input[name$="[supplierPrice]"]').each(function() {
+                total += getFloat($(this).val());
             });
 
-            var sum2 = new Number(0);
-            $('.item-administrative-charge').each(function() {
-                sum2 += parseFloat($(this).find('input[name*="[price]"]').val());
+            $('#offer_form_totalExpenses').val(total.toFixed(2)).trigger('change');
+        }
+
+        //Todos los totales de item-service
+        $('#offer_form_services').on('change', '.item-service input[name$="[supplierPrice]"]', function() {
+            updateTotalExpenses();
+        });
+
+        //Inputs de un cargo administrativo
+        $('.item-administrative-charge').on('change', 'input', function() {
+            if (!$(this).is('[name$="[pax]"], [name$="[nights]"], [name$="[price]"]')) {
+                return;
+            }
+
+            var total = new Number();
+            $(this).closest('.item').find('[name$="[pax]"], [name$="[nights]"]').each(function() {
+                total += getFloat($(this).val()) * getFloat($(this).closest('.item').find('input[name$="[price]"]').val());
             });
 
-            $('#offer_form_clientCharge').val((new Number(sum * 0.3 + sum + sum2)).toFixed(2));
+            $(this).closest('.item').find('input[name$="[total]"]').val(total.toFixed(2)).trigger('change');
         });
-    }(jQuery));
 
-    +(function($) {
-        $('body').on('click', 'button.btn-calc-ads', function() {
-            var $item = $(this).closest('.item'),
-                $pax = $item.find('input[name*="[factor]"]'),
-                $base = $item.find('input[name*="[base]"]'),
-                $price = $item.find('input[name*="[price]"]'),
-                price = (new Number(parseFloat($pax.val() ? $pax.val() : 0) * parseFloat($base.val() ? $base.val() : 0))).toFixed(2);
+        var updateTotalCharges = function() {
+            var $total = $('#offer_form_totalCharges'),
+                $items = $('.item-administrative-charge input[name$="[total]"]'),
+                total = new Number(0);
 
-            $price.val(price);
+            $items.each(function() {
+                total += getFloat($(this).val());
+            });
+
+            $total.val(total.toFixed(2)).trigger('change');
+        }
+
+        //Totales de cargos administrativos
+        $('.item-administrative-charge').on('change', 'input[name$="[total]"]', function() {
+            updateTotalCharges();            
         });
+
+        //Las line charges
+        $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
+            var $controls = $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
+            
+            var sum = getFloat($('#offer_form_totalExpenses').val()),
+                sum2 = getFloat($('#offer_form_totalCharges').val()),
+                $plus = $('#offer_form_percentApplied_percent'), charge;
+
+            if ($plus.val() === 'plus') {
+                charge = new Number(sum + sum2 + getFloat($('#offer_form_percentApplied_plus').val()));
+            } else {
+                charge = new Number(sum * ($plus.val() / 100) + sum + sum2);
+            }
+
+            $('#offer_form_clientCharge').val(charge.toFixed(2));
+        });
+
+        $('#offer_form_totalExpenses').trigger('change');
+
+        $('#offer_form_percentApplied_percent').on('change', function() {
+            if ($(this).val() !== 'plus') {
+                $('#offer_form_percentApplied_plus').val(0);
+            }
+        });
+
+        updateTotalExpenses();
+        updateTotalCharges();
     }(jQuery));
 });

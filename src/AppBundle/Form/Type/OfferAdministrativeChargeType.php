@@ -19,20 +19,11 @@ class OfferAdministrativeChargeType extends AbstractType
     {
         $builder
                 ->add('name')
-                ->add('base')
+                ->add('nights')
+                ->add('pax')
                 ->add('price')
+                ->add('total')
                 ;
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            $label = in_array($data->getName(), array('Room', 'Board')) ? 'Number of nights' : 'Pax';
-
-            $form->add('factor', null, array(
-                'label' => $label
-            ));
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

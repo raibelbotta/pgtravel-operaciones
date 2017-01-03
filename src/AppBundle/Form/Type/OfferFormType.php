@@ -93,6 +93,15 @@ class OfferFormType extends AbstractType
                     'label'=> 'Representant',
                     'required' => false
                 ))
+                ->add('percentApplied', PercentAppliedType::class, array(
+                    'required' => true
+                ))
+                ->add('totalExpenses', null, array(
+                    'mapped' => false
+                ))
+                ->add('totalCharges', null, array(
+                    'mapped' => false
+                ))
                 ;
 
         $manager = $this->manager;
@@ -118,6 +127,7 @@ class OfferFormType extends AbstractType
 
             if (null === $data->getId()) {
                 $form->add('jumpToOperation', CheckboxType::class, array(
+                    'label' => 'Put this offer in operation after save',
                     'mapped' => false,
                     'required' => false
                 ));

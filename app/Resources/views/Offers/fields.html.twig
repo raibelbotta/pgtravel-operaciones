@@ -1,3 +1,150 @@
+{% block _offer_form_row %}
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-warning">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Client'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="form-group col-sm-3 col-xs-6">
+                    {{ form_label(form.clientType, null, {'label_attr': {'class': 'control-label'}}) }}
+                    <div>
+                        <label>
+                            {{ form_widget(form.clientType[0], {'attr': {'class': 'flat'}}) }}
+                            {{ 'Registered'|trans }}
+                        </label>
+                        <label>
+                            {{ form_widget(form.clientType[1], {'attr': {'class': 'flat'}}) }}
+                            {{ 'Direct'|trans }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-3 col-xs-6">
+                    {{ form_label(form.operator, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.operator, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
+                    {{ form_label(form.client, null, {'required': true, 'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                    {{ form_label(form.directClientFullName, null, {'required': true, 'label_attr': {'class': 'control-label'}})}}
+                    {{ form_widget(form.directClientFullName, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-sm-2 col-xs-12">
+                    {{ form_label(form.notificationLine, null, {'labl_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.notificationLine, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-sm-6 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                    {{ form_label(form.directClientEmail, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.directClientEmail, {'attr': {'class': 'form-control'}}) }}
+                </div><div class="form-group col-sm-6 col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                    {{ form_label(form.directClientMobilePhone, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.directClientMobilePhone, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class=" form-group col-xs-12 block-clienttype block-clienttype-direct"{% if form.vars.data.clientType == 'registered' %} style="display: none;"{% endif %}>
+                    {{ form_label(form.directClientPostalAddress, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.directClientPostalAddress, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
+                    {{ form_label(form.notificationContact, null, {'labl_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.notificationContact, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Booking data'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="form-group col-sm-8 col-xs-12">
+                    {{ form_label(form.name, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    {{ form_label(form.offerSummaryFile, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.offerSummaryFile, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 xol-xs-12 form-group">
+                    {{ form_label(form.travelerNames, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                    {{ form_widget(form.travelerNames, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="col-sm-6 col-xs-12 form-group">
+                    {{ form_label(form.fliesData, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                    {{ form_widget(form.fliesData, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>
+                {{ 'Services'|trans }}
+                <input type="hidden" name="servicesCounter" value="{{ form.services.vars.data|length }}">
+            </h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            {{ form_row(form.services, {'attr': {'counter': '[name=servicesCounter]'}}) }}
+            <div class="pull-right"><button title="{{ 'Add service'|trans }}" class="btn btn-default btn-xs btn-add-item" type="button" data-collection="#{{ form.services.vars.id }}"><i class="fa fa-plus-circle"></i></button></div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Administrative charges'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            {{ form_row(form.administrativeCharges) }}
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Charges'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="form-group col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                    {{ form_label(form.totalExpenses, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.totalExpenses, {'attr': {'class': 'form-control input-sm text-right', 'readonly': 'readonly'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                    {{ form_label(form.totalCharges, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.totalCharges, {'attr': {'class': 'form-control input-sm text-right', 'readonly': 'readonly'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-8 col-xs-12 form-group">
+                    {{ form_label(form.percentApplied, null, {'label_attr': {'class': 'control-label'}}) }}
+                    <div class="row">
+                        <div class="col-xs-6">{{ form_widget(form.percentApplied.percent, {'attr': {'class': 'form-control input-sm'}}) }}</div>
+                        <div class="col-xs-6">{{ form_widget(form.percentApplied.plus, {'attr': {'class': 'form-control input-sm text-right'}}) }}</div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-sm-offset-8 col-xs-12 form-group">
+                    {{ form_label(form.clientCharge, null, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.clientCharge, {'attr': {'class': 'form-control text-right'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block _offer_form_client_type_widget %}
     <div>
         {% for child in form %}
@@ -28,7 +175,6 @@
                         </button>
                     </span>
                 </div>
-                
             </div>
             <div class="col-sm-3 col-xs-6 form-group">
                 {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
@@ -46,11 +192,21 @@
         <div class="row">
             <div class="form-group col-sm-6 col-xs-12">
                 {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.startAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
+                <div class="input-group date">
+                    {{ form_widget(form.startAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
             </div>
             <div class="form-group col-sm-6 col-xs-12">
                 {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.endAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
+                <div class="input-group date">
+                    {{ form_widget(form.endAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -79,32 +235,37 @@
     </div>
 {% endblock %}
 
+{% block _offer_form_administrativeCharges_row %}
+    <div class="hidden-xs">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12"><strong>{{ 'Name'|trans }}</strong></div>
+            <div class="col-sm-6 col-xs-12">
+                <div class="row">
+                    <div class="col-xs-3 text-right"><strong>PAX</strong></div>
+                    <div class="col-xs-3 text-right"><strong>{{ 'Nights'|trans }}</strong></div>
+                    <div class="col-xs-3 text-right"><strong>{{ 'Price'|trans }}</strong></div>
+                    <div class="col-xs-3 text-right"><strong>{{ 'Total'|trans }}</strong></div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    {{ form_rest(form) }}
+{% endblock %}
+
 {% block offer_administrative_charge_row %}
     <div class="item item-administrative-charge">
         <div class="row">
-            <div class="col-sm-6 col-xs-12 form-group">
-                {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.name, {'attr': {'class': 'form-control input-sm'}}) }}
-            </div>
-            <div class="col-sm-2 col-xs-4 form-group">
-                {{ form_label(form.factor, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.factor, {'attr': {'class': 'form-control input-sm text-right'}}) }}
-            </div>
-            <div class="col-sm-2 col-xs-4 form-group">
-                {{ form_label(form.base, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.base, {'attr': {'class': 'form-control input-sm text-right'}}) }}
-            </div>
-            <div class="col-xs-2 col-xs-4 form-group">
-                {{ form_label(form.price, null, {'label_attr': {'class': 'control-label'}}) }}
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-sm btn-default btn-calc-ads"><i class="fa fa-refresh"></i></button>
-                    </span>
-                    {{ form_widget(form.price, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+            <div class="col-sm-6 col-xs-12 form-group">{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}</div>
+            <div class="col-sm-6 col-xs-12">
+                <div class="row">
+                    <div class="col-xs-3 form-group">{{ form_widget(form.pax, {'attr': {'class': 'form-control text-right'}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.nights, {'attr': {'class': 'form-control text-right'}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.price, {'attr': {'class': 'form-control text-right'}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.total, {'attr': {'class': 'form-control text-right', 'placeholder': 'Total'|trans}}) }}</div>
                 </div>
             </div>
         </div>
         {{ form_rest(form) }}
-        <hr>
     </div>
 {% endblock %}

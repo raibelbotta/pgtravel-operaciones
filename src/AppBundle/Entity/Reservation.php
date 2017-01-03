@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * @ORM\Table(name="reservation")
  * @ORM\Entity
  * @Vich\Uploadable
+ * @AppBundle\Validator\Constraints\OfferHasOneServiceAtLeast
  */
 class Reservation
 {
@@ -149,6 +150,13 @@ class Reservation
      * @ORM\Column(name="offer_summary_original_filename", type="string", length=255, nullable=true)
      */
     private $offerSummaryOriginalFilename;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="percent_applied", type="string", length=10)
+     */
+    private $percentApplied;
 
     /**
      * @var string
@@ -888,5 +896,29 @@ class Reservation
     public function getOfferSummaryOriginalFilename()
     {
         return $this->offerSummaryOriginalFilename;
+    }
+
+    /**
+     * Set percentApplied
+     *
+     * @param string $percentApplied
+     *
+     * @return Reservation
+     */
+    public function setPercentApplied($percentApplied)
+    {
+        $this->percentApplied = $percentApplied;
+
+        return $this;
+    }
+
+    /**
+     * Get percentApplied
+     *
+     * @return string
+     */
+    public function getPercentApplied()
+    {
+        return $this->percentApplied;
     }
 }

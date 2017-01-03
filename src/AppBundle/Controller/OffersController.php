@@ -134,9 +134,10 @@ class OffersController extends Controller
             $service = new \AppBundle\Entity\ReservationAdministrativeCharge();
             $service
                     ->setName($k['name'])
-                    ->setFactor(0)
-                    ->setBase($k['price'])
-                    ->setPrice(0)
+                    ->setPax(0)
+                    ->setNights(0)
+                    ->setPrice($k['price'])
+                    ->setTotal(0)
                     ;
             $offer->addAdministrativeCharge($service);
         }
@@ -146,7 +147,7 @@ class OffersController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('jumpToOperation')->getData()) {
-                $$offer->setState(Reservation::STATE_RESERVATION);
+                $offer->setState(Reservation::STATE_RESERVATION);
             }
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($form->getData());

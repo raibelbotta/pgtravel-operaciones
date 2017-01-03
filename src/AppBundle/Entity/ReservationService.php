@@ -69,13 +69,6 @@ class ReservationService
     private $supplierPrice;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="supplierCharge", type="decimal", precision=10, scale=2)
-     */
-    private $supplierCharge;
-
-    /**
      * @var Supplier
      *
      * @ORM\ManyToOne(targetEntity="Supplier")
@@ -252,30 +245,6 @@ class ReservationService
     public function getPax()
     {
         return $this->pax;
-    }
-
-    /**
-     * Set supplierPrice
-     *
-     * @param string $supplierPrice
-     *
-     * @return ReservationService
-     */
-    public function setSupplierPrice($supplierPrice)
-    {
-        $this->supplierPrice = $supplierPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get supplierPrice
-     *
-     * @return string
-     */
-    public function getSupplierPrice()
-    {
-        return $this->supplierPrice;
     }
 
     /**
@@ -627,26 +596,26 @@ class ReservationService
     }
 
     /**
-     * Set supplierCharge
+     * Set supplierPrice
      *
-     * @param string $supplierCharge
+     * @param string $supplierPrice
      *
      * @return ReservationService
      */
-    public function setSupplierCharge($supplierCharge)
+    public function setSupplierPrice($supplierPrice)
     {
-        $this->supplierCharge = $supplierCharge;
+        $this->supplierPrice = $supplierPrice;
 
         return $this;
     }
 
     /**
-     * Get supplierCharge
+     * Get supplierPrice
      *
      * @return string
      */
-    public function getSupplierCharge()
+    public function getSupplierPrice()
     {
-        return $this->supplierCharge;
+        return $this->supplierPrice;
     }
 }

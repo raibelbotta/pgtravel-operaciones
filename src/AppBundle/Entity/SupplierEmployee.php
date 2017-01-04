@@ -42,6 +42,14 @@ class SupplierEmployee
     /**
      * @var string
      *
+     * @ORM\Column(name="job_position", nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $jobPosition;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="gender", type="string", length=1, nullable=true)
      * @Assert\Regex("/|F|M/")
      */
@@ -289,5 +297,29 @@ class SupplierEmployee
     public function getSupplier()
     {
         return $this->supplier;
+    }
+
+    /**
+     * Set jobPosition
+     *
+     * @param string $jobPosition
+     *
+     * @return SupplierEmployee
+     */
+    public function setJobPosition($jobPosition)
+    {
+        $this->jobPosition = $jobPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get jobPosition
+     *
+     * @return string
+     */
+    public function getJobPosition()
+    {
+        return $this->jobPosition;
     }
 }

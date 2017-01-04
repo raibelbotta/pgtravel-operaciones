@@ -19,6 +19,7 @@ class ClientContactType extends AbstractType
     {
         $builder
                 ->add('fullName')
+                ->add('jobPlace')
                 ->add('gender', GenderType::class, array(
                     'required' => false
                 ))

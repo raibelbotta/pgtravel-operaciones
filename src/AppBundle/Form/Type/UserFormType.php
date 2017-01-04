@@ -46,6 +46,7 @@ class UserFormType extends AbstractType
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
                 ))
+                ->add('enabled')
                 ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {

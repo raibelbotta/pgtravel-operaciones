@@ -107,7 +107,11 @@ App = {
             var clickRemoveItem = function(event) {
                 event.preventDefault();
 
-                $(this).closest('.item').remove();
+                $(this).closest('.item').fadeOut(function() {
+                    var $container = $(this).closest('.collection');
+                    $(this).remove();
+                    $container.trigger('item-removed.app');
+                });
             }
 
             var clickAddItem = function(event) {
@@ -146,76 +150,7 @@ App = {
                 initCollectionControls();
             }
         }
-    }(),
-    
-    FormSupplier: function() {
-        var initControls = function() {
-            $('form#supplier input[type=tel]').intlTelInput({
-                allowExtensions: true,
-                autoFormat: false,
-                autoHideDialCode: true,
-                autoPlaceholder: false,
-                defaultCountry: 'auto',
-                geoIpLookup: function(callback) {
-                    $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                        var countryCode = (resp && resp.country) ? resp.country : '';
-                        callback(countryCode);
-                    });
-                },
-                nationalMode: false,
-                numberType: 'MOBILE',
-                preferredCountries: ['cu'],
-                utilsScript: '/plugins/intl-tel-input/js/utils.js'
-            });
-
-            $('form#supplier .collection-employees').on('item-added.app', function(event, data) {
-                $(data.item).find('input[type=tel]').intlTelInput({
-                    allowExtensions: true,
-                    autoFormat: false,
-                    autoHideDialCode: true,
-                    autoPlaceholder: false,
-                    defaultCountry: 'auto',
-                    geoIpLookup: function(callback) {
-                        $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                            var countryCode = (resp && resp.country) ? resp.country : '';
-                            callback(countryCode);
-                        });
-                    },
-                    nationalMode: false,
-                    numberType: 'MOBILE',
-                    preferredCountries: ['cu'],
-                    utilsScript: '/plugins/intl-tel-input/js/utils.js'
-                });
-            });
-        }
-
-        var initValidator = function() {
-            $('#supplier').validate({
-                errorPlacement: function(error, element) {
-                    if (!element.data('tooltipster-ns')) {
-                        element.tooltipster({
-                            trigger: 'custom',
-                            onlyOne: false,
-                            position: 'bottom-left',
-                            positionTracker: true
-                        });
-                    }
-                    element.tooltipster('update', $(error).text());
-                    element.tooltipster('show');
-                },
-                success: function (label, element) {
-                    $(element).tooltipster('hide');
-                }
-            });
-        };
-
-        return {
-            init: function() {
-                initControls();
-                initValidator();
-            }
-        }
-    }()
+    }() 
 };
 
 /**

@@ -34,6 +34,14 @@ class ClientContact
     /**
      * @var string
      *
+     * @ORM\Column(name="job_place", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $jobPlace;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="string", length=1, nullable=true)
      * @Assert\Regex("/|F|M/")
      */
@@ -352,5 +360,29 @@ class ClientContact
     public function getGender()
     {
         return $this->gender;
+    }
+
+    /**
+     * Set jobPlace
+     *
+     * @param string $jobPlace
+     *
+     * @return ClientContact
+     */
+    public function setJobPlace($jobPlace)
+    {
+        $this->jobPlace = $jobPlace;
+
+        return $this;
+    }
+
+    /**
+     * Get jobPlace
+     *
+     * @return string
+     */
+    public function getJobPlace()
+    {
+        return $this->jobPlace;
     }
 }

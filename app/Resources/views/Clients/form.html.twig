@@ -1,43 +1,106 @@
-{% form_theme form 'Clients/fields.html.twig' %}
+{% block client_form_row %}
+    {% if form.vars.errors|length > 0 %}
+        <div class="alert alert-warning">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
 
-<div class="x_panel">
-    <div class="x_title">
-        <h2>{{ 'Identification info'|trans }}</h2>
-        <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Identification info'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="form-group">
+                    {{ form_label(form.fullName, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_widget(form.fullName, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.fixedPhone, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_widget(form.fixedPhone, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="x_content">
+
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>
+                {{ 'Contacts'|trans }}
+                <input type="hidden" name="contactCounter" value="{{ form.vars.data.contacts|length }}">
+            </h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            {{ form_row(form.contacts) }}
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary btn-xs btn-add-item" title="{{ 'Add item'|trans }}"><i class="fa fa-plus-circle"></i></button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block collection_row %}
+    <div class="collection" id="{{ form.vars.id }}" data-prototype="{{ form_row(form.vars.prototype)|e }}">
+        {% for child in form %}
+            {{ form_row(child) }}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block client_contact_row %}
+    <div class="item">
         <div class="row">
-            <div class="form-group">
-                {{ form_label(form.fullName, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
-                <div class="col-sm-6 col-xs-12">
-                    {{ form_widget(form.fullName, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
-                </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                {{ form_label(form.fullName, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.fullName, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <div class="form-group">
-                {{ form_label(form.fixedPhone, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
-                <div class="col-sm-6 col-xs-12">
-                    {{ form_widget(form.fixedPhone, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
-                </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                {{ form_label(form.jobPlace, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.jobPlace, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <div class="form-group">
-                {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
-                <div class="col-sm-6 col-xs-12">
-                    {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}
-                </div>
+            <div class="col-sm-3 col-xs-6 form-group">
+                {{ form_label(form.gender, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
-    </div>
-</div>
-
-<div class="x_panel">
-    <div class="x_title">
-        <h2>{{ 'Contacts'|trans }}</h2>
-        <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-        {{ form_row(form.contacts) }}
-        <div class="pull-right">
-            <button type="button" class="btn btn-primary btn-xs btn-add-item" title="{{ 'Add item'|trans }}"><i class="fa fa-plus-circle"></i></button>
+        <div class="row">
+            <div class="col-sm-4 col-xs-12 form-group">
+                {{ form_label(form.emailAddress, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.emailAddress, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="col-sm-4 col-xs-12 form-group">
+                {{ form_label(form.mobilePhone, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.mobilePhone, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="col-sm-4 col-xs-12 form-group">
+                {{ form_label(form.fixedPhone, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.fixedPhone, {'attr': {'class': 'form-control'}}) }}
+            </div>
         </div>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 form-group">
+                {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="col-sm-6 col-xs-12 form-group">
+                {{ form_label(form.notes, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <button type="button" class="btn btn-block btn-danger btn-xs btn-delete-item" title="{{ 'Remove contact'|trans }}"><i class="fa fa-trash"></i></button>
+        <hr>
+        {{ form_rest(form) }}
     </div>
-</div>
+{% endblock %}

@@ -60,12 +60,15 @@ class DefaultController extends Controller
                         )
                 );
 
-        $query = $qb->where($andX)->having($having)->getQuery()->setParameters(array(
-            'from' => $from->format('Y-m-d'),
-            'to' => $to->format('Y-m-d 23:59:59')
-        ));
+        $query = $qb
+                ->where($andX)
+                ->having($having)
+                ->getQuery()
+                ->setParameters(array(
+                    'from' => $from->format('Y-m-d'),
+                    'to' => $to->format('Y-m-d 23:59:59')
+                ));
 
-        #echo $query->getSql(); die();
         $backColors = array('#ff7d71', '#7dff71', '#7d71ff', 'red', 'blue', 'olive');
 
         return new JsonResponse(array(

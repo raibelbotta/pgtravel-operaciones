@@ -31,6 +31,7 @@ class SupplierEmployeeType extends AbstractType
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
                 ))
+                ->add('jobPosition')
                 ;
     }
 

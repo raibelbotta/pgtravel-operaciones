@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="client")
  * @ORM\Entity
+ * @AppBundle\Validator\Constraints\ClientHasOneContactAtLeast
  */
 class Client
 {

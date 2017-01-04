@@ -50,23 +50,21 @@ class Costing extends Report
         $this->pdf->SetFont('', 'B');
 
         $h = $this->getRowHeight(array(
-            array(20, 'SUPPLIER'),
+            array(45, 'SUPPLIER'),
             array(60, 'SERVICE'),
             array(20, 'BOOKING NUMBER'),
             array(20, '# OF NIGHTS'),
             array(20, '# OF PAX'),
             array(20, 'COST'),
-            array(20, 'TOTAL'),
             array(25, 'CURRENCY'),
             array(0, 'NOTES')
         ));
-        $this->pdf->MultiCell(25, $h, 'SUPPLIER', 1, 'C', false, 0);
+        $this->pdf->MultiCell(45, $h, 'SUPPLIER', 1, 'C', false, 0);
         $this->pdf->MultiCell(60, $h, 'SERVICE', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, 'BOOKING NUMBER', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, '# OF NIGHTS', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, '# OF PAX', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, 'COST', 1, 'C', false, 0);
-        $this->pdf->MultiCell(20, $h, 'TOTAL', 1, 'C', false, 0);
         $this->pdf->MultiCell(25, $h, 'CURRENCY', 1, 'C', false, 0);
         $this->pdf->MultiCell(0, $h, 'NOTES', 1, 'C', false, 1);
 
@@ -77,28 +75,26 @@ class Costing extends Report
 
         foreach ($this->offer->getServices() as $service) {
             $h = $this->getRowHeight(array(
-                array(25, $service->getSupplier()->getName()),
+                array(45, $service->getSupplier()->getName()),
                 array(60, $service->getName()),
                 array(20, $service->getSupplierReference()),
                 array(20, $service->getNights()),
                 array(20, $service->getPax()),
-                array(20, $service->getSupplierPrice()),
-                array(20, $service->getSupplierCharge()),
+                array(20, sprintf('%0.2f', $service->getSupplierPrice())),
                 array(25, 'CUC'),
                 array(0, $service->getInternalNotes())
             ));
 
-            $this->pdf->MultiCell(25, $h, $service->getSupplier()->getName(), 1, 'L', false, 0);
+            $this->pdf->MultiCell(45, $h, $service->getSupplier()->getName(), 1, 'L', false, 0);
             $this->pdf->MultiCell(60, $h, $service->getName(), 1, 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getSupplierReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getNights(), 1, 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getPax(), 1, 'C', false, 0);
             $this->pdf->MultiCell(20, $h, sprintf('%0.2f', $service->getSupplierPrice()), 1, 'R', false, 0);
-            $this->pdf->MultiCell(20, $h, sprintf('%0.2f', $service->getSupplierCharge()), 1, 'R', false, 0);
             $this->pdf->MultiCell(25, $h, 'CUC', 1, 'C', false, 0);
             $this->pdf->MultiCell(0, $h, $service->getInternalNotes(), 1, 'J', false, 1);
 
-            $totalSuppliers += $service->getSupplierCharge();
+            $totalSuppliers += $service->getSupplierPrice();
         }
 
         $this->pdf->Cell(165, 0, '', 0, 0);
@@ -127,21 +123,28 @@ class Costing extends Report
         $this->pdf->SetFontSize(9);
         $this->pdf->SetFont('', '');
 
+        $sumCharges = 0;
         foreach ($this->offer->getAdministrativeCharges() as $charge) {
             $this->pdf->Cell(105, 0, $charge->getName(), 1, 0);
             $this->pdf->Cell(20, 0, $charge->getNights(), 1, 0);
             $this->pdf->Cell(20, 0, $charge->getPax(), 1, 0);
             $this->pdf->Cell(20, 0, $charge->getPrice(), 1, 0, 'R');
             $this->pdf->Cell(20, 0, $charge->getTotal(), 1, 1, 'R');
+
+            $sumCharges += $charge->getTotal();
         }
 
         $this->pdf->Cell(165, 0, '', 0, 0);
-        $this->pdf->Cell(20, 0, sprintf('%0.2f', 0), 1, 1, 'R');
+        $this->pdf->Cell(20, 0, sprintf('%0.2f', $sumCharges), 1, 1, 'R');
+
+        $this->pdf->Ln(5);
+
+        $this->pdf->SetFont('', 'B');
+        $this->pdf->Cell(105, 0, $this->offer->getPercentApplied() != 'plus' ? 'Percent applied' : 'PLus added', 1, 0, 'L');
     }
 
     public function renderFooter()
     {
         $this->pdf->Ln(8);
-        
     }
 }

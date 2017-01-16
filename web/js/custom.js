@@ -32,7 +32,7 @@ App = {
                 $('#modalPassword').modal().on('hide.bs.modal', function(){
                     $(this).find('form').remove();
                 });
-                $('#modalPassword .modal-body').empty().load(app_user_changepassword_url, function() {
+                $('#modalPassword .modal-body').empty().load(Routing.generate('app_user_changepassword'), function() {
                     $('#modalPassword form').validate({
                         messages: {
                             'form[current_password]': {
@@ -42,7 +42,7 @@ App = {
                         rules: {
                             'form[current_password]': {
                                 remote: {
-                                    url: app_user_checkpassword_url,
+                                    url: Routing.generate('app_user_checkpassword'),
                                     type: 'post',
                                     data: {
                                         password: function() {

@@ -298,10 +298,8 @@
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <script type="text/javascript">
-        app_user_changepassword_url = '{{ path('app_user_changepassword') }}';
-        app_user_checkpassword_url = '{{ path('app_user_checkpassword') }}';
-    </script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
     <!-- Custom Theme Scripts -->
     {% javascripts filter="yui_js" output='compiled/js/custom.js'

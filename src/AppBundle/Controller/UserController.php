@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UserController extends Controller
 {
     /**
-     * @Route("/profile/change-password")
+     * @Route("/profile/change-password", options={"expose": true})
      * @Method({"get", "post"})
      * @param Request
      * @return Response
@@ -62,7 +62,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/profile/check-current-password")
+     * @Route("/profile/check-current-password", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      */

@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
 
             //project bundles
             new AppBundle\AppBundle(),

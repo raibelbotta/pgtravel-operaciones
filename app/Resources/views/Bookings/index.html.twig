@@ -1,10 +1,5 @@
 {% extends 'frontend.html.twig' %}
 
-{% block page_stylesheets %}
-    <link href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
-{% endblock %}
-
 {% block content %}
     <div class="row">
         <div class="col-xs-12">
@@ -23,7 +18,7 @@
                                 <th>{{ 'Name'|trans }}</th>
                                 <th>{{ 'Start date'|trans }}</th>
                                 <th>{{ 'End date'|trans }}</th>
-                                <th width="70">{{ 'Actions'|trans }}</th>
+                                <th width="90">{{ 'Actions'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -51,9 +46,6 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset('plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             {% if app.session.flashBag.has('notice') %}
@@ -89,6 +81,7 @@
                     }
                 ],
                 serverSide: true,
+                processing: true,
                 ajax: {
                     method: 'post',
                     url: '{{ path('app_bookings_getdata') }}'

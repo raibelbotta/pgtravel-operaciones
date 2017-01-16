@@ -143,3 +143,12 @@ vich_uploader:
             uri_prefix:         /uploads/pay_attachments
             upload_destination: pay_attachments_fs
             namer:              vich_uploader.namer_uniqid
+
+assetic:
+    java:               %local_java_path%
+    debug:              %kernel.debug%
+    use_controller:     %kernel.debug%
+    filters:
+        cssrewrite:     ~
+        yui_js:
+            jar:        '%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar'

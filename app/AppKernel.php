@@ -16,6 +16,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             
+            // 3rd part bundles
             new FOS\UserBundle\FOSUserBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new Oneup\FlysystemBundle\OneupFlysystemBundle(),
@@ -23,7 +24,9 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
 
+            //project bundles
             new AppBundle\AppBundle(),
         );
 

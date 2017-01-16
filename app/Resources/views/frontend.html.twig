@@ -11,9 +11,9 @@
 {% block title %}Operaciones P&amp;GTRAVEL{% endblock %}
 
 {% block stylesheets %}
-    <!-- Bootstrap -->
+    <!-- Bootstrap 3 -->
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}">
-    <!-- Font Awesome -->
+    <!-- Font Awesome 3 -->
     <link rel="stylesheet" href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}">
     <!-- NProgress -->
     <link rel="stylesheet" href="{{ asset('plugins/nprogress/nprogress.css') }}">
@@ -28,7 +28,13 @@
     <!-- fullcalendar -->
     <link rel="stylesheet" href="{{ asset('plugins/fullcalendar-3.0.1/fullcalendar.min.css') }}">
     <!-- iCheck -->
-    <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/flat/green.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/flat/green.css') }}">    
+    <!-- dataTables -->
+    <link href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <!-- select2 -->
+    <link rel="stylesheet" href="{{ asset('plugins/select2/dist/css/select2.min.css') }}">
+    <!-- sweetalert -->
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
 
     {% block page_stylesheets %}{% endblock %}
 
@@ -63,7 +69,7 @@
                             <img src="{{ asset('images/img.jpg') }}" alt="..." class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
-                            {% trans with {'%user%': app.user.email} -%}
+                            {% trans with {'%user%': app.user.fullName ? app.user.fullName : app.user.email} -%}
                                 <span>Welcome, </span>
                                 <h2>%%user%%</h2>
                             {%- endtrans %}
@@ -270,33 +276,27 @@
 {% endblock %}
 
 {% block javascripts %}
-    <!-- jQuery -->
-    <script src="{{ asset('plugins/jquery/dist/jquery.min.js') }}"></script>
-    <!-- Bootstrap -->
-    <script src="{{ asset('plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <!-- FastClick -->
-    <script src="{{ asset('plugins/fastclick/lib/fastclick.js') }}"></script>
-    <!-- NProgress -->
-    <script src="{{ asset('plugins/nprogress/nprogress.js') }}"></script>
-    
-    <script src="{{ asset('plugins/jquery.form.js') }}"></script>
-    <script src="{{ asset('plugins/tooltipster/js/jquery.tooltipster.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
-
-    <!-- moment.js -->
-    <script src="{{ asset('plugins/moment/moment.js') }}"></script>
-
-    <!-- bootstrap-datetimepicker -->
-    <script src="{{ asset('plugins/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
-
-    <!-- intl-tel-input -->
-    <script src="{{ asset('plugins/intl-tel-input/js/intlTelInput.min.js') }}"></script>
-
-    <!-- fullcalendar -->
-    <script src="{{ asset('plugins/fullcalendar-3.0.1/fullcalendar.min.js') }}"></script>
-
-    <!-- iCheck -->
-    <script src="{{ asset('plugins/iCheck/icheck.min.js') }}"></script>
+    <!-- plugins -->
+    {% javascripts filter="yui_js" output='compiled/js/plugins.js'
+        '../web/plugins/jquery/dist/jquery.min.js'
+        '../web/plugins/bootstrap/dist/js/bootstrap.js'
+        '../web/plugins/fastclick/lib/fastclick.js'
+        '../web/plugins/nprogress/nprogress.js'
+        '../web/plugins/jquery.form.js'
+        '../web/plugins/tooltipster/js/jquery.tooltipster.js'
+        '../web/plugins/jquery-validation/dist/jquery.validate.js'
+        '../web/plugins/moment/moment.js'
+        '../web/plugins/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+        '../web/plugins/intl-tel-input/js/intlTelInput.js'
+        '../web/plugins/fullcalendar-3.0.1/fullcalendar.js'
+        '../web/plugins/iCheck/icheck.js'
+        '../web/plugins/datatables.net/js/jquery.dataTables.js'
+        '../web/plugins/datatables.net-bs/js/dataTables.bootstrap.js'
+        '../web/plugins/select2/dist/js/select2.js'
+        '../web/plugins/sweetalert/sweetalert.min.js'
+         %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
     <script type="text/javascript">
         app_user_changepassword_url = '{{ path('app_user_changepassword') }}';
@@ -304,7 +304,12 @@
     </script>
 
     <!-- Custom Theme Scripts -->
-    <script src="{{ asset('js/custom.min.js') }}"></script>
+    {% javascripts filter="yui_js" output='compiled/js/custom.js'
+        '../web/js/custom.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <script>
         $(document).ready(function() {
             App.Main.init();

@@ -1178,6 +1178,7 @@ table.jambo_table tbody tr.selected td {
   zoom: 1; }
 
 .dataTables_processing {
+/*
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1190,7 +1191,9 @@ table.jambo_table tbody tr.selected td {
   text-align: center;
   color: #999;
   font-size: 14px;
-  background-color: white; }
+  background-color: white;
+*/
+}
 
 .dataTables_length {
   width: 40%;

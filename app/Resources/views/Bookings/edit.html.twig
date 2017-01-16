@@ -146,10 +146,12 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset('plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
         url_searchservice = '{{ path('app_offers_searchservice') }}';
     </script>
-    <script src="{{ asset('js/form-reservation.js') }}"></script>
+    {% javascripts filter="yui_js" output="compiled/js/form-reservation.js"
+        '../web/js/form-reservation.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

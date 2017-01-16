@@ -61,6 +61,7 @@ class UsersController extends Controller
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->createUser();
+        $user->setEnabled(true);
         $form = $this->createForm(UserFormType::class, $user);
 
         $form->handleRequest($request);

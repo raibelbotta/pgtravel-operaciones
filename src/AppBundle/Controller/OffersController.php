@@ -128,9 +128,10 @@ class OffersController extends Controller
         }
 
         $twig = $this->container->get('twig');
-        $data = array_map(function($record) use($twig) {
+        $data = array_map(function($record) use ($twig) {
             return array(
-                sprintf('<i class="fa fa-circle" style="color: #%s"></i>', $record[0]->getState() == Reservation::STATE_RESERVATION ? '1ABB9C' : ($record[0]->getState() == Reservation::STATE_OFFER ? '1ABB9C' : '333')),
+                (string) $record[0]->getVersion(),
+                sprintf('<i class="fa fa-circle" style="color: #%s"></i>', $record[0]->getIsCancelled() ? '333' : ($record[0]->getState() == Reservation::STATE_RESERVATION ? '1abb9c' : 'd9534f')),
                 $record[0]->getName(),
                 null !== $record[0]->getClient() ? (string) $record[0]->getClient() : $record[0]->getDirectClientFullName(),
                 date_create($record['startAt'])->format('d/m/Y H:i'),
@@ -223,6 +224,8 @@ class OffersController extends Controller
                     $manager->remove($charge);
                 }
             }
+
+            $record->setVersion($record->getVersion() + 1);
 
             $manager->flush();
 

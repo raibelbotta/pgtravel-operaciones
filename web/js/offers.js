@@ -27,34 +27,40 @@ $(document).ready(function() {
     });
 
     $table.dataTable({
-        'order': [[ 2, 'desc' ]],
+        'order': [[ 4, 'asc' ]],
         'columnDefs': [
             {
                 searchable: false,
                 sortable: false,
-                targets: [4],
-                width: '130px'
+                targets: [5],
+                width: '135px'
+            },
+            {
+                name: "version",
+                searchable: false,
+                targets: [0],
+                title: 'V'
             },
             {
                 name: "state",
-                searchable: true,
-                targets: [0],
+                searchable: false,
+                targets: [1],
                 title: Translator.trans('State')
             },
             {
                 name: 'name',
-                targets: [1],
+                targets: [2],
                 title: Translator.trans('Name')
             },
             {
                 name: 'client',
-                targets: [2],
+                targets: [3],
                 title: Translator.trans('Client')
             },
             {
                 name: 'startAt',
                 searchable: false,
-                targets: [3],
+                targets: [4],
                 title: Translator.trans('Date')
             }
         ],

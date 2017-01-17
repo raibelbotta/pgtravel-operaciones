@@ -31,6 +31,13 @@ class Reservation
     private $id;
 
     /**
+     * @var int
+     * 
+     * @ORM\Column(name="version", type="integer", options={"default": 1})
+     */
+    private $version;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -225,6 +232,7 @@ class Reservation
         
         $this->state = 'offer';
         $this->isCancelled = false;
+        $this->version = 1;
     }
 
     public function __toString()
@@ -920,5 +928,29 @@ class Reservation
     public function getPercentApplied()
     {
         return $this->percentApplied;
+    }
+
+    /**
+     * Set version
+     *
+     * @param integer $version
+     *
+     * @return Reservation
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return integer
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }

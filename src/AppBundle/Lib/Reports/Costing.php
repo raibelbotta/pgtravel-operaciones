@@ -2,6 +2,9 @@
 
 namespace AppBundle\Lib\Reports;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Entity\Reservation;
+
 /**
  * Description of Costing
  *
@@ -10,20 +13,31 @@ namespace AppBundle\Lib\Reports;
 class Costing extends Report
 {
     /**
-     * @var \AppBundle\Entity\Reservation
+     * @var Reservation
      */
     private $offer;
 
     /**
      * @param array $options
      */
-    public function __construct(array $options)
+    public function __construct(array $options = array())
     {
-        parent::__construct('L', 'A4');
+        parent::__construct($options);
 
         $this->offer = $options['record'];
     }
 
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+        
+        $resolver
+                ->setDefault('orientation', 'L')
+                ->setRequired('record')
+                ->setAllowedTypes('record', 'AppBundle\\Entity\\Reservation')
+                ;
+    }
+    
     public function getContent()
     {
         $this->pdf->AddPage();
@@ -140,7 +154,13 @@ class Costing extends Report
         $this->pdf->Ln(5);
 
         $this->pdf->SetFont('', 'B');
-        $this->pdf->Cell(105, 0, $this->offer->getPercentApplied() != 'plus' ? 'Percent applied' : 'PLus added', 1, 0, 'L');
+        $this->pdf->Cell(165, 0, preg_match('/^\d+\%$/', $this->offer->getPercentApplied()) ? 'Percent applied' : 'Plus added', 1, 0, 'L');
+        $this->pdf->Cell(20, 0, $this->offer->getPercentApplied(), 1, 1, 'R');
+        
+        $this->pdf->Ln(5);
+        
+        $this->pdf->Cell(165, 0, 'Total client charge', 1, 0, 'L');
+        $this->pdf->Cell(20, 0, sprintf('%0.2f', $this->offer->getClientCharge()), 1, 1, 'R');
     }
 
     public function renderFooter()

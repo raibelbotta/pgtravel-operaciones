@@ -105,7 +105,7 @@ class ReportsController extends Controller
                 'record' => $record
             ));
 
-            return new \Symfony\Component\HttpFoundation\StreamedResponse(function() use($report) {
+            return new StreamedResponse(function() use($report) {
                 $content = $report->getContent();
                 file_put_contents('php://output', $content);
             }, 200, array(

@@ -41,12 +41,12 @@ class PercentAppliedType extends AbstractType
                             );
                         }
                         return array(
-                            'percent'   => false !== strpos($value, '%') ? $value : 's',
+                            'percent'   => false !== strpos($value, '%') ? $value : 'plus',
                             'plus'      => false === strpos($value, '%') ? $value : 0
                         );
                     },
                     function($value) {
-                        return $value['percent'] !== 's' ? $value['percent'] : $value['plus'];
+                        return $value['percent'] !== 'plus' ? $value['percent'] : $value['plus'];
                     }
                 ))
                 ;

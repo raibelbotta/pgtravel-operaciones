@@ -4,16 +4,36 @@ namespace AppBundle\Lib\Reports;
 
 include_once dirname(__FILE__) . '/../tcpdf/tcpdf.php';
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 abstract class Report implements ReportInterface
 {
     /**
      * @var \TCPDF
      */
     protected $pdf;
+    
+    /**
+     * @var array
+     */
+    protected $options;
 
-    public function __construct($orintation = 'P', $format = 'A4')
+    public function __construct(array $options = array())
     {
-        $this->pdf = new \TCPDF($orintation, 'mm', $format);
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        
+        $this->options = $resolver->resolve($options);
+        
+        $this->pdf = new \TCPDF($this->options['orientation'], 'mm', $this->options['format']);
+    }
+
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+                    'orientation'   => 'P',
+                    'format'        => 'A4'
+                ));
     }
 
     /**

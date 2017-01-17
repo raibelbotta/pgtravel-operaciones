@@ -40,7 +40,7 @@ class NotificationsController extends Controller
     }
 
     /**
-     * @Route("/get-data")
+     * @Route("/get-data", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return JsonResponse

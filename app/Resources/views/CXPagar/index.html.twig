@@ -1,10 +1,5 @@
 {% extends 'frontend.html.twig' %}
 
-{% block page_stylesheets %}
-    <link href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
-{% endblock %}
-
 {% block content %}
     <div class="row">
         <div class="col-xs-12">
@@ -17,16 +12,18 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <div class="row">
-                        <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
-                            <label for="filter-state" class="control-label">{{ 'State'|trans }}</label>
-                            <select id="filter-state" class="form-control input-sm filter-state">
-                                <option value=""></option>
-                                <option value="no"{% if filter.state == 'no' %} selected="selected"{% endif %}>No pagado</option>
-                                <option value="yes"{% if filter.state == 'yes' %} selected="selected"{% endif %}>Pagado</option>
-                            </select>
+                    <form id="filter">
+                        <div class="row">
+                            <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
+                                <label for="filter_state" class="control-label">{{ 'State'|trans }}</label>
+                                <select id="filter_state" name="filter[state]" class="form-control input-sm">
+                                    <option value=""{% if filter.state is not defined or filter.state == '' %} selected="selected"{% endif %}></option>
+                                    <option value="no"{% if filter.state is defined and filter.state == 'no' %} selected="selected"{% endif %}>No pagado</option>
+                                    <option value="yes"{% if filter.state is defined and filter.state == 'yes' %} selected="selected"{% endif %}>Pagado</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                     <div class="row">
                         <div class="col-xs-12"><br></div>
                     </div>
@@ -69,108 +66,7 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset('plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.form.js') }}"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var $table = $('#datatable-x');
-
-            $table.on('click', '.btn-change-state', function(event) {
-                event.preventDefault();
-
-                var $modal = $('.modal#modal-change');
-                
-                $modal.find('.modal-content').empty().load($(this).attr('href'), function() {
-                    $modal.find('form').ajaxForm({
-                        beforeSubmit: function(){
-                            $modal.find('button[type=submit]').text('{{ 'Saving...'|trans }}').attr('disabled', 'disabled');
-                        },
-                        dataType: 'json',
-                        success: function(json) {
-                            $modal.modal('hide');
-                            $table.dataTable().api().draw(true);
-                        }
-                    });
-
-                    var $container = $modal.find('.collection');
-                    $container.data('index', $container.find('.item').length);
-
-                    $modal.find('.btn-add-item').on('click', function() {
-                        var index = $container.data('index'),
-                            prototype = $container.data('prototype');
-
-                        $container.append($(prototype.replace(/__name__/g, index)));
-                        $container.data('index', index + 1);
-                    });
-                });
-
-                $modal.modal();
-            });
-
-            $table.on('click', '.btn-view', function(event) {
-                event.preventDefault();
-
-                var $modal = $('.modal#modal-view');
-                
-                $modal.modal();
-                $modal.find('.modal-content').empty().load($(this).attr('href'));
-            });
-
-            $('.modal#modal-change button.btn-primary').on('click', function() {
-                $(this).attr('disabled', 'disabled').text('{{ 'Saving...'|trans }}')
-                $.ajax($('.modal#modal-change').data('record-url'), {
-                    data: {
-                        notes: $('.modal#modal-change textarea').val()
-                    },
-                    dataType: 'json',
-                    method: 'POST',
-                    success: function(json) {
-                        $table.dataTable().api().draw(false);
-                        swal({
-                            title: '{{ 'Success'|trans }}',
-                            text: '{{ 'Operation done successfuly.'|trans }}'
-                        });
-                        $('.modal#modal-change').modal('hide');
-                    }
-                })
-            });
-
-            $table.dataTable({
-                order: [[3, 'asc']],
-                aoColumns: [
-                    {name: 'client'},
-                    {name: 'name'},
-                    {name: 'service'},
-                    {name: 'startAt', searchable: false},
-                    {name: 'endAt', searchable: false},
-                    {name: 'supplier'},
-                    {name: 'date', searchable: false},
-                    {name: 'notes'},
-                    {
-                        sortable: false,
-                        searchable: false
-                    }
-                ],
-                serverSide: true,
-                ajax: {
-                    method: 'post',
-                    url: '{{ path('app_cxpagar_getdata') }}',
-                    data: function(params) {
-                        return $.extend({}, params, {
-                            filter: {
-                                state: $('#filter-state').val()
-                            }
-                        });
-                    }
-                }
-            });
-
-            $('#filter-state').on('change', function() {
-                $table.dataTable().api().draw(true);
-            }); 
-        });
-    </script>
+    {% javascripts filter="yui_js" output="compiled/js/cxp.js" '../web/js/cxp.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

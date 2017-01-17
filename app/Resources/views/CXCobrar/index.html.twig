@@ -1,10 +1,5 @@
 {% extends 'frontend.html.twig' %}
 
-{% block page_stylesheets %}
-    <link href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
-{% endblock %}
-
 {% block content %}
     <div class="row">
         <div class="col-xs-12">
@@ -14,16 +9,18 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <div class="row">
-                        <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
-                            <label for="filter-state" class="control-label">{{ 'State'|trans }}</label>
-                            <select id="filter-state" class="form-control input-sm filter-state">
-                                <option value=""></option>
-                                <option value="no">No pagado</option>
-                                <option value="yes">Pagado</option>
-                            </select>
+                    <form id="filter">
+                        <div class="row">
+                            <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
+                                <label for="filter_state" class="control-label">{{ 'Pagado'|trans }}</label>
+                                <select id="filter_state" name="filter[state]" class="form-control input-sm">
+                                    <option value=""{{ filter.state is not defined or filter.state == '' ? ' selected="selected"' : '' }}></option>
+                                    <option value="no"{{ filter.state is defined and filter.state == 'no' ? ' selected="selected"' : '' }}>{{ 'No'|trans }}</option>
+                                    <option value="yes"{{ filter.state is defined and filter.state == 'yes' ? ' selected="selected"' : '' }}>{{ 'Yes'|trans }}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                     <div class="row">
                         <div class="col-xs-12"><br></div>
                     </div>
@@ -65,92 +62,7 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset('plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.form.js') }}"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var $table = $('#datatable-x');
-
-            $table.on('click', '.btn-change-state', function(event) {
-                event.preventDefault();
-
-                var $modal = $('.modal#modal-change');
-                $modal.data('process', $(this));
-                $(this).attr('disabled', 'disabled');
-
-                $modal.modal();
-                $modal.find('.modal-content').empty().append($('<div class="modal-body"><p>{{ 'Loading data...'|trans }}</p></div>')).load($(this).attr('href'), function() {
-                    $modal.data('process').removeAttr('disabled');
-                    $modal.find('form').ajaxForm({
-                        dataType: 'json',
-                        success: function(json) {
-                            $modal.modal('hide');
-                            $($modal.data('process')).parent().text('{{ 'Updating...'|trans }}');
-                            $table.dataTable().api().draw(false);
-                        }
-                    });
-
-                    var $container = $modal.find('.collection');
-                    $container.data('index', $container.find('.item').length);
-
-                    $modal.find('.btn-add-item').on('click', function() {
-                        var $container = $modal.find('.collection'),
-                            prototype = $container.data('prototype'),
-                            index = $container.data('index');
-
-                        $item = $(prototype.replace(/__name__/g, index)).appendTo($container);
-                        $container.data('index', index + 1);
-                    });
-                });
-            });
-
-            $table.on('click', '.btn-view', function(event) {
-                event.preventDefault();
-
-                var $modal = $('.modal#modal-view'),
-                    cancelUrl = $(this).data('cancel-url');
-
-                $modal.modal();
-                $modal.find('.modal-content').empty().load($(this).attr('href'), function() {
-                    $modal.find('a.btn-danger').attr('href', cancelUrl);
-                });
-            });
-
-            $table.dataTable({
-                order: [[2, 'desc']],
-                aoColumns: [
-                    {name: 'client'},
-                    {name: 'name'},
-                    {name: 'startAt', searchable: false},
-                    {name: 'endAt', searchable: false},
-                    {name: 'price', searchable: false},
-                    {name: 'date'},
-                    {name: 'notes'},
-                    {
-                        sortable: false,
-                        searchable: false
-                    }
-                ],
-                serverSide: true,
-                ajax: {
-                    method: 'post',
-                    url: '{{ path('app_cxcobrar_getdata') }}',
-                    data: function(params) {
-                        return $.extend({}, params, {
-                            filter: {
-                                state: $('#filter-state').val()
-                            }
-                        });
-                    }
-                }
-            });
-
-            $('#filter-state').on('change', function() {
-                $table.dataTable().api().draw(true);
-            }); 
-        });
-    </script>
+    {% javascripts filter="yui_js" output="compiled/js/cxc.js" '../web/js/cxc.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

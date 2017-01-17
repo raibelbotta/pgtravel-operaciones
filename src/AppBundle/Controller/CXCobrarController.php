@@ -28,11 +28,17 @@ class CXCobrarController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('CXCobrar/index.html.twig');
+        $session = $this->container->get('session');
+        
+        return $this->render('CXCobrar/index.html.twig', array(
+            'filter' => $session->get('cxc.filter', array(
+                'paid' => 'no'
+            ))
+        ));
     }
 
     /**
-     * @Route("/get-data")
+     * @Route("/get-data", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return JsonResponse
@@ -68,6 +74,9 @@ class CXCobrarController extends Controller
         $columns = $request->get('columns');
         $orders = $request->get('order');
         $filter = $request->get('filter');
+        
+        $session = $this->container->get('session');
+        $session->set('cxc.filter', $filter);
 
         $andX = $qb->expr()->andX($qb->expr()->eq('r.state',
                 $qb->expr()->literal(Reservation::STATE_RESERVATION)));

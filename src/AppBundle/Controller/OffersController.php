@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Reservation;
@@ -555,6 +556,28 @@ class OffersController extends Controller
             'Cache-Control' => 'must-revalidate',
             'Pragma' => 'public',
             'Content-length' => filesize($filename)
+        ));
+    }
+    
+    /**
+     * @Route("/{id}/print-preview")
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @Method({"get"})
+     * @return Response
+     */
+    public function printPreviewAction(Reservation $record)
+    {
+        $report = new \AppBundle\Lib\Reports\BookingReview(array(
+            'record' => $record,
+            'manager' => $this->getDoctrine()->getManager()
+        ));
+        
+        return new StreamedResponse(function() use($report) {
+            $content = $report->getContent();
+            file_put_contents('php://output', $content);
+        }, 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => sprintf('inline; filename="%s booking review.pdf"', $record->getName())
         ));
     }
 }

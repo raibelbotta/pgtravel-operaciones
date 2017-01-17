@@ -198,10 +198,6 @@ class OffersController extends Controller
      */
     public function editAction(Reservation $record, Request $request)
     {
-        if (Reservation::STATE_OFFER !== $record->getState()) {
-            throw $this->createNotFoundException();
-        }
-
         $originalServices = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($record->getServices() as $service) {
             $originalServices[] = $service;

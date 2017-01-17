@@ -146,9 +146,6 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script>
-        url_searchservice = '{{ path('app_offers_searchservice') }}';
-    </script>
     {% javascripts filter="yui_js" output="compiled/js/form-reservation.js"
         '../web/js/form-reservation.js'
         %}

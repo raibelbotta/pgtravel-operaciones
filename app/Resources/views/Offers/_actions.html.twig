@@ -12,7 +12,9 @@
             <li><a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'pdf'}) }}" target="_blank">{{ 'Costing (pdf)'|trans }}</a></li>
             <li><a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'xls'}) }}" target="_blank">{{ 'Costing (xls)'|trans }}</a></li>
         </ul>
-        <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-xs btn-promote bg-marron" title="{{ 'Promote'|trans }}"><i class="fa fa-check"></i></a>
+        {% if record.state == constant('\\AppBundle\\Entity\\Reservation::STATE_OFFER') %}
+            <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-xs btn-promote bg-marron" title="{{ 'Promote'|trans }}"><i class="fa fa-check"></i></a>
+        {% endif %}
         <a href="{{ path('app_offers_cancel', {'id': record.id}) }}" role="button" class="btn btn-info btn-xs btn-cancel" title="{{ 'Cancel'|trans }}"><i class="fa fa-ban"></i></a>
     {% endif %}
     <a href="{{ path('app_offers_delete', {'id': record.id}) }}" role="button" class="btn btn-danger btn-xs btn-delete" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></a>

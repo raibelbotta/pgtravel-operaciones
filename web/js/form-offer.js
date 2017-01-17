@@ -23,19 +23,13 @@ $(document).ready(function() {
     $('#offer_form_client').on('change', function() {
         $('#offer_form_notificationContact').empty();
         var id = $(this).val();
-        $.getJSON(url_getclientcontact + '?client=' + id, function(json) {
+        $.getJSON(Routing.generate('app_offers_getclientcontacts') + '?client=' + id, function(json) {
             $('#offer_form_notificationContact').append($('<option value=""></option>'));
             $.each(json.elements, function(i, e) {
                 $('#offer_form_notificationContact').append($('<option value="' + e.id + '">' + e.text + '</option>'));
             });
         });
     });
-
-    /*
-    $('#offer_form_services').find('.datepicker').datetimepicker({
-        format: 'DD/MM/YYYY HH:mm'
-    });
-    */
 
     $('#offer_form_directClientMobilePhone').intlTelInput({
         allowExtensions: true,
@@ -189,7 +183,7 @@ $(document).ready(function() {
             $('#searchServiceModal').data('item', $item).modal({
                 backdrop: 'static'
             });
-            $('#searchServiceModal .modal-body').empty().append($('<p>Cargando datos...</p>')).load(url_searchservice);
+            $('#searchServiceModal .modal-body').empty().append($('<p>Cargando datos...</p>')).load(Routing.generate('app_offers_searchservice'));
         });
     }());
 

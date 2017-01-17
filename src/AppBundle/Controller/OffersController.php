@@ -28,11 +28,18 @@ class OffersController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('Offers/index.html.twig');
+        $session = $this->container->get('session');
+        
+        return $this->render('Offers/index.html.twig', array(
+            'filter' => $session->get('offers.filter', array(
+                'fromDate' => date_create('now')->format('d/m/Y'),
+                'cancelled' => 'no'
+            ))
+        ));
     }
 
     /**
-     * @Route("/get-data", options={"i18n": false})
+     * @Route("/get-data", options={"i18n": false, "expose": true})
      * @Method({"post"})
      * @return JsonResponse
      */
@@ -44,14 +51,33 @@ class OffersController extends Controller
                 ->createQueryBuilder('r')
                 ->leftJoin('r.client', 'c')
                 ;
-        $qb->add('select', '(SELECT MIN(rs.startAt) FROM AppBundle:ReservationService rs JOIN rs.reservation rk WHERE rk.id = r.id ORDER BY rs.startAt ASC) AS startAt', true);
+        $qb->add('select', '(SELECT MIN(rs1.startAt) FROM AppBundle:ReservationService rs1 JOIN rs1.reservation rk1 WHERE rk1.id = r.id) AS startAt', true);
         $qb->add('select', '(CASE WHEN r.client IS NULL THEN r.directClientFullName ELSE c.fullName END) AS clientName', true);
 
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order');
+        $filter = $request->get('filter', array());
 
-        $andX = $qb->expr()->andX($qb->expr()->eq('r.state', $qb->expr()->literal(Reservation::STATE_OFFER)));
+        $session = $this->container->get('session');
+        $session->set('offers.filter', $filter);
+
+        $andX = $qb->expr()->andX();
+        
+        if (isset($filter['state']) && $filter['state']) {
+            $andX->add($qb->expr()->eq('r.state', $qb->expr()->literal('offer' === $filter['state'] ? Reservation::STATE_OFFER : Reservation::STATE_RESERVATION)));
+        }
+        if (isset($filter['fromDate']) && $filter['fromDate'] && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $filter['fromDate'])) {
+            $fromDate = \DateTime::createFromFormat('d/m/Y', $filter['fromDate']);
+            $andX->add($qb->expr()->gte('(SELECT MIN(rs3.startAt) FROM AppBundle:ReservationService rs3 JOIN rs3.reservation rk3 WHERE rk3.id = r.id)', $qb->expr()->literal($fromDate->format('Y-m-d'))));
+        }
+        if (isset($filter['toDate']) && $filter['toDate'] && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $filter['toDate'])) {
+            $toDate = \DateTime::createFromFormat('d/m/Y', $filter['toDate']);
+            $andX->add($qb->expr()->lte('(SELECT MAX(rs4.endAt) FROM AppBundle:ReservationService rs4 JOIN rs4.reservation rk4 WHERE rk4.id = r.id)', $qb->expr()->literal($toDate->format('Y-m-d 23:59:59'))));
+        }
+        if (isset($filter['cancelled']) && $filter['cancelled']) {
+            $andX->add($qb->expr()->eq('r.isCancelled', $qb->expr()->literal('yes' === $filter['cancelled'])));
+        }
 
         if (is_array($search) && isset($search['value']) && $search['value']) {
             $andX->add($qb->expr()->orX(
@@ -104,6 +130,7 @@ class OffersController extends Controller
         $twig = $this->container->get('twig');
         $data = array_map(function($record) use($twig) {
             return array(
+                sprintf('<i class="fa fa-circle" style="color: #%s"></i>', $record[0]->getState() == Reservation::STATE_RESERVATION ? '1ABB9C' : ($record[0]->getState() == Reservation::STATE_OFFER ? '1ABB9C' : '333')),
                 $record[0]->getName(),
                 null !== $record[0]->getClient() ? (string) $record[0]->getClient() : $record[0]->getDirectClientFullName(),
                 date_create($record['startAt'])->format('d/m/Y H:i'),
@@ -264,7 +291,7 @@ class OffersController extends Controller
     }
 
     /**
-     * @Route("/get-client-contacts")
+     * @Route("/get-client-contacts", options={"expose": true})
      * @Method({"get"})
      * @param Request $request
      * @return JsonResponse
@@ -288,7 +315,7 @@ class OffersController extends Controller
     }
 
     /**
-     * @Route("/search-service")
+     * @Route("/search-service", options={"expose": true})
      * @Method({"get"})
      * @return Response
      */

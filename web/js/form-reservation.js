@@ -121,15 +121,19 @@ $(document).ready(function() {
     }());
 
     +(function($) {
+        var getFloat = function(val) {
+            return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+        };
+
         $('#btnRecalc').on('click', function() {
             var sum = new Number(0);
             $('.item-service').each(function() {
-                sum += parseFloat($(this).find('input[name*="[supplierPrice]"]').val());
+                sum += getFloat($(this).find('input[name*="[supplierPrice]"]').val());
             });
 
             var sum2 = new Number(0);
             $('.item-administrative-charge').each(function() {
-                sum2 += parseFloat($(this).find('input[name*="[price]"]').val());
+                sum2 += getFloat($(this).find('input[name*="[price]"]').val());
             });
 
             $('#reservation_form_clientCharge').val((new Number(sum * 0.3 + sum + sum2)).toFixed(2));
@@ -144,7 +148,7 @@ $(document).ready(function() {
                 $price = $item.find('input[name*="[price]"]'),
                 price = (new Number(parseFloat($pax.val() ? $pax.val() : 0) * parseFloat($base.val() ? $base.val() : 0))).toFixed(2);
 
-            $price.val(price);
+            $price.vbtnReal(price);
         });
     }(jQuery));
 });

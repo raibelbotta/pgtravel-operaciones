@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block html_tag %}<html lang="en">{% endblock %}
+{% block html_tag %}<html lang="{{ app.request.locale|split('_')[0] }}">{% endblock %}
 
 {% block metas %}
     {{ parent() }}
@@ -98,8 +98,7 @@
                                 <li>
                                     <a href="javascript:;"><i class="fa fa-tachometer"></i> {{ 'Operation'|trans }} <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ path('app_offers_index') }}">{{ 'Offers'|trans }}</a></li>
-                                        <li><a href="{{ path('app_bookings_index') }}">{{ 'Booking list'|trans }}</a></li>
+                                        <li><a href="{{ path('app_offers_index') }}">{{ 'Booking list'|trans }}</a></li>
                                         <!-- <li><a href="{{ path('homepage') }}">{{ 'Calendar view'|trans }}</a></li> -->
                                         <li><a href="{{ path('app_notifications_index') }}">{{ 'Services confirm'|trans }}</a></li>
                                     </ul>
@@ -300,6 +299,9 @@
 
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
 
     <!-- Custom Theme Scripts -->
     {% javascripts filter="yui_js" output='compiled/js/custom.js'

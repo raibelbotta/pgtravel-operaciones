@@ -38,14 +38,17 @@ $(document).ready(function() {
             {
                 name: "version",
                 searchable: false,
+                sortable: false,
                 targets: [0],
-                title: 'V'
+                title: 'V',
+                width: '20px'
             },
             {
                 name: "state",
                 searchable: false,
                 targets: [1],
-                title: Translator.trans('State')
+                title: Translator.trans('State'),
+                width: '35px'
             },
             {
                 name: 'name',

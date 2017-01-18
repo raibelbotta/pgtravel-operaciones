@@ -48,14 +48,14 @@ $(document).ready(function() {
             data: function(params) {
                 return $.extend({}, params, {
                     filter: {
-                        state: $('#filter-state').val()
+                        state: $('form#filter select[name$="[state]"]').val()
                     }
                 });
             }
         }
     });
 
-    $('#filter-state').on('change', function() {
+    $('form#filter select[name$="[state]"]').on('change', function() {
         $table.dataTable().api().draw(true);
     }); 
 });

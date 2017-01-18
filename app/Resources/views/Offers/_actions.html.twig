@@ -9,9 +9,24 @@
             {% if record.offerSummaryFilename is not empty %}
                 <li><a href="{{ path('app_offers_downloaditinerarydocument', {'id': record.id, 'filename': record.offerSummaryOriginalFilename}) }}" target="_blank">{{ record.offerSummaryOriginalFilename }}</a></li>
             {% endif %}
-            <li><a href="{{ path('app_offers_printpreview', {'id': record.id}) }}" target="_blank">{{ 'Booking review'|trans }}</a></li>
-            <li><a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'pdf'}) }}" target="_blank">{{ 'Costing (pdf)'|trans }}</a></li>
-            <li><a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'xls'}) }}" target="_blank">{{ 'Costing (xls)'|trans }}</a></li>
+            <li>
+                <a href="{{ path('app_offers_printpreview', {'id': record.id}) }}" target="_blank">
+                    <span class="fa fa-file-pdf-o"></span>
+                    {{ 'Booking review'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'pdf'}) }}" target="_blank">
+                    <span class="fa fa-file-pdf-o"></span>
+                    {{ 'Costing (pdf)'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_reports_offer', {'id': record.id, 'format': 'xls'}) }}" target="_blank">
+                    <span class="fa fa-file-excel-o"></span>
+                    {{ 'Costing (xls)'|trans }}
+                </a>
+            </li>
         </ul>
         {% if record.state == constant('\\AppBundle\\Entity\\Reservation::STATE_OFFER') %}
             <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-xs btn-promote bg-marron" title="{{ 'Promote'|trans }}"><i class="fa fa-check"></i></a>

@@ -113,26 +113,15 @@ class ReportsController extends Controller
                 'Content-Disposition' => sprintf('inline; filename="Costing %s.pdf"', $record->getName())
             ));
         } else {
-            $excelService = $this->get('phpexcel');
+            $book = new \AppBundle\Lib\Excel\Costing(array(
+                'phpexcel' => $this->container->get('phpexcel'),
+                'record' => $record
+            ));
 
-            $xls = $excelService->createPHPExcelObject();
-            $xls
-                    ->setActiveSheetIndex(0)
-                    ->setCellValue('A1', sprintf('COSTING %s', $record->getName()))
-                    ;
-            $xls->getActiveSheet()->mergeCells('A1:L4');
-            $xls->getActiveSheet()->getStyle('A1:L4')->getFont()->setBold(true);
-            $xls->getActiveSheet()->getStyle()->getAlignment()
-                    ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-                    ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
-                    ;
-
-            $writer = $excelService->createWriter($xls, 'Excel5');
-            $response = $excelService->createStreamedResponse($writer);
-
+            $response = $book->getBookContent();
             $dispositionHeader = $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                'costing.xls'
+                sprintf('Costing %s v%s.xls', $record->getName(), $record->getVersion())
             );
             $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
             $response->headers->set('Pragma', 'public');

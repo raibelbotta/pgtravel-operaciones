@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Reservation;
 use AppBundle\Form\Type\OfferFormType;
@@ -579,5 +580,33 @@ class OffersController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => sprintf('inline; filename="%s booking review.pdf"', $record->getName())
         ));
+    }
+    
+    /**
+     * @Route("/{id}/print-cash")
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @Method({"get"})
+     * @return Response
+     */
+    public function printCash(Reservation $record)
+    {
+        $book = new \AppBundle\Lib\Excel\Cash(array(
+            'record' => $record,
+            'phpexcel' => $this->container->get('phpexcel'),
+            'translator' => $this->container->get('translator'),
+            'locale' => $this->container->get('request')->getLocale()
+        ));
+        
+        $response = $book->getBookContent();
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('Cash %s v%s.xls', $record->getName(), $record->getVersion())
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+        
+        return $response;
     }
 }

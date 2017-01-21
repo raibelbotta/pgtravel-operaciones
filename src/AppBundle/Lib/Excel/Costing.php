@@ -5,6 +5,11 @@ namespace AppBundle\Lib\Excel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use AppBundle\Entity\Reservation;
 
+/**
+ * Description of Costing
+ * 
+ * @author Raibel Botta <raibelbotta@gmail.com>
+ */
 class Costing extends ExportableBook
 {    
     /**

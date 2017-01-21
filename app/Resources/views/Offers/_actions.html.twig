@@ -27,6 +27,14 @@
                     {{ 'Costing (xls)'|trans }}
                 </a>
             </li>
+            {% if record.state == constant("AppBundle\\Entity\\Reservation::STATE_RESERVATION") %}
+                <li>
+                    <a href="{{ path('app_offers_printcash', {'id': record.id}) }}" target="_blank">
+                        <span class="fa fa-file-excel-o"></span>
+                        {{ 'Cash'|trans }}
+                    </a>
+                </li>
+            {% endif %}
         </ul>
         {% if record.state == constant('\\AppBundle\\Entity\\Reservation::STATE_OFFER') %}
             <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-xs btn-promote bg-marron" title="{{ 'Promote'|trans }}"><i class="fa fa-check"></i></a>

@@ -1,5 +1,7 @@
 {% extends 'frontend.html.twig' %}
 
+{% form_theme form _self %}
+
 {% block content %}
     <div class="page-title">
         <div class="title_left">
@@ -47,6 +49,12 @@
                                 {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control col-md-7 col-xs-12'}}) }}
                             </div>
                         </div>
+                        <div class="form-group">
+                            {{ form_label(form.imageFile, null, {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}}) }}
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ form_widget(form.imageFile) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="x_panel">
@@ -74,48 +82,35 @@
 
 {% block page_javascripts %}
     <script>
-        $(document).ready(function() {
-            $('input[type=tel]').intlTelInput({
-                allowExtensions: true,
-                autoFormat: false,
-                autoHideDialCode: true,
-                autoPlaceholder: false,
-                defaultCountry: 'auto',
-                geoIpLookup: function(callback) {
-                    $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                        var countryCode = (resp && resp.country) ? resp.country : '';
-                        callback(countryCode);
-                    });
-                },
-                nationalMode: false,
-                numberType: 'MOBILE',
-                preferredCountries: ['cu'],
-                utilsScript: '{{ asset('plugins/intl-tel-input/js/utils.js') }}'
-            });
-
-            +(function() {
-                $.validator.addMethod('strongpassword', function(value, element) {
-                    return this.optional(element) || (/[A-Z]/.test(value) && /[a-z]/.test(value) && /[0-9]/.test(value) && value.length > 7);
-                }, '{{ 'Password strong is too low (8 characters minimun and contains at least 1 character from groups [A-Z], [a-z] and [0-9])'|trans }}');
-                
-                $('form#profile').validate({
-                    errorPlacement: function(error, element) {
-                        if (!element.data('tooltipster-ns')) {
-                            element.tooltipster({
-                                trigger: 'custom',
-                                onlyOne: false,
-                                position: 'bottom-left',
-                                positionTracker: true
-                            });
-                        }
-                        element.tooltipster('update', $(error).text());
-                        element.tooltipster('show');
-                    },
-                    success: function (label, element) {
-                        $(element).tooltipster('hide');
-                    }
-                });
-            });
-        });
+        util_url = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
     </script>
+    {% javascripts filter="yui_js" output="compiled/js/form-profile.js"
+        "../web/js/form-profile.js"
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block vich_image_widget %}
+    <div class="fileupload fileupload-{{ download_uri is defined and download_uri ? 'exists' : 'new' }} text-center" data-provides="fileupload">
+        <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+            <img src="{{ no_image_url|default(asset('images/anonimo.png')) }}" alt="" />
+        </div>
+        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;">
+            <img src="{{ download_uri is defined and download_uri ? download_uri : asset("images/anonimo.png") }}" alt="" />
+        </div>
+        <div>
+            <span class="btn btn-file">
+                <span class="fileupload-new">{{ 'Select image'|trans }}</span>
+                <span class="fileupload-exists">{{ 'Select new image'|trans }}</span>
+                {{ form_widget(form.file, {'class': 'default'}) }}
+                {% if form.delete is defined %}
+                    <span class="hidden">{{ form_widget(form.delete) }}</span>
+                {% endif %}
+            </span>
+            {% if form.delete is defined %}
+                <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">{{ 'Remove'|trans }}</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

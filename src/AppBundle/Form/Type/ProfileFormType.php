@@ -6,6 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Description of ProfileFormType
@@ -29,6 +30,10 @@ class ProfileFormType extends BaseType
                 ))
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
+                ))
+                ->add('imageFile', VichImageType::class, array(
+                    'required' => false,
+                    'label' => 'Picture'
                 ))
                 ;
     }

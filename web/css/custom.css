@@ -1,3 +1,7 @@
+label.required:after {
+    content: ' (*)';
+}
+
 .bg-blue {
     background-color: #5367ce;
 }

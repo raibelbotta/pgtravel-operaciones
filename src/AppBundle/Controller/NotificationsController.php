@@ -67,8 +67,7 @@ class NotificationsController extends Controller
 
         $andX = $qb->expr()->andX(
                 $qb->expr()->eq('r.state', $qb->expr()->literal(Reservation::STATE_RESERVATION)),
-                $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false))/*,
-                $qb->expr()->gte('rs.startAt', $qb->expr()->literal(date('Y/m/d')))*/
+                $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false))
                 );
 
         if (isset($filter['state']) && $filter['state']) {
@@ -97,7 +96,7 @@ class NotificationsController extends Controller
                             ),
                     $qb->expr()->andX(
                             $qb->expr()->isNotNull('rs.supplier'),
-                            $qb->expr()->like('s.fullName', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
+                            $qb->expr()->like('s.name', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
                             ),
                     $qb->expr()->like('rs.name', $qb->expr()->literal('%' . $search['value'] . '%')),
                     $qb->expr()->like('rs.supplierReference', $qb->expr()->literal('%' . $search['value'] . '%'))

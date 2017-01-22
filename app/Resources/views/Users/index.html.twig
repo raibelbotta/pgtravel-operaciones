@@ -54,47 +54,13 @@
             {% if app.session.flashBag.has('notice') %}
                 +(function() {
                     swal({
-                        title: '{{ 'Notification'|trans }}',
+                        title: Translator.trans('Notification'),
                         text: '{{ app.session.flashBag.get('notice')[0] }}'
                     });
                 }());
             {% endif %}
 
-            var $datatable = $('#datatable-users');
-
-            $datatable.dataTable({
-                'order': [[ 1, 'asc' ]],
-                'columnDefs': [
-                    {
-                        orderable: false,
-                        targets: [0, 3]
-                    }
-                ]
-            });
-
-            $datatable.on('draw.dt', function() {
-                $(this).find('input').iCheck({
-                    checkboxClass: 'icheckbox_flat-green'
-                });
-            });
-
-            $('.btn-delete').on('click', function(event) {
-                event.preventDefault();
-
-                var url = $(this).attr('href');
-
-                swal({
-                    title: '{{ 'Confirm remove'|trans }}',
-                    text: '{{ 'The record will be removed. Are you sure you want to continue?'|trans }}',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d9534f'
-                }, function(isConfirmed) {
-                    if (isConfirmed) {
-                        location.href = url;
-                    }
-                });
-            });
+            App.Users.Index.init();
         });
     </script>
 {% endblock %}

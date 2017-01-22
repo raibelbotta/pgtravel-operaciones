@@ -46,8 +46,8 @@
 {% block page_javascripts %}
     <script type="text/javascript">
         phone_util_script_url = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
+        $(document).ready(function() {
+            App.Bookings.Form.init();
+        });
     </script>
-    {% javascripts filter="yui_js" output="compiled/js/form-offer.js" '../web/js/form-offer.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}

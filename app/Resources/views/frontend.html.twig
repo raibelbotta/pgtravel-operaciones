@@ -35,14 +35,14 @@
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 
-    {% block page_stylesheets %}{% endblock %}
-
     <!-- Custom Theme Style -->
     {% stylesheets filter="yui_css" output="compiled/css/custom.css"
         "../web/css/custom.css"
         %}
         <link href="{{ asset_url }}" rel="stylesheet">
     {% endstylesheets %}
+
+    {% block page_stylesheets %}{% endblock %}
 {% endblock %}
 
 {% block body_tag %}<body class="nav-md">{% endblock %}
@@ -141,7 +141,7 @@
                     #}
                 </div>
             </div>
-            
+
             <!-- top navigation -->
             <div class="top_nav">
                 <div class="nav_menu">
@@ -306,8 +306,8 @@
     <script src="{{ url('bazinga_jstranslation_js') }}"></script>
 
     <!-- Custom Theme Scripts -->
-    {% javascripts filter="yui_js" output='compiled/js/custom.js'
-        '../web/js/custom.js'
+    {% javascripts filter="yui_js" output="compiled/js/custom.js"
+        "../web/js/*.js"
         %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

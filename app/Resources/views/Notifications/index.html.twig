@@ -53,7 +53,9 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    {% javascripts filter="yui_js" output="compiled/js/notifications.js" '../web/js/notifications.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script>
+        $(document).ready(function() {
+            App.Notifications.Index.init();
+        });
+    </script>
 {% endblock %}

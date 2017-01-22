@@ -51,7 +51,7 @@
     <div class="modal fade in" id="modal-change" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                
+
             </div>
         </div>
     </div>
@@ -59,14 +59,16 @@
     <div class="modal fade in" id="modal-view" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                
+
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block page_javascripts %}
-    {% javascripts filter="yui_js" output="compiled/js/cxp.js" '../web/js/cxp.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script>
+        $(document).ready(function() {
+            App.PayableAccounts.Index.init();
+        });
+    </script>
 {% endblock %}

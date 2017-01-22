@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    
+
     <div class="row">
         <div class="col-md-12 col-xs-12 col-sm-12">
             {{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left', 'id': 'profile'}}) }}
@@ -83,12 +83,10 @@
 {% block page_javascripts %}
     <script>
         util_url = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
+        $(document).ready(function() {
+            App.Profile.Form.init();
+        });
     </script>
-    {% javascripts filter="yui_js" output="compiled/js/form-profile.js"
-        "../web/js/form-profile.js"
-        %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}
 
 {% block vich_image_widget %}

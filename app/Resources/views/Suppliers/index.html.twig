@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             {% if app.session.flashBag.has('notice') %}
                 +(function() {
@@ -38,61 +38,7 @@
                 }());
             {% endif %}
 
-            var $datatable = $('#datatable-suppliers');
-
-            $datatable.dataTable({
-                'order': [[ 1, 'asc' ]],
-                'columnDefs': [
-                    {
-                        orderable: false,
-                        sortable: false,
-                        targets: [0, 2]
-                    },
-                    {
-                        name: 'name',
-                        targets: [1]
-                    }
-                ],
-                serverSide: true,
-                sDom: 'lfr<"clearfix">t<ip>',
-                ajax: {
-                    method: 'post',
-                    url: '{{ path('app_suppliers_getdata') }}'
-                }
-            });
-
-            $datatable.on('draw.dt', function() {
-                $(this).find('input').iCheck({
-                    checkboxClass: 'icheckbox_flat-green'
-                });
-
-                $(this).find('a.btn-delete').on('click', function(event) {
-                    event.preventDefault();
-
-                    var url = $(this).attr('href'),
-                        $a = $(this);
-
-                    swal({
-                        title: '{{ 'Confirm remove'|trans }}',
-                        text: '{{ 'The record will be removed. Are you sure you want to continue?'|trans }}',
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d9534f'
-                    }, function(isConfirmed) {
-                        if (isConfirmed) {
-                            $a.closest('td').text('{{ 'Removing...'|trans }}').closest('tr').addClass('row-removing');
-                            $.ajax(url, {
-                                dataType: 'json',
-                                method: 'post',
-                                success: function(json) {
-                                    $datatable.find('tr.row-removing').remove();
-                                    $datatable.dataTable().api().draw(false);
-                                }
-                            });
-                        }
-                    });
-                });
-            });
+            App.Suppliers.Index.init();
         });
     </script>
 {% endblock %}

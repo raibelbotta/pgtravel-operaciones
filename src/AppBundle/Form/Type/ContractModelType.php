@@ -12,6 +12,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class ContractModelType extends AbstractType
 {
+    /**
+     * @var array
+     */
+    private $types;
+
+    public function __construct(array $types)
+    {
+        $this->types = array();
+        foreach ($types as $type) {
+            $this->types[$type['display']] = $type['name'];
+        }
+    }
+
     public function getParent()
     {
         return ChoiceType::class;
@@ -20,15 +33,7 @@ class ContractModelType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'choices' => array(
-                'Hotel'         => 'hotel',
-                'Transport'     => 'transport',
-                'Car rental'    => 'car-rental',
-                'Restaurant'    => 'restaurant',
-                'Optionals'     => 'optionals',
-                'Guide'         => 'guide',
-                'Other'         => 'other'
-            ),
+            'choices' => $this->types,
             'choices_as_values' => true
         ));
     }

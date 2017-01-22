@@ -17,6 +17,15 @@ parameters:
         - { name: Bonus, price: 20 }
         - { name: Parking, price: 5 }
 
+    app.contract.models:
+        - { name: hotel, display: Hotel }
+        - { name: transport, display: Transport }
+        - { name: car-rental, display: Car rental }
+        - { name: restaurant, display: Restaurant }
+        - { name: optionals, display: Optionals }
+        - { name: guide, display: Guide }
+        - { name: other, display: Other }
+
 services:
     # KernelRequest listener
     extension.listener:
@@ -115,6 +124,11 @@ services:
     app.form.type.offer_service_type:
         class: AppBundle\Form\Type\OfferServiceType
         arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+    app.form.type.contract_model_type:
+        class: AppBundle\Form\Type\ContractModelType
+        arguments: [ '%app.contract.models%' ]
         tags:
             - { name: form.type }
 

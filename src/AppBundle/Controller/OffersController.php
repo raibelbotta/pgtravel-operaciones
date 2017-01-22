@@ -609,4 +609,24 @@ class OffersController extends Controller
         
         return $response;
     }
+
+    /**
+     * @Route("/{id}/print-vouchers", requirements={"id": "\d+"})
+     * @Method({"get"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @return Response
+     */
+    public function printVouchersAction(Reservation $record)
+    {
+        $pdf = new \AppBundle\Lib\Reports\Vouchers(array(
+            'record' => $record
+        ));
+
+        return new StreamedResponse(function() use($pdf) {
+            file_put_contents('php://output', $pdf->getContent());
+        }, 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => sprintf('inline; filename="Vouchers %s v%s.pdf"', $record->getName(), $record->getVersion())
+        ));
+    }
 }

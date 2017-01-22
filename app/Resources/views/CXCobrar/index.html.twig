@@ -47,7 +47,7 @@
     <div class="modal fade in" id="modal-change" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                
+
             </div>
         </div>
     </div>
@@ -55,14 +55,16 @@
     <div class="modal fade in" id="modal-view" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                
+
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block page_javascripts %}
-    {% javascripts filter="yui_js" output="compiled/js/cxc.js" '../web/js/cxc.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script>
+        $(document).ready(function() {
+            App.ReceivableAccounts.Index.init();
+        });
+    </script>
 {% endblock %}

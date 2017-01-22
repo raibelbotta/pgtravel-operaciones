@@ -29,9 +29,15 @@
             </li>
             {% if record.state == constant("AppBundle\\Entity\\Reservation::STATE_RESERVATION") %}
                 <li>
-                    <a href="{{ path('app_offers_printcash', {'id': record.id}) }}" target="_blank">
+                    <a href="{{ path('app_offers_printcash', {"id": record.id}) }}" target="_blank">
                         <span class="fa fa-file-excel-o"></span>
                         {{ 'Cash'|trans }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_offers_printvouchers', {"id": record.id}) }}" target="_blank">
+                        <span class="fa fa-file-pdf-o"></span>
+                        {{ 'Vouchers'|trans }}
                     </a>
                 </li>
             {% endif %}

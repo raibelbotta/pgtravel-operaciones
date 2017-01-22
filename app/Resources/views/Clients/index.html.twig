@@ -37,62 +37,7 @@
                 }());
             {% endif %}
 
-            var $datatable = $('#datatable-clients');
-
-            $datatable.dataTable({
-                'order': [[ 0, 'asc' ]],
-                'columnDefs': [
-                    {
-                        orderable: false,
-                        sortable: false,
-                        targets: [1]
-                    },
-                    {
-                        name: 'fullname',
-                        targets: [0]
-                    }
-                ],
-                "dom": "lfrtip",
-                "processing": true,
-                "serverSide": true,
-                "ajax": {
-                    method: 'post',
-                    url: '{{ path('app_clients_getdata') }}'
-                }
-            });
-
-            $datatable.on('draw.dt', function() {
-                $(this).find('a.btn-delete').on('click', function(event) {
-                    event.preventDefault();
-
-                    var url = $(this).attr('href'),
-                        $a = $(this);
-
-                    swal({
-                        title: '{{ 'Confirm remove'|trans }}',
-                        text: '{{ 'The record will be removed. Are you sure you want to continue?'|trans }}',
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d9534f'
-                    }, function(isConfirmed) {
-                        if (isConfirmed) {
-                            $a.closest('td').text('{{ 'Removing...'|trans }}').closest('tr').addClass('row-removing');
-                            $.ajax(url, {
-                                dataType: 'json',
-                                method: 'post',
-                                success: function(json) {
-                                    $datatable.find('tr.row-removing').remove();
-                                    swal({
-                                        title: '{{ 'Notification'|trans }}',
-                                        text: '{{ 'Client has been removed successfuly'|trans }}'
-                                    });
-                                    $datatable.dataTable().api().draw(false);
-                                }
-                            });
-                        }
-                    });
-                });
-            });
+            App.Clients.Index.init();
         });
     </script>
 {% endblock %}

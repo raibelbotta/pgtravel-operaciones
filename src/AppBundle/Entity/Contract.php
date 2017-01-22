@@ -27,6 +27,7 @@ class Contract
      * @var string
      *
      * @ORM\Column(name="model", type="string", length=100)
+     * @AppBundle\Validator\Constraints\ValidServiceType
      */
     private $model;
 

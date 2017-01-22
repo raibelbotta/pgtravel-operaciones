@@ -146,7 +146,7 @@ vich_uploader:
 
 assetic:
     java:               %local_java_path%
-    debug:              false
+    debug:              false #%kernel.debug%
     use_controller:     %kernel.debug%
     filters:
         cssrewrite:     ~

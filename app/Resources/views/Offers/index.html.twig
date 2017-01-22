@@ -56,19 +56,18 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    {% javascripts filter="yui_js" output="compiled/js/offers.js" '../web/js/offers.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
             {% if app.session.flashBag.has('notice') %}
                 +(function() {
                     swal({
-                        title: '{{ 'Notification'|trans }}',
+                        title: Translator.trans('Notification'),
                         text: '{{ app.session.flashBag.get('notice')[0] }}'
                     });
                 }());
             {% endif %}
+
+            App.Bookings.Index.init();
         });
     </script>
 {% endblock %}

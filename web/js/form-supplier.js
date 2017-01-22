@@ -1,4 +1,6 @@
-$(document).ready(function() {
+App = typeof App !== 'undefined' ? App : {};
+App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
+App.Suppliers.Form = function() {
     var initControls = function() {
         $('form#supplier input[type=tel]').intlTelInput({
             allowExtensions: true,
@@ -34,8 +36,15 @@ $(document).ready(function() {
                 nationalMode: false,
                 numberType: 'MOBILE',
                 preferredCountries: ['cu'],
-                utilsScript: '/plugins/intl-tel-input/js/utils.js'
+                utilsScript: url_utilScript
             });
+        });
+
+        $('#supplier_form_employees').on('item-added.app', function() {
+            $('input:hidden[name="employeeCounter"]').val($('#supplier_form_employees').find('.item').length);
+        });
+        $('#supplier_form_employees').on('item-removed.app', function() {
+            $('input:hidden[name="employeeCounter"]').val($('#supplier_form_employees').find('.item').length);
         });
     }
 
@@ -76,13 +85,10 @@ $(document).ready(function() {
         });
     };
 
-    initControls();
-    initValidator();
-
-    $('#supplier_form_employees').on('item-added.app', function() {
-        $('input:hidden[name="employeeCounter"]').val($('#supplier_form_employees').find('.item').length);
-    });
-    $('#supplier_form_employees').on('item-removed.app', function() {
-        $('input:hidden[name="employeeCounter"]').val($('#supplier_form_employees').find('.item').length);
-    });
-});
+    return {
+        init: function() {
+            initControls();
+            initValidator();
+        }
+    }
+}();

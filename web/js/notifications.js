@@ -1,61 +1,72 @@
-$(document).ready(function() {
-    var $table = $('#datatable-x');
+App = typeof App !== 'undefined' ? App : {};
+App.Notifications = typeof App.Notifications !== 'undefined' ? App.Notifications : {};
 
-    $table.on('click', '.btn-change-state', function(event) {
-        event.preventDefault();
+App.Notifications.Index = function() {
+    var init = function() {
+        var $table = $('#datatable-x');
 
-        $(this).attr('disabled', 'disabled');
-        $('#modalConfirm').data('process', $(this));
+        $table.on('click', '.btn-change-state', function(event) {
+            event.preventDefault();
 
-        $('#modalConfirm .modal-content').load($(this).attr('href'), function() {
-            $('#modalConfirm').modal();
-            $table.find('.btn[disabled]').removeAttr('disabled');
+            $(this).attr('disabled', 'disabled');
+            $('#modalConfirm').data('process', $(this));
 
-            $('#modalConfirm form').ajaxForm({
-                beforeSuccess: function() {
-                    $('#modalConfirm button.btn-primary').attr('disabled', 'disabled');
-                },
-                success: function(json) {
-                    $('#modalConfirm').modal('hide');
+            $('#modalConfirm .modal-content').load($(this).attr('href'), function() {
+                $('#modalConfirm').modal();
+                $table.find('.btn[disabled]').removeAttr('disabled');
 
-                    $($('#modalConfirm').data('process')).parent().text(Translator.trans('Updating...'));
-                    $('#modalConfirm').removeData('process');
+                $('#modalConfirm form').ajaxForm({
+                    beforeSuccess: function() {
+                        $('#modalConfirm button.btn-primary').attr('disabled', 'disabled');
+                    },
+                    success: function(json) {
+                        $('#modalConfirm').modal('hide');
 
-                    $table.dataTable().api().draw(true);
-                }
-            });
-        });
-    });
+                        $($('#modalConfirm').data('process')).parent().text(Translator.trans('Updating...'));
+                        $('#modalConfirm').removeData('process');
 
-    $table.dataTable({
-        order: [[5, 'asc']],
-        aoColumns: [
-            {name: 'name'},
-            {name: 'operator'},
-            {name: 'client'},
-            {name: 'supplier'},
-            {name: 'service'},
-            {name: 'startAt', searchable: false},
-            {name: 'endAt', searchable: false},
-            {name: 'reference'},
-            {sortable: false, searchable: false}
-        ],
-        processing: true,
-        serverSide: true,
-        ajax: {
-            method: 'post',
-            url: Routing.generate('app_notifications_getdata'),
-            data: function(params) {
-                return $.extend({}, params, {
-                    filter: {
-                        state: $('form#filter select[name$="[state]"]').val()
+                        $table.dataTable().api().draw(true);
                     }
                 });
-            }
-        }
-    });
+            });
+        });
 
-    $('form#filter select[name$="[state]"]').on('change', function() {
-        $table.dataTable().api().draw(true);
-    }); 
-});
+        $table.dataTable({
+            order: [[5, 'asc']],
+            aoColumns: [
+                {name: 'name'},
+                {name: 'operator'},
+                {name: 'client'},
+                {name: 'supplier'},
+                {name: 'service'},
+                {name: 'startAt', searchable: false},
+                {name: 'endAt', searchable: false},
+                {name: 'reference'},
+                {sortable: false, searchable: false}
+            ],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                method: 'post',
+                url: Routing.generate('app_notifications_getdata'),
+                data: function(params) {
+                    return $.extend({}, params, {
+                        filter: {
+                            state: $('form#filter select[name$="[state]"]').val()
+                        }
+                    });
+                }
+            }
+        });
+
+        $('form#filter select[name$="[state]"]').on('change', function() {
+            $table.dataTable().api().draw(true);
+        });
+    }
+    
+    return {
+        init: function() {
+            init();
+        }
+    }
+}();

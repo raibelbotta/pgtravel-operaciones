@@ -34,6 +34,14 @@ class ReservationService
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=20)
+     * @AppBundle\Validator\Constraints\ValidServiceType
+     */
+    private $model;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      */

@@ -30,7 +30,12 @@ abstract class Report implements ReportInterface
 
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver
+                ->setRequired(array('format', 'orientation'))
+                ->setAllowedTypes('format', array('string', 'array'))
+                ->setAllowedTypes('orientation', 'string')
+                ->setAllowedValues('orientation', array('P', 'L'))
+                ->setDefaults(array(
                     'orientation'   => 'P',
                     'format'        => 'A4'
                 ));

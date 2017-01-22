@@ -16,5 +16,9 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset('js/form-contract.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.Contracts.Form.init();
+        });
+    </script>
 {% endblock %}

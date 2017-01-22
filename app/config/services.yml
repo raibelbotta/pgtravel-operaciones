@@ -24,6 +24,7 @@ parameters:
         - { name: restaurant, display: Restaurant }
         - { name: optionals, display: Optionals }
         - { name: guide, display: Guide }
+        - { name: private-house, display: Private house }
         - { name: other, display: Other }
 
 services:

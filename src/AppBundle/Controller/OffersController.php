@@ -323,15 +323,7 @@ class OffersController extends Controller
     public function searchServiceAction()
     {
         $cupos = $this->container->getParameter('app.hotel.cupos');
-        $models = array(
-            'hotel'         => 'Hotel',
-            'transport'     => 'Transport',
-            'car-rental'    => 'Car rental',
-            'restaurant'    => 'Restaurant',
-            'optionals'     => 'Optionals',
-            'guide'         => 'Guide',
-            'other'         => 'Other'
-        );
+        $models = $this->container->getParameter('app.contract.models');
 
         return $this->render('Offers/search_service.html.twig', array(
             'cupos' => $cupos,

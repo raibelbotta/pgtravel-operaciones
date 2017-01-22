@@ -89,7 +89,7 @@ class Costing extends Report
 
         foreach ($this->offer->getServices() as $service) {
             $h = $this->getRowHeight(array(
-                array(45, $service->getSupplier()->getName()),
+                array(45, $service->getSupplier() ? $service->getSupplier()->getName() : ''),
                 array(60, $service->getName()),
                 array(20, $service->getSupplierReference()),
                 array(20, $service->getNights()),
@@ -99,7 +99,7 @@ class Costing extends Report
                 array(0, $service->getInternalNotes())
             ));
 
-            $this->pdf->MultiCell(45, $h, $service->getSupplier()->getName(), 1, 'L', false, 0);
+            $this->pdf->MultiCell(45, $h, $service->getSupplier() ? $service->getSupplier()->getName() : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(60, $h, $service->getName(), 1, 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getSupplierReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getNights(), 1, 'C', false, 0);

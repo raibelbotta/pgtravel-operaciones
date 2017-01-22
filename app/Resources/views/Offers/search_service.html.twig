@@ -1,6 +1,6 @@
     <ul class="nav nav-tabs" role="tablist">
-        {% for key, model in models %}
-            <li{{ key == 'hotel' ? ' class="active"' : '' }} role="presentation"><a href="#tab-{{ key }}" aria-controls="tab-{{ key }}" role="tab" data-toggle="tab">{{ model|trans }}</a></li>
+        {% for model in models %}
+            <li{{ model.name == 'hotel' ? ' class="active"' : '' }} role="presentation"><a href="#tab-{{ model.name }}" aria-controls="tab-{{ model.name }}" role="tab" data-toggle="tab">{{ model.display|trans }}</a></li>
         {% endfor %}
     </ul>
     <div class="tab-content">
@@ -42,15 +42,15 @@
                 </div>
             </div>
         </div>
-        {% for key, model in models if key != 'hotel' %}
-            <div class="tab-pane" role="tabpanel" id="tab-{{ key }}" style="padding: 16px;">
+        {% for model in models if model.name != 'hotel' %}
+            <div class="tab-pane" role="tabpanel" id="tab-{{ model.name }}" style="padding: 16px;">
                 <div class="row">
                     <div class="col-sm-6 form-group">
-                        <label for="" class="control-label">From</label>
+                        <label for="" class="control-label">{{ 'From'|trans }}</label>
                         <input type="text" name="" id="" class="form-control input-sm datepicker">
                     </div>
                     <div class="col-sm-6 form-group">
-                        <label for="" class="control-label">To</label>
+                        <label for="" class="control-label">{{ 'To'|trans }}To</label>
                         <input type="text" name="" id="" class="form-control input-sm datepicker">
                     </div>
                 </div>
@@ -79,7 +79,7 @@
             $('#searchServiceModal #tab-hotel input:text.datepicker').on('dp.change', function() {
                 $('#tab-hotel').find('select.hotel').empty();
                 $('#tab-hotel').find('select.pax').val('');
-                $(this).closest('.tab-pane').find('.table-responsive').empty().closest('.row').hide();                
+                $(this).closest('.tab-pane').find('.table-responsive').empty().closest('.row').hide();
 
                 var $dates = $('#searchServiceModal #tab-hotel input:text.datepicker'),
                     data = {

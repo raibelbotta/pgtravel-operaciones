@@ -1,0 +1,96 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Clients'|trans }} <small>{{ 'view'|trans }}</small></h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Identification info'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="control-label">{{ "Full name"|trans }}</label>
+                    <div class="form-control">{{ record.fullName }}</div>
+                    <div class="help-block"></div>
+                </div>
+                <div class="col-xs-12">
+                    <label class="control-label">{{ "Fixed phone"|trans }}</label>
+                    <div class="form-control">{{ record.fixedPhone is not empty ? phone_number_format(record.fixedPhone, 'INTERNATIONAL') : '' }}</div>
+                    <div class="help-block"></div>
+                </div>
+                {% if record.postalAddress is not empty %}
+                    <div class="col-xs-12">
+                        <label for="" class="control-label">{{ 'Postal address'|trans }}</label>
+                        <div class="form-control" style="height: auto;">
+                            {{ record.postalAddress }}
+                        </div>
+                        <div class="help-block"></div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Contacts'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            {% for contact in record.contacts %}
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 form-group">
+                        <label for="" class="control-label">{{ "Full name"|trans }}</label>
+                        <div class="form-control">{{ contact.fullName }}</div>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 form-group">
+                        <label for="" class="control-label">{{ 'Job position'|trans }}</label>
+                        <div class="form-control">{{ contact.jobPlace }}</div>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 form-group">
+                        <label for="" class="control-label">{{ 'Gender'|trans }}</label>
+                        <div class="form-control">{{ contact.gender }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 form-group">
+                        <label for="" class="control-label">{{ 'Email address'|trans }}</label>
+                        <div class="form-control">{{ contact.emailAddress }}</div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12 form-group">
+                        <label for="" class="control-label">{{ 'Mobile phone'|trans }}</label>
+                        <div class="form-control">{{ contact.mobilePhone is not empty ? phone_number_format(contact.mobilePhone, 'INTERNATIONAL') : '' }}</div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12 form-group">
+                        <label for="" class="control-label">{{ 'Fixed phone'|trans }}</label>
+                        <div class="form-control">{{ contact.fixedPhone is not empty ? phone_number_format(contact.fixedPhone, 'INTERNATIONAL') : '' }}</div>
+                    </div>
+                    {% if contact.postalAddress is not empty %}
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="" class="control-label">{{ 'Postal address'|trans }}</label>
+                            <div class="form-control" style="height: auto;">{{ contact.postalAddress }}</div>
+                        </div>
+                    {% endif %}
+                    {% if contact.notes is not empty %}
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="" class="control-label">{{ 'Notes'|trans }}</label>
+                            <div class="form-control" style="height: auto;">{{ contact.notes }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="clearfix"></div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="pull-right">
+        <a href="{{ path('app_clients_edit', {"id": record.id}) }}" class="btn btn-primary">{{ "Edit"|trans }}</a>
+        <a href="{{ path('app_clients_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
+    </div>
+{% endblock %}

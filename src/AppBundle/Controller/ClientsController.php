@@ -101,7 +101,21 @@ class ClientsController extends Controller
     }
 
     /**
+     * @Route("/{id}/view", requirements={"id": "\d+"})
+     * @Method({"get"})
+     * @ParamConverter("record", class="AppBundle\Entity\Client")
+     * @return Response
+     */
+    public function viewAction(Client $record)
+    {
+        return $this->render('Clients/view.html.twig', array(
+            'record' => $record
+        ));
+    }
+
+    /**
      * @Route("/new")
+     * @Method({"get", "post"})
      * @param Request $request
      * @return Response
      */

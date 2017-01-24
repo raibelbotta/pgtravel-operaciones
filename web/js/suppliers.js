@@ -5,16 +5,15 @@ App.Suppliers.Index = function() {
         var $datatable = $('#datatable-suppliers');
 
         $datatable.dataTable({
-            'order': [[ 1, 'asc' ]],
             'columnDefs': [
                 {
                     orderable: false,
                     sortable: false,
-                    targets: [0, 2]
+                    targets: [1]
                 },
                 {
                     name: 'name',
-                    targets: [1]
+                    targets: [0]
                 }
             ],
             serverSide: true,

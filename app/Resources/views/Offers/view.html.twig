@@ -1,0 +1,225 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Offers'|trans }} <small>{{ 'view'|trans }}</small></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{{ 'Client'|trans }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="form-group col-sm-3 col-xs-6">
+                                <label for="" class="control-label">{{ 'Representant'|trans }}</label>
+                                <div class="fom-control">{{ record.operator }} </div>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12">
+                                {% if record.client is not empty %}
+                                    <label for="" class="control-label">{{ 'Client'|trans }}</label>
+                                    <div class="form-control">{{ record.client }}</div>
+                                {% else %}
+                                    <label for="" class="control-label">{{ 'Direct client full name'|trans }}</label>
+                                    <div class="form-control">{{ record.directClientFullName }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-sm-2 col-xs-12">
+                                <label for="" class="control-label">{{ 'Notification line'|trans }}</label>
+                                <div class="form-control">{{ record.notificationLine }}</div>
+                            </div>
+                            {% if record.client is not empty %}
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <label class="control-label">{{ 'Direct client email'|trans }}</label>
+                                    <div class="form-control">{{ record.directClientEmail }}</div>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <label class="control-label">{{ 'Direct client mobile phone'|trans }}</label>
+                                    <div class="form-control">{{ record.directClientMobilePhone }}</div>
+                                </div>
+                                {% if record.directClientPostalAddress is not empty %}
+                                    <div class=" form-group col-xs-12">
+                                        <label class="control-label">{{ 'Direct client postal address'|trans }}</label>
+                                        <div class="form-control" style="height: auto;">{{ record.directClientPostalAddress }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12">
+                                <label for="" class="control-label">{{ 'Notification contact'|trans }}</label>
+                                <div class="form-control">{{ record.notificationContact }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{{ 'Booking data'|trans }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="form-group col-sm-8 col-xs-12">
+                                <label class="control-label">{{ 'Name'|trans }}</label>
+                                <div class="form-control">{{ record.name }}</div>
+                            </div>
+                            {% if record.offerSummaryFileName is not empty %}
+                                <div class="form-group col-sm-4 col-xs-12">
+                                    <label class="control-label">{{ 'Offer summary file'|trans }}</label>
+                                    <div class="form-control">
+                                        <a href="{{ vich_uploader_asset(record, 'offerSummaryFile') }}">{{ record.offerSummaryFilename }}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 xol-xs-12 form-group">
+                                <label class="control-label">{{ 'Traveler names'|trans }}</label>
+                                <div class="form-control">{{ record.travelerNames }}</div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12 form-group">
+                                <label class="control-label">{{ 'Flies data'|trans }}</label>
+                                <div class="form-control">{{ record.fliesData }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{{ 'Services'|trans }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        {% set totalExpenses = 0 %}
+                        {% for service in record.services %}
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-6 form-group">
+                                    <label class="control-label">{{ 'Name'|trans }}</label>
+                                    <div class="form-control">{{ service.name }}</div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 form-group">
+                                    <label class="control-label">{{ 'Supplier'|trans }}</label>
+                                    <div class="form-control">{{ service.supplier }}</div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12 form-group">
+                                    <label class="control-label">{{ 'Pax'|trans }}</label>
+                                    <div class="form-control text-right">{{ service.pax }}</div>
+                                </div>
+                                <div class="col-sm-4 col-xs-6 form-group">
+                                    <label class="control-label">{{ 'Supplier price'|trans }}</label>
+                                    <div class="form-control text-right">{{ service.supplierPrice }}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <label class="control-label">{{ 'Start at'|trans }}</label>
+                                    <div class="form-control">{{ service.startAt.format('d/m/Y H:i') }}</div>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <label class="control-label">{{ 'End at'|trans }}</label>
+                                    <div class="form-control">{{ service.endAt.format('d/m/Y H:i') }}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12 form-group">
+                                    <label class="control-label">{{ 'Description'|trans }}</label>
+                                    <div class="form-control">{{ service.description }}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 form-group">
+                                    <label class="control-label">{{ 'Internal notes'|trans }}</label>
+                                    <div class="form-control">{{ service.internalNotes }}</div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 form-group">
+                                    <label class="control-label">{{ 'Supplier notes'|trans }}</label>
+                                    <div class="form-control">{{ service.supplierNotes }}</div>
+                                </div>
+                            </div>
+                            <hr>
+                            {% set totalExpenses = totalExpenses + service.supplierPrice %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{{ 'Administrative charges'|trans }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="hidden-xs">
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-12"><strong>{{ 'Name'|trans }}</strong></div>
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-3 text-right"><strong>PAX</strong></div>
+                                        <div class="col-xs-3 text-right"><strong>{{ 'Nights'|trans }}</strong></div>
+                                        <div class="col-xs-3 text-right"><strong>{{ 'Price'|trans }}</strong></div>
+                                        <div class="col-xs-3 text-right"><strong>{{ 'Total'|trans }}</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        {% set totalCharges = 0 %}
+                        {% for charge in record.administrativeCharges %}
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-12 form-group"><div class="form-control">{{ charge.name }}</div></div>
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-3 form-group"><div class="form-control text-right">{{ charge.pax }}</div></div>
+                                        <div class="col-xs-3 form-group"><div class="form-control text-right">{{ charge.nights }}</div></div>
+                                        <div class="col-xs-3 form-group"><div class="form-control text-right">{{ '%0.2f'|format(charge.price) }}</div></div>
+                                        <div class="col-xs-3 form-group"><div class="form-control text-right">{{ '%0.2f'|format(charge.total) }}</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% set totalCharges = totalCharges + charge.total %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>{{ 'Charges'|trans }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                                <label class="control-label">{{ 'Total expenses'|trans }}</label>
+                                <div class="form-control text-right">{{ '%0.2f'|format(totalExpenses) }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                                <label class="control-label">{{ 'Total charges'|trans }}</label>
+                                <div class="form-control text-right">{{ '%0.2f'|format(totalCharges) }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-8 col-xs-12 form-group">
+                                <label class="control-label">{{ 'Percent applied'|trans }}</label>
+                                <div class="row">
+                                    <div class="col-xs-12"><div class="form-control text-right">{{ record.percentApplied }}</div></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-sm-offset-8 col-xs-12 form-group">
+                                <label class="control-label">{{ 'Client charge'|trans }}</label>
+                                <div class="form-control text-right">{{ record.clientCharge }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="pull-right">
+                <a href="{{ path('app_offers_edit', {'id': record.id}) }}" class="btn btn-primary">{{ 'Edit'|trans }}</a>
+                <a href="{{ path('app_offers_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -31,12 +31,26 @@ class OffersController extends Controller
     public function indexAction()
     {
         $session = $this->container->get('session');
-        
+
         return $this->render('Offers/index.html.twig', array(
             'filter' => $session->get('offers.filter', array(
                 'fromDate' => date_create('now')->format('d/m/Y'),
                 'cancelled' => 'no'
             ))
+        ));
+    }
+
+    /**
+     * @Route("/{id}/view", requirements={"id": "\d+"})
+     * @ParamConverter("record", class="AppBundle\Entity\Reservation")
+     * @Method({"get"})
+     * @param Reservation $record
+     * @return Response
+     */
+    public function viewAction(Reservation $record)
+    {
+        return $this->render('Offers/view.html.twig', array(
+            'record' => $record
         ));
     }
 
@@ -65,7 +79,7 @@ class OffersController extends Controller
         $session->set('offers.filter', $filter);
 
         $andX = $qb->expr()->andX();
-        
+
         if (isset($filter['state']) && $filter['state']) {
             $andX->add($qb->expr()->eq('r.state', $qb->expr()->literal('offer' === $filter['state'] ? Reservation::STATE_OFFER : Reservation::STATE_RESERVATION)));
         }
@@ -348,7 +362,7 @@ class OffersController extends Controller
         $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
 
         switch ($model) {
-            case 'hotel': 
+            case 'hotel':
                 $qb = $manager->getRepository('AppBundle:ContractFacility')
                         ->createQueryBuilder('f')
                         ->select('f.id, f.name, s.id AS supplierId, s.name AS supplierName')
@@ -416,7 +430,7 @@ class OffersController extends Controller
                 ->join('s.facility', 'f')
                 ;
         $andX = $qb->expr()->andX();
-        
+
         if ($request->get('hotel')) {
             $andX->add($qb->expr()->eq('f.id', $qb->expr()->literal($request->get('hotel'))));
         }
@@ -551,7 +565,7 @@ class OffersController extends Controller
             'Content-length' => filesize($filename)
         ));
     }
-    
+
     /**
      * @Route("/{id}/print-preview")
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")
@@ -564,7 +578,7 @@ class OffersController extends Controller
             'record' => $record,
             'manager' => $this->getDoctrine()->getManager()
         ));
-        
+
         return new StreamedResponse(function() use($report) {
             $content = $report->getContent();
             file_put_contents('php://output', $content);
@@ -573,7 +587,7 @@ class OffersController extends Controller
             'Content-Disposition' => sprintf('inline; filename="%s booking review.pdf"', $record->getName())
         ));
     }
-    
+
     /**
      * @Route("/{id}/print-cash")
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")
@@ -588,7 +602,7 @@ class OffersController extends Controller
             'translator' => $this->container->get('translator'),
             'locale' => $this->container->get('request')->getLocale()
         ));
-        
+
         $response = $book->getBookContent();
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
@@ -598,7 +612,7 @@ class OffersController extends Controller
         $response->headers->set('Pragma', 'public');
         $response->headers->set('Cache-Control', 'maxage=1');
         $response->headers->set('Content-Disposition', $dispositionHeader);
-        
+
         return $response;
     }
 

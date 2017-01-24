@@ -84,19 +84,13 @@ class SuppliersController extends Controller
             $total = count($list);
         }
 
-        $translator = $this->container->get('translator');
-        $data = array_map(function($record) use($translator) {
+        $twig = $this->container->get('templating');
+        $data = array_map(function($record) use($twig) {
             return array(
-                '<input type="checkbox" class="flat">',
                 $record->getName(),
-                sprintf('<div class="btn-group">%s%s</div>',
-                    sprintf('<a href="%s" title="%s" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>',
-                            $this->generateUrl('app_suppliers_edit', array('id' => $record->getId())),
-                            $translator->trans('Edit')),
-                    sprintf('<a href="%s" title="%s" class="btn btn-danger btn-xs btn-delete"><i class="fa fa-remove"></i></a>',
-                        $this->generateUrl('app_suppliers_delete', array('id' => $record->getId())),
-                        $translator->trans('Delete'))
-                )
+                $twig->render('Suppliers/_actions.html.twig', array(
+                    'record' => $record
+                ))
             );
         }, $list);
 
@@ -105,6 +99,20 @@ class SuppliersController extends Controller
             'draw' => $request->get('draw'),
             'recordsTotal' => $total,
             'recordsFiltered' => $total
+        ));
+    }
+
+    /**
+     * @Route("/{id}/view", requirements={"id": "\d+"})
+     * @Method({"get"})
+     * @ParamConverter("record", class="AppBundle\Entity\Supplier")
+     * @param Supplier $record
+     * @return Response
+     */
+    public function viewAction(Supplier $record)
+    {
+        return $this->render('Suppliers/view.html.twig', array(
+            'record' => $record
         ));
     }
 
@@ -161,7 +169,7 @@ class SuppliersController extends Controller
                     $em->remove($employee);
                 }
             }
-            
+
             $em->flush();
 
             $translator = $this->container->get('translator');

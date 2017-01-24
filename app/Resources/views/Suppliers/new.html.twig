@@ -19,8 +19,8 @@
     {{ form_start(form, {'attr': {'role': 'form', 'id': 'supplier', 'class': 'form-horizontal form-label-left'}}) }}
         {{ form_row(form) }}
         <div class="pull-right">
-            <a href="{{ path('app_suppliers_index') }}" class="btn btn-default">{{ 'Cancel'|trans }}</a>
             <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+            <a href="{{ path('app_suppliers_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
         </div>
     {{ form_end(form) }}
 {% endblock %}
@@ -28,8 +28,6 @@
 {% block page_javascripts %}
     <script>
         var url_utilScript = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
-    </script>
-    <script type="text/javascript">
         $(document).ready(function() {
             App.Suppliers.Form.init();
             App.Forms.init();

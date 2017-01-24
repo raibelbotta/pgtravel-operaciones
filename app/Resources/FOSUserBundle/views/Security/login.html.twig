@@ -5,7 +5,6 @@
 {% block metas %}
     {{ parent() }}
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
@@ -17,12 +16,15 @@
     <link href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="{{ asset('plugins/nprogress/nprogress.css') }}" rel="stylesheet">
-    <!-- Animate.css -->
-    <link href="{{ asset('plugins/animate.css/animate.min.css') }}" rel="stylesheet">
-    <!-- Custom Theme Style -->
-    <link href="{{ asset('css/custom.min.css') }}" rel="stylesheet">
+    {% stylesheets filter="yui_css" output="compiled/css/login.min.css"
+        "../web/plugins/tooltipster/css/tooltipster.css"
+        "../web/plugins/tooltipster/css/tooltipster-custom.css"
+        "../web/plugins/nprogress/nprogress.css"
+        "../web/plugins/animate.css/animate.css"
+        "../web/css/custom.css"
+        %}
+        <link href="{{ asset_url }}" rel="stylesheet">
+    {% endstylesheets %}
 {% endblock %}
 
 {% block body_tag %}<body class="login">{% endblock %}
@@ -35,13 +37,13 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form action="{{ path('fos_user_security_check') }}" method="post" role="form">
+                    <form action="{{ path('fos_user_security_check') }}" method="post" role="form" id="formLogin">
                         <h1>{{ 'Sign in'|trans }}</h1>
                         {% if error %}
                             <div class="alert alert-warning">{{ error|trans({}, 'FOSUserBundle') }}</div>
                         {% endif %}
                         <div>
-                            <input type="text" class="form-control" placeholder="Username" required name="_username" />
+                            <input type="email" class="form-control" placeholder="Username" required name="_username" />
                         </div>
                         <div>
                             <input type="password" class="form-control" placeholder="Password" required name="_password" />
@@ -111,4 +113,37 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts filter="yui_js" output="compiled/js/login.min.js"
+        "../web/plugins/jquery/dist/jquery.min.js"
+        "../web/plugins/bootstrap/dist/js/bootstrap.js"
+        "../web/plugins/tooltipster/js/jquery.tooltipster.js"
+        "../web/plugins/jquery-validation/dist/jquery.validate.js"
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function() {
+            $('#formLogin').validate({
+                errorPlacement: function(error, element) {
+                    if (!element.data('tooltipster-ns')) {
+                        element.tooltipster({
+                            trigger: 'custom',
+                            onlyOne: false,
+                            position: 'bottom-left',
+                            positionTracker: true
+                        });
+                    }
+                    element.tooltipster('update', $(error).text());
+                    element.tooltipster('show');
+                },
+                success: function (label, element) {
+                    $(element).tooltipster('hide');
+                }
+            });
+        });
+    </script>
 {% endblock %}

@@ -92,7 +92,7 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\User
     profile:
-        form: 
+        form:
             type: AppBundle\Form\Type\ProfileFormType
 
 oneup_flysystem:
@@ -146,7 +146,7 @@ vich_uploader:
 
 assetic:
     java:               %local_java_path%
-    debug:              false #%kernel.debug%
+    debug:              %kernel.debug%
     use_controller:     %kernel.debug%
     filters:
         cssrewrite:     ~

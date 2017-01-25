@@ -147,3 +147,8 @@ services:
         class: AppBundle\Lib\Reports\ReportFactory
         arguments: [ "@service_container" ]
     report.factory: '@app.lib.reports.report_factory'
+
+    app.listener.response_cache_listener:
+        class: AppBundle\Listener\AddResponseCacheListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

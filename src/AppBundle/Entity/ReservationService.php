@@ -626,4 +626,28 @@ class ReservationService
     {
         return $this->supplierPrice;
     }
+
+    /**
+     * Set model
+     *
+     * @param string $model
+     *
+     * @return ReservationService
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get model
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
 }

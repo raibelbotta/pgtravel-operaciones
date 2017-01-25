@@ -2,6 +2,141 @@ App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 App.Bookings.Form = function() {
+    var initCollections = function() {
+        var linkDatepickers = function(item) {
+            var dps = $(item).find('input.datepicker');
+            $(dps[0]).parent().datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+            $(dps[1]).parent().datetimepicker({
+                format: 'D/MM/YYYY HH:mm',
+                useCurrent: false
+            });
+            $(dps[0]).parent().on('dp.change', function(e) {
+                $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
+            });
+            $(dps[1]).parent().on("dp.change", function(e) {
+                $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
+            });
+        }
+
+        $('.item.item-service').each(function() {
+            linkDatepickers(this);
+        });
+
+        $('body').on('click', '.btn-add-item', function(event) {
+            var $btn = $(this);
+            if ($btn.is('a')) {
+                event.preventDefault();
+            }
+
+            var $container = $($btn.data('collection')),
+                index = $container.data('index'),
+                prototype = $container.data('prototype')
+                $counter = $container.data('counter') ? $($container.data('counter')) : null;
+
+            $item = $(prototype.replace(/__name__/g, index));
+            $container.data('index', index + 1);
+            if ($counter) {
+                $counter.val(parseInt($counter.val(),10) + 1);
+            }
+            $container.append($item);
+
+            linkDatepickers($item);
+
+            $item.find('input:text:first').focus();
+
+            //hide error if there is
+            if ($container.closest('div.x_panel').find('h2').data('tooltipster-ns')) {
+                $container.closest('div.x_panel').find('h2').tooltipster('hide');
+            }
+
+            $('body').animate({
+                scrollTop: $item.offset().top
+            }, 500);
+        });
+
+        $('body').on('click', '.btn-remove-item', function(event) {
+            var $btn = $(this), $item = $btn.closest('.item');
+
+            if ($btn.is('a')) {
+                event.preventDefault();
+            }
+
+            swal({
+                title: Translator.trans('Confirm operation'),
+                text: Translator.trans('The service will be removed. Are you sure you want to continue?'),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d9534f'
+            }, function(isConfirmed) {
+                if (isConfirmed) {
+                    $item.fadeOut(function() {
+                        var $container = $(this).closest('.collection'),
+                            $counter = $container.data('counter') ? $($container.data('counter')) : null;
+                        $(this).remove();
+                        if ($counter) {
+                            $counter.val($counter.val() - 1);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    var initValidation = function() {
+        $('#reservation').validate({
+            errorPlacement: function(error, element) {
+                if (element.is(':hidden')) {
+                    element = element.closest(':visible');
+                }
+                if (!element.data('tooltipster-ns')) {
+                    element.tooltipster({
+                        trigger: 'custom',
+                        onlyOne: false,
+                        position: 'bottom-left',
+                        positionTracker: true
+                    });
+                }
+                element.tooltipster('update', $(error).text());
+                element.tooltipster('show');
+            },
+            ignore: ':hidden:not(input[name="servicesCounter"])',
+            messages: {
+                'servicesCounter': {
+                    min: Translator.trans('Add a service at least')
+                }
+            },
+            rules: {
+                'servicesCounter': {
+                    min: 1
+                },
+                'offer_form[directClientFullName]': {
+                    required: {
+                        depends: function() {
+                            return $('#offer_form_clientType_1').prop('checked') === true;
+                        }
+                    }
+                },
+                'offer_form[client]': {
+                    required: {
+                        depends: function() {
+                            return $('#offer_form_clientType_0').prop('checked') === true;
+                        }
+                    }
+                },
+                'offer_form[percentApplied][plus]': 'number'
+            },
+            success: function (label, element) {
+                var $element = $(element);
+                if ($element.is(':hidden')) {
+                    $element = $element.closest(':visible');
+                }
+                $element.tooltipster('hide');
+            }
+        });
+    }
+
     var init = function() {
         $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
             var value = $(this).val();
@@ -52,133 +187,6 @@ App.Bookings.Form = function() {
             preferredCountries: ['ca', 'us', 'gb'],
             utilsScript: phone_util_script_url
         });
-
-        //collection stuff
-        +(function() {
-            var linkDatepickers = function(item) {
-                var dps = $(item).find('input.datepicker');
-                $(dps[0]).parent().datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
-                });
-                $(dps[1]).parent().datetimepicker({
-                    format: 'D/MM/YYYY HH:mm',
-                    useCurrent: false
-                });
-                $(dps[0]).parent().on('dp.change', function(e) {
-                    $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
-                });
-                $(dps[1]).parent().on("dp.change", function(e) {
-                    $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
-                });
-            }
-
-            $('.item.item-service').each(function() {
-                linkDatepickers(this);
-            });
-
-            $('body').on('click', '.btn-add-item', function(event) {
-                var $btn = $(this);
-                if ($btn.is('a')) {
-                    event.preventDefault();
-                }
-
-                var $container = $($btn.data('collection')),
-                    index = $container.data('index'),
-                    prototype = $container.data('prototype')
-                    $counter = $container.data('counter') ? $($container.data('counter')) : null;
-
-                $item = $(prototype.replace(/__name__/g, index));
-                $container.data('index', index + 1);
-                if ($counter) {
-                    $counter.val(parseInt($counter.val(),10) + 1);
-                }
-                $container.append($item);
-
-                linkDatepickers($item);
-
-                $item.find('input:text:first').focus();
-
-                //hide error if there is
-                if ($container.closest('div.x_panel').find('h2').data('tooltipster-ns')) {
-                    $container.closest('div.x_panel').find('h2').tooltipster('hide');
-                }
-
-                $('body').animate({
-                    scrollTop: $item.offset().top
-                }, 500);
-            });
-
-            $('body').on('click', '.btn-remove-item', function(event) {
-                var $btn = $(this);
-
-                if ($btn.is('a')) {
-                    event.preventDefault();
-                }
-
-                $btn.closest('.item').fadeOut(function() {
-                    var $container = $(this).closest('.collection'),
-                        $counter = $container.data('counter') ? $($container.data('counter')) : null;
-                    $(this).remove();
-                    if ($counter) {
-                        $counter.val($counter.val() - 1);
-                    }
-                });
-            });
-        }());
-
-        //validation stuff
-        +(function() {
-            $('#reservation').validate({
-                errorPlacement: function(error, element) {
-                    if (element.is(':hidden')) {
-                        element = element.closest(':visible');
-                    }
-                    if (!element.data('tooltipster-ns')) {
-                        element.tooltipster({
-                            trigger: 'custom',
-                            onlyOne: false,
-                            position: 'bottom-left',
-                            positionTracker: true
-                        });
-                    }
-                    element.tooltipster('update', $(error).text());
-                    element.tooltipster('show');
-                },
-                ignore: ':hidden:not(input[name="servicesCounter"])',
-                messages: {
-                    'servicesCounter': {
-                        min: Translator.trans('Add a service at least')
-                    }
-                },
-                rules: {
-                    'servicesCounter': {
-                        min: 1
-                    },
-                    'offer_form[directClientFullName]': {
-                        required: {
-                            depends: function() {
-                                return $('#offer_form_clientType_1').prop('checked') === true;
-                            }
-                        }
-                    },
-                    'offer_form[client]': {
-                        required: {
-                            depends: function() {
-                                return $('#offer_form_clientType_0').prop('checked') === true;
-                            }
-                        }
-                    },
-                    'offer_form[percentApplied][plus]': 'number'
-                },
-                success: function (label, element) {
-                    var $element = $(element);
-                    if ($element.is(':hidden')) {
-                        $element = $element.closest(':visible');
-                    }
-                    $element.tooltipster('hide');
-                }
-            });
-        }());
 
         +(function() {
             $('body').on('click', '.btn-search-service', function() {
@@ -238,13 +246,13 @@ App.Bookings.Form = function() {
 
             //Totales de cargos administrativos
             $('.item-administrative-charge').on('change', 'input[name$="[total]"]', function() {
-                updateTotalCharges();            
+                updateTotalCharges();
             });
 
             //Las line charges
             $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
                 var $controls = $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
-                
+
                 var sum = getFloat($('#offer_form_totalExpenses').val()),
                     sum2 = getFloat($('#offer_form_totalCharges').val()),
                     $plus = $('#offer_form_percentApplied_percent'), charge;
@@ -274,6 +282,8 @@ App.Bookings.Form = function() {
     return {
         init: function() {
             init();
+            initCollections();
+            initValidation();
         }
     }
 }();

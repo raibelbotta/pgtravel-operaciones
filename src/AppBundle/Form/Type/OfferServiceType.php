@@ -29,6 +29,9 @@ class OfferServiceType extends AbstractType
     {
         $builder
                 ->add('name')
+                ->add('model', null, array(
+                    'label' => 'Type'
+                ))
                 ->add('description', TextareaType::class, array(
                     'required' => false
                 ))

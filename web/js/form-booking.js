@@ -199,6 +199,12 @@ App.Bookings.Form = function() {
             });
         }());
 
+        +(function() {
+            $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
+                console.log(this.options[this.selectedIndex]);
+            });
+        }());
+
         +(function($) {
             var getFloat = function(val) {
                 return isNaN(parseFloat(val)) ? 0 : parseFloat(val);

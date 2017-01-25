@@ -165,7 +165,11 @@
 {% block offer_service_row %}
     <div class="item item-service">
         <div class="row">
-            <div class="col-sm-3 col-xs-6 form-group">
+            <div class="form-group col-xs-12 col-sm-3">
+                {{ form_label(form.model, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.model, {'attr': {'class': 'form-control input-sm'}}) }}
+            </div>
+            <div class="form-group col-xs-12 col-sm-9">
                 {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
                 <div class="input-group">
                     {{ form_widget(form.name, {'attr': {'class': 'form-control input-sm'}}) }}
@@ -176,21 +180,9 @@
                     </span>
                 </div>
             </div>
-            <div class="col-sm-3 col-xs-6 form-group">
-                {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.supplier, {'attr': {'class': 'form-control input-sm'}}) }}
-            </div>
-            <div class="col-sm-2 col-xs-12 form-group">
-                {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.pax, {'attr': {'class': 'form-control input-sm text-right'}}) }}
-            </div>
-            <div class="col-sm-4 col-xs-6 form-group">
-                {{ form_label(form.supplierPrice, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.supplierPrice, {'attr': {'class': 'form-control input-sm text-right'}}) }}
-            </div>
         </div>
         <div class="row">
-            <div class="form-group col-sm-6 col-xs-12">
+            <div class="form-group col-xs-6 col-sm-4">
                 {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 <div class="input-group date">
                     {{ form_widget(form.startAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
@@ -199,7 +191,7 @@
                     </span>
                 </div>
             </div>
-            <div class="form-group col-sm-6 col-xs-12">
+            <div class="form-group col-xs-6 col-sm-4">
                 {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 <div class="input-group date">
                     {{ form_widget(form.endAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
@@ -207,6 +199,24 @@
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                 </div>
+            </div>
+            <div class="form-group col-xs-6 col-sm-2">
+                {{ form_label(form.nights, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.nights, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+            </div>
+            <div class="form-group col-xs-6 col-sm-2">
+                {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.pax, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-8">
+                {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.supplier, {'attr': {'class': 'form-control input-sm'}}) }}
+            </div>
+            <div class="form-group col-xs-12 col-sm-4">
+                {{ form_label(form.supplierPrice, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.supplierPrice, {'attr': {'class': 'form-control input-sm text-right'}}) }}
             </div>
         </div>
         <div class="row">

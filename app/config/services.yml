@@ -18,13 +18,13 @@ parameters:
         - { name: Parking, price: 5 }
 
     app.contract.models:
-        - { name: hotel, display: Hotel }
+        - { name: hotel, display: Hotel, has_night: true }
         - { name: transport, display: Transport }
         - { name: car-rental, display: Car rental }
-        - { name: restaurant, display: Restaurant }
+        - { name: restaurant, display: Restaurant, has_end_date: false }
         - { name: optionals, display: Optionals }
         - { name: guide, display: Guide }
-        - { name: private-house, display: Private house }
+        - { name: private-house, display: Private house, has_night: true }
         - { name: other, display: Other }
 
 services:
@@ -129,6 +129,11 @@ services:
             - { name: form.type }
     app.form.type.contract_model_type:
         class: AppBundle\Form\Type\ContractModelType
+        arguments: [ '%app.contract.models%' ]
+        tags:
+            - { name: form.type }
+    app.form.type.offer_service_model_type:
+        class: AppBundle\Form\Type\OfferServiceModelType
         arguments: [ '%app.contract.models%' ]
         tags:
             - { name: form.type }

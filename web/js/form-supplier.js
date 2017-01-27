@@ -1,45 +1,13 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
+
 App.Suppliers.Form = function() {
     var initControls = function() {
-        $('form#supplier input[type=tel]').intlTelInput({
-            allowExtensions: true,
-            autoFormat: false,
-            autoHideDialCode: true,
-            autoPlaceholder: false,
-            defaultCountry: 'auto',
-            geoIpLookup: function(callback) {
-                $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                    var countryCode = (resp && resp.country) ? resp.country : '';
-                    callback(countryCode);
-                });
-            },
-            nationalMode: false,
-            numberType: 'MOBILE',
-            preferredCountries: ['cu'],
-            utilsScript: url_utilScript
-        });
+        App.Forms.initTelephoneControl($('form#supplier input[type=tel]'));
 
         $('form#supplier .collection-employees').on('item-added.app', function(event, data) {
-            $(data.item).find('input[type=tel]').intlTelInput({
-                allowExtensions: true,
-                autoFormat: false,
-                autoHideDialCode: true,
-                autoPlaceholder: false,
-                defaultCountry: 'auto',
-                geoIpLookup: function(callback) {
-                    $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                        var countryCode = (resp && resp.country) ? resp.country : '';
-                        callback(countryCode);
-                    });
-                },
-                nationalMode: false,
-                numberType: 'MOBILE',
-                preferredCountries: ['cu'],
-                utilsScript: url_utilScript
-            });
+            App.Forms.initTelephoneControl($(data.item).find('input[type=tel]'));
         });
-
         $('#supplier_form_employees').on('item-added.app', function() {
             $('input:hidden[name="employeeCounter"]').val($('#supplier_form_employees').find('.item').length);
         });
@@ -83,7 +51,7 @@ App.Suppliers.Form = function() {
                 $(element).tooltipster('hide');
             }
         });
-    };
+    }
 
     return {
         init: function() {

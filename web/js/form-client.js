@@ -24,23 +24,7 @@ App.Clients.Form = function() {
                 $container.data('index', index + 1);
                 $('input:hidden[name="contactCounter"]').val($('#client_form_contacts').find('.item').length);
 
-                $item.find('input[type=tel]').intlTelInput({
-                    allowExtensions: true,
-                    autoFormat: false,
-                    autoHideDialCode: true,
-                    autoPlaceholder: false,
-                    defaultCountry: 'auto',
-                    geoIpLookup: function(callback) {
-                        $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                            var countryCode = (resp && resp.country) ? resp.country : '';
-                            callback(countryCode);
-                        });
-                    },
-                    nationalMode: false,
-                    numberType: 'MOBILE',
-                    preferredCountries: ['cu'],
-                    utilsScript: url_utilScript
-                });
+                App.Forms.initTelephoneControl($item.find('input[type=tel]'));
             });
 
             $('body').on('click', '.btn-delete-item', function(event) {
@@ -53,23 +37,7 @@ App.Clients.Form = function() {
             });
         }());
 
-        $('input[type=tel]').intlTelInput({
-            allowExtensions: true,
-            autoFormat: false,
-            autoHideDialCode: true,
-            autoPlaceholder: false,
-            defaultCountry: 'auto',
-            geoIpLookup: function(callback) {
-                $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                    var countryCode = (resp && resp.country) ? resp.country : '';
-                    callback(countryCode);
-                });
-            },
-            nationalMode: false,
-            numberType: 'MOBILE',
-            preferredCountries: ['cu'],
-            utilsScript: url_utilScript
-        });
+        App.Forms.initTelephoneControl($('input[type=tel]'));
 
         $('form#client').validate({
             errorPlacement: function(error, element) {

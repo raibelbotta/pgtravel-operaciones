@@ -243,23 +243,7 @@ App.Bookings.Form = function() {
             });
         });
 
-        $('#offer_form_directClientMobilePhone').intlTelInput({
-            allowExtensions: true,
-            autoFormat: false,
-            autoHideDialCode: true,
-            autoPlaceholder: false,
-            defaultCountry: 'auto',
-            geoIpLookup: function(callback) {
-                $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                    var countryCode = (resp && resp.country) ? resp.country : '';
-                    callback(countryCode);
-                });
-            },
-            nationalMode: false,
-            numberType: 'MOBILE',
-            preferredCountries: ['ca', 'us', 'gb'],
-            utilsScript: phone_util_script_url
-        });
+        App.Forms.initTelephoneControl($('#offer_form_directClientMobilePhone'));
 
         $('body').on('click', '.btn-search-service', function() {
             var $item = $(this).closest('.item');

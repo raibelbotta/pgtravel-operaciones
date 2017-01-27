@@ -275,6 +275,16 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
+
+    <script>
+        phone_util_script_url = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
+    </script>
+
     <!-- plugins -->
     {% javascripts filter="yui_js" output="compiled/js/plugins.js"
         "../web/plugins/jquery/dist/jquery.min.js"
@@ -298,12 +308,6 @@
          %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-
-    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
 
     <!-- Custom Theme Scripts -->
     {% javascripts filter="yui_js" output="compiled/js/custom.js"

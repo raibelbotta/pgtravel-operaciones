@@ -21,7 +21,7 @@ App.Main = function() {
         $('#modalPassword button[type=button]:last').hide().on('click', function() {
             $('#modalPassword form').submit();
         });
-        
+
         $.validator.addMethod('validpassword', function(value, element) {
             return this.optional(element) || (/[A-Z]/.test(value) && /[0-9]/.test(value) && /[a-z]/.test(value) && value.length > 7);
         }, Translator.trans('Password strength is too low (include letters, capital letters and digits)'));
@@ -145,9 +145,30 @@ App.Forms = function() {
         });
     }
 
+    var initTelephoneControl = function(control, options) {
+        $(control).intlTelInput($.extend({}, {
+            allowExtensions: true,
+            autoFormat: false,
+            autoHideDialCode: true,
+            autoPlaceholder: false,
+            defaultCountry: 'auto',
+            geoIpLookup: function(callback) {
+                $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                    var countryCode = (resp && resp.country) ? resp.country : '';
+                    callback(countryCode);
+                });
+            },
+            nationalMode: false,
+            numberType: 'MOBILE',
+            preferredCountries: ['us', 'ca', 'cu'],
+            utilsScript: phone_util_script_url
+        }, options));
+    }
+
     return {
         init: function() {
             initCollectionControls();
-        }
+        },
+        initTelephoneControl: initTelephoneControl
     }
 }();

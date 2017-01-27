@@ -33,7 +33,7 @@
                     <h4 class="modal-title">{{ 'Search service'|trans }}</h4>
                 </div>
                 <div class="modal-body">
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">{{ 'Close'|trans }}</button>
@@ -45,7 +45,6 @@
 
 {% block page_javascripts %}
     <script type="text/javascript">
-        phone_util_script_url = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
         $(document).ready(function() {
             App.Bookings.Form.init();
         });

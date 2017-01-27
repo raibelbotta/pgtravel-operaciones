@@ -50,41 +50,39 @@ App.Contracts.Form = function(){
             });
         }(jQuery));
 
-        +(function() {
-            $('#contract').validate({
-                errorPlacement: function(error, element) {
-                    if (!element.data('tooltipster-ns')) {
-                        element.tooltipster({
-                            trigger: 'custom',
-                            onlyOne: false,
-                            position: 'bottom-left',
-                            positionTracker: true
-                        });
-                    }
-                    element.tooltipster('update', $(error).text());
-                    element.tooltipster('show');
-                },
-                rules: {
-                    'contract_form[startAt]': {
-                        required: {
-                            depends: function() {
-                                return '' !== $('#contract_form_endAt').val();
-                            }
-                        }
-                    },
-                    'contract_form[endAt]': {
-                        required: {
-                            depends: function() {
-                                return '' !== $('#contract_form_startAt').val();
-                            }
-                        }
-                    }
-                },
-                success: function (label, element) {
-                    $(element).tooltipster('hide');
+        $('#contract').validate({
+            errorPlacement: function(error, element) {
+                if (!element.data('tooltipster-ns')) {
+                    element.tooltipster({
+                        trigger: 'custom',
+                        onlyOne: false,
+                        position: 'bottom-left',
+                        positionTracker: true
+                    });
                 }
-            });
-        }());
+                element.tooltipster('update', $(error).text());
+                element.tooltipster('show');
+            },
+            rules: {
+                'contract_form[startAt]': {
+                    required: {
+                        depends: function() {
+                            return '' !== $('#contract_form_endAt').val();
+                        }
+                    }
+                },
+                'contract_form[endAt]': {
+                    required: {
+                        depends: function() {
+                            return '' !== $('#contract_form_startAt').val();
+                        }
+                    }
+                }
+            },
+            success: function (label, element) {
+                $(element).tooltipster('hide');
+            }
+        });
 
         +(function() {
             var clickRemoveItem = function(event) {

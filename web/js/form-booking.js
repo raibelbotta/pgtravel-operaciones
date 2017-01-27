@@ -3,25 +3,86 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 App.Bookings.Form = function() {
     var initCollections = function() {
-        var linkDatepickers = function(item) {
-            var dps = $(item).find('input.datepicker');
-            $(dps[0]).parent().datetimepicker({
-                format: 'DD/MM/YYYY HH:mm'
-            });
-            $(dps[1]).parent().datetimepicker({
-                format: 'D/MM/YYYY HH:mm',
+        var updateNights = function($item, trigger) {
+            var $nights = $item.find('input[name$="[nights]"]'),
+                $dates = $item.find('input.datepicker'),
+                now = $.now();
+
+            if ($nights.data('ajax')) {
+                $nights.data('ajax').abort();
+            }
+
+            if ($($dates[0]).val() == '') {
+                return;
+            }
+
+            if ($(trigger).is('.datepicker')) {
+                if ($($dates[1]).val() == '') {
+                    $nights.val('');
+                    return;
+                }
+
+                var xhr = $.ajax(Routing.generate('app_offers_getnights') + '?id=' + now, {
+                    data: {
+                        from: $($dates[0]).val(),
+                        to: $($dates[1]).val()
+                    },
+                    dataType: 'json',
+                    method: 'POST',
+                    success: function(json) {
+                        $nights.val(json.nights);
+                        $nights.removeData('ajax');
+                    }
+                });
+            } else {
+                if ($(trigger).val() == '') {
+                    $($dates[1]).val('');
+                    return;
+                }
+
+                var xhr = $.ajax(Routing.generate('app_offers_getnights') + '?id=' + now, {
+                    data: {
+                        from: $($dates[0]).val(),
+                        nights: $nights.val()
+                    },
+                    dataType: 'json',
+                    method: 'POST',
+                    success: function(json) {
+                        $($dates[1]).val(json.to);
+                        $nights.removeData('ajax');
+                    }
+                });
+            }
+
+            $nights.data('ajax', xhr);
+        }
+
+        var initDatepickers = function(item) {
+            var dps = $(item).find('input.datepicker'), options = {
+                format: 'DD/MM/YYYY HH:mm',
+                showClear: true,
+                showTodayButton: true
+            };
+            $(dps[0]).parent().datetimepicker(options);
+            $(dps[1]).parent().datetimepicker($.extend({}, options, {
                 useCurrent: false
-            });
+            }));
             $(dps[0]).parent().on('dp.change', function(e) {
                 $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
+                updateNights($(item), dps[0]);
             });
             $(dps[1]).parent().on("dp.change", function(e) {
                 $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
+                updateNights($(item), dps[1]);
             });
         }
 
         $('.item.item-service').each(function() {
-            linkDatepickers(this);
+            initDatepickers(this);
+        });
+
+        $('body').on('change', '.item-service input[name$="[nights]"]', function() {
+            updateNights($(this).closest('.item'), this);
         });
 
         $('body').on('click', '.btn-add-item', function(event) {
@@ -42,7 +103,7 @@ App.Bookings.Form = function() {
             }
             $container.append($item);
 
-            linkDatepickers($item);
+            initDatepickers($item);
 
             $item.find('input:text:first').focus();
 
@@ -188,22 +249,28 @@ App.Bookings.Form = function() {
             utilsScript: phone_util_script_url
         });
 
-        +(function() {
-            $('body').on('click', '.btn-search-service', function() {
-                var $item = $(this).closest('.item');
+        $('body').on('click', '.btn-search-service', function() {
+            var $item = $(this).closest('.item');
 
-                $('#searchServiceModal').data('item', $item).modal({
-                    backdrop: 'static'
-                });
-                $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'));
+            $('#searchServiceModal').data('item', $item).modal({
+                backdrop: 'static'
             });
-        }());
+            $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'));
+        });
 
-        +(function() {
-            $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
-                console.log(this.options[this.selectedIndex]);
-            });
-        }());
+        $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
+            var $item = $(this).closest('.item'),
+                option = this.options[this.selectedIndex],
+                $nightsControl = $item.find('input[name$="[nights]"]');
+
+            if (parseInt($(option).data('has-nights')) === 1) {
+                $nightsControl.parent().show();
+            } else {
+                $nightsControl.parent().hide();
+            }
+        });
+
+        $('.item.item-service select[name$="[model]"]').trigger('change');
 
         +(function($) {
             var getFloat = function(val) {

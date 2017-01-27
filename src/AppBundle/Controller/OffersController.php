@@ -288,6 +288,33 @@ class OffersController extends Controller
     }
 
     /**
+     * @Route("/get-nights", options={"expose": true})
+     * @Method({"post"})
+     * @return JsonResponse
+     */
+    public function getNightsAction(Request $request)
+    {
+        $from = \DateTime::createFromFormat('d/m/Y', preg_replace('/ \d{2}:\d{2}/', '', $request->get('from')));
+        $response = array(
+            'id' => $request->query->get('id')
+        );
+        
+        if ($request->request->has('to')) {
+            $to = \DateTime::createFromFormat('d/m/Y', preg_replace('/ \d{2}:\d{2}/', '', $request->get('to')));
+            
+            $diff = date_diff($to, $from, true);
+            
+            $response['nights'] = $diff->days;
+        } elseif ($request->request->has('nights')) {
+            $to = $from->add(new \DateInterval(sprintf('P%sD', $request->request->get('nights'))));
+            
+            $response['to'] = $to->format('d/m/Y H:i');
+        }
+        
+        return new JsonResponse($response);
+    }
+    
+    /**
      * @Route("/{id}/promote", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")

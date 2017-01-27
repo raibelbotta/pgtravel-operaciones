@@ -71,6 +71,13 @@ class ReservationService
 
     /**
      * @var string
+     * 
+     * @ORM\Column(name="supplier_unit_price", type="decimal", precision=10, scale=2)
+     */
+    private $supplierUnitPrice;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="supplier_price", type="decimal", precision=10, scale=2)
      */
@@ -649,5 +656,30 @@ class ReservationService
     public function getModel()
     {
         return $this->model;
+    }
+
+
+    /**
+     * Set supplierUnitPrice
+     *
+     * @param string $supplierUnitPrice
+     *
+     * @return ReservationService
+     */
+    public function setSupplierUnitPrice($supplierUnitPrice)
+    {
+        $this->supplierUnitPrice = $supplierUnitPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get supplierUnitPrice
+     *
+     * @return string
+     */
+    public function getSupplierUnitPrice()
+    {
+        return $this->supplierUnitPrice;
     }
 }

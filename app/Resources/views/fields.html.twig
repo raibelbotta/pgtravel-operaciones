@@ -1,5 +1,5 @@
 {% block vich_file_widget %}
-    <div class="input-group">
+    <div class="input-group vich-image-field">
         {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
         {% if download_uri is defined and download_uri %}
             <div class="input-group-addon">

@@ -77,11 +77,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6 xol-xs-12 form-group">
+                <div class="col-xs-12 col-sm-6 form-group">
                     {{ form_label(form.travelerNames, null, {'label_attr': {'class': 'cotrol-label'}}) }}
                     {{ form_widget(form.travelerNames, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <div class="col-sm-6 col-xs-12 form-group">
+                <div class="col-xs-12 col-sm-6 form-group">
                     {{ form_label(form.fliesData, null, {'label_attr': {'class': 'cotrol-label'}}) }}
                     {{ form_widget(form.fliesData, {'attr': {'class': 'form-control'}}) }}
                 </div>
@@ -186,18 +186,14 @@
                 {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 <div class="input-group date">
                     {{ form_widget(form.startAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
             <div class="form-group col-xs-6 col-sm-4">
                 {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
                 <div class="input-group date">
                     {{ form_widget(form.endAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
             <div class="form-group col-xs-6 col-sm-2">
@@ -214,23 +210,25 @@
                 {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.supplier, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
-            <div class="form-group col-xs-12 col-sm-4">
+            <div class="form-group col-xs-6 col-sm-2">
+                {{ form_label(form.supplierUnitPrice, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.supplierUnitPrice, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+            </div>
+            <div class="form-group col-xs-6 col-sm-2">
                 {{ form_label(form.supplierPrice, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.supplierPrice, {'attr': {'class': 'form-control input-sm text-right'}}) }}
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-xs-12 form-group">
+            <div class="col-xs-12 col-sm-4 form-group">
                 {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.description, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 form-group">
+            <div class="col-xs-12 col-sm-4 form-group">
                 {{ form_label(form.internalNotes, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.internalNotes, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
-            <div class="col-xs-12 col-sm-6 form-group">
+            <div class="col-xs-12 col-sm-4 form-group">
                 {{ form_label(form.supplierNotes, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.supplierNotes, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>

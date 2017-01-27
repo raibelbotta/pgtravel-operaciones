@@ -37,6 +37,7 @@ class OfferServiceType extends AbstractType
                 ))
                 ->add('pax')
                 ->add('nights')
+                ->add('supplierUnitPrice')
                 ->add('supplierPrice')
                 ->add('supplier', null, array(
                     'required' => false,

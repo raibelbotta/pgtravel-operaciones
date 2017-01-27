@@ -99,11 +99,23 @@ App.Bookings.Form = function() {
             $item = $(prototype.replace(/__name__/g, index));
             $container.data('index', index + 1);
             if ($counter) {
-                $counter.val(parseInt($counter.val(),10) + 1);
+                $counter.val(parseInt($counter.val(), 10) + 1);
             }
             $container.append($item);
 
-            initDatepickers($item);
+            if ($item.is('.item-service')) {
+                if ($container.find('.item-service').length > 1) {
+                    var $prev = $item.prev();
+                    for (var i = 0; i < 2; i++) {
+                        if ($prev.find('.datepicker:eq(' + i + ')').val() !== '') {
+                            $item.find('.datepicker:eq(' + i + ')').val($prev.find('.datepicker:eq(' + i + ')').val());
+                        }
+                    }
+                }
+                $item.find('select[name$="[model]"]').trigger('change');
+                initDatepickers($item);
+            }
+
 
             $item.find('input:text:first').focus();
 

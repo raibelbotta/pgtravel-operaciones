@@ -3,6 +3,9 @@
 namespace AppBundle\Lib\Reports;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Entity\Reservation;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Description of BookingPreview
@@ -11,14 +14,47 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class BookingReview extends Report
 {
+    /**
+     * @var Reservation
+     */
+    private $record;
+    
+    /**
+     * @var array
+     */
+    private $serviceModels;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+    
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
+        
+        $this->record = $this->options['record'];
+        $this->serviceModels = array();
+        foreach ($this->options['models'] as $element) {
+            $this->serviceModels[$element['name']] = $element;
+        }
+        $this->translator = $this->options['translator'];
+        
+        unset($this->options['record'], $this->options['models'], $this->options['translator']);
+    }
+    
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
         
         $resolver
-                ->setRequired(array('record', 'manager'))
+                ->setRequired(array('record', 'manager', 'models', 'locale', 'translator'))
                 ->setAllowedTypes('record', 'AppBundle\\Entity\\Reservation')
                 ->setAllowedTypes('manager', 'Doctrine\\ORM\\EntityManager')
+                ->setAllowedTypes('models', 'array')
+                ->setAllowedTypes('translator', 'Symfony\\Component\\Translation\\TranslatorInterface')
+                ->setAllowedTypes('locale', 'string')
+                ->setDefault('locale', 'en')
                 ;
     }
     
@@ -34,8 +70,8 @@ class BookingReview extends Report
     
     private function renderHeader()
     {
-        $this->pdf->Write(0, 'BOOKING PREVIEW', '', false, 'C', true);
-        $this->pdf->Write(0, sprintf('Name: %s', $this->options['record']->getName()), '', false, 'C', true);
+        $this->pdf->Write(0, 'BOOKING REVIEW', '', false, 'C', true);
+        $this->pdf->Write(0, sprintf('Name: %s', $this->record->getName()), '', false, 'C', true);
         
         $this->pdf->Ln(8);
     }
@@ -43,9 +79,21 @@ class BookingReview extends Report
     private function renderBody()
     {
         $this->pdf->SetFontSize(10);
+        $accessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->getSortedServices() as $service) {
-            $text = sprintf('%s to %s. %s', $service->getStartAt()->format('d/m/Y'), $service->getEndAt()->format('d/m/Y'), $service->getName());
+            if (null !== $service->getDescription()) {
+                $text = $service->getDescription();
+            } elseif (Reservation::STATE_OFFER === $this->record->getState()) {
+                if ($accessor->getValue($this->serviceModels[$service->getModel()], '[has_nights]')) {
+                    $text = sprintf('%s nights in %s', $service->getNights() , $service->getName());
+                } else {
+                    $text = $service->getName();
+                }
+            } else {
+                $text = sprintf('%s to %s. %s', $service->getStartAt()->format('d/m/Y H:i'), $service->getEndAt()->format('d/m/Y H:i'), $service->getName());
+            }
+            
             $this->pdf->Write(0, $text, '', false, 'L', true);
             $this->pdf->Ln(2);
         }
@@ -54,7 +102,7 @@ class BookingReview extends Report
     private function getSortedServices()
     {
         $query = $this->options['manager']->createQuery('SELECT rs FROM AppBundle:ReservationService rs JOIN rs.reservation r WHERE r.id = :reservation ORDER BY rs.startAt')
-                ->setParameter('reservation', $this->options['record']->getId())
+                ->setParameter('reservation', $this->record->getId())
                 ;
         
         return $query->getResult();

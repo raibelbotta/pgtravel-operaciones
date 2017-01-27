@@ -603,7 +603,10 @@ class OffersController extends Controller
     {
         $report = new \AppBundle\Lib\Reports\BookingReview(array(
             'record' => $record,
-            'manager' => $this->getDoctrine()->getManager()
+            'manager' => $this->getDoctrine()->getManager(),
+            'models' => $this->container->getParameter('app.contract.models'),
+            'locale' => $this->container->get('request')->getLocale(),
+            'translator' => $this->container->get('translator')
         ));
 
         return new StreamedResponse(function() use($report) {

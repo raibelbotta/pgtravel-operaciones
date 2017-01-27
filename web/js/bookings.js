@@ -9,7 +9,7 @@ App.Bookings.Index = function() {
             event.preventDefault();
 
             var $a = $(this), url = $a.attr('href');
-            
+
             swal({
                 title: Translator.trans('Confirm operation'),
                 text: Translator.trans('The record will be cancelled. Are you sure you want to continue?'),
@@ -34,18 +34,19 @@ App.Bookings.Index = function() {
             'order': [[ 4, 'asc' ]],
             'columnDefs': [
                 {
-                    searchable: false,
-                    sortable: false,
-                    targets: [5],
-                    width: '135px'
+                    'searchable': false,
+                    'sortable': false,
+                    'targets': [5],
+                    'width': '155px',
+                    'title': Translator.trans('Actions')
                 },
                 {
-                    name: "version",
-                    searchable: false,
-                    sortable: false,
-                    targets: [0],
-                    title: 'V',
-                    width: '20px'
+                    'name': 'version',
+                    'searchable': false,
+                    'sortable': false,
+                    'targets': [0],
+                    'title': 'V',
+                    'width': '20px'
                 },
                 {
                     name: "state",

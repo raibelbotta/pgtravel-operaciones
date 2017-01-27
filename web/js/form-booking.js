@@ -273,12 +273,18 @@ App.Bookings.Form = function() {
         $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
             var $item = $(this).closest('.item'),
                 option = this.options[this.selectedIndex],
-                $nightsControl = $item.find('input[name$="[nights]"]');
+                $nightsControl = $item.find('input[name$="[nights]"]'),
+                $places = $item.find('input[name$="[origin]"]');
 
             if (parseInt($(option).data('has-nights')) === 1) {
                 $nightsControl.parent().show();
             } else {
                 $nightsControl.parent().hide();
+            }
+            if (parseInt($(option).data('has-places')) == 1) {
+                $places.closest('.row').show();
+            } else {
+                $places.closest('.row').hide();
             }
         });
 

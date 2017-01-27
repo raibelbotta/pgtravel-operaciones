@@ -35,8 +35,13 @@ class OfferServiceType extends AbstractType
                 ->add('description', TextareaType::class, array(
                     'required' => false
                 ))
+                ->add('clientName')
+                ->add('clientPassport')
                 ->add('pax')
                 ->add('nights')
+                ->add('origin')
+                ->add('destination')
+                ->add('description')
                 ->add('supplierUnitPrice', null, array(
                     'label' => 'Unit price'
                 ))

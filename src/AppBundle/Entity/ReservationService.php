@@ -56,6 +56,22 @@ class ReservationService
     private $description;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="client_name", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $clientName;
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="client_passport", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $clientPassport;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="pax", type="integer", nullable=true)
@@ -105,6 +121,22 @@ class ReservationService
      */
     private $endAt;
 
+    /**
+     * @var Place
+     * 
+     * @ORM\Column(nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $origin;
+    
+    /**
+     * @var Place
+     * 
+     * @ORM\Column(nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $destination;
+    
     /**
      * @var string
      *
@@ -681,5 +713,101 @@ class ReservationService
     public function getSupplierUnitPrice()
     {
         return $this->supplierUnitPrice;
+    }
+
+    /**
+     * Set clientName
+     *
+     * @param string $clientName
+     *
+     * @return ReservationService
+     */
+    public function setClientName($clientName)
+    {
+        $this->clientName = $clientName;
+
+        return $this;
+    }
+
+    /**
+     * Get clientName
+     *
+     * @return string
+     */
+    public function getClientName()
+    {
+        return $this->clientName;
+    }
+
+    /**
+     * Set clientPassport
+     *
+     * @param string $clientPassport
+     *
+     * @return ReservationService
+     */
+    public function setClientPassport($clientPassport)
+    {
+        $this->clientPassport = $clientPassport;
+
+        return $this;
+    }
+
+    /**
+     * Get clientPassport
+     *
+     * @return string
+     */
+    public function getClientPassport()
+    {
+        return $this->clientPassport;
+    }
+
+    /**
+     * Set origin
+     *
+     * @param string $origin
+     *
+     * @return ReservationService
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * Get origin
+     *
+     * @return string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * Set destination
+     *
+     * @param string $destination
+     *
+     * @return ReservationService
+     */
+    public function setDestination($destination)
+    {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get destination
+     *
+     * @return string
+     */
+    public function getDestination()
+    {
+        return $this->destination;
     }
 }

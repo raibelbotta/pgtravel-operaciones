@@ -655,7 +655,11 @@ class OffersController extends Controller
     public function printVouchersAction(Reservation $record)
     {
         $pdf = new \AppBundle\Lib\Reports\Vouchers(array(
-            'record' => $record
+            'record' => $record,
+            'translator' => $this->container->get('translator'),
+            'locale' => $this->container->get('request')->getLocale(),
+            'images_dir' => $this->container->getParameter('kernel.root_dir') . '/../web/images',
+            'models' => $this->container->getParameter('app.contract.models')
         ));
 
         return new StreamedResponse(function() use($pdf) {

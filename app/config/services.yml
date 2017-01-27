@@ -18,14 +18,14 @@ parameters:
         - { name: Parking, price: 5 }
 
     app.contract.models:
-        - { name: hotel, display: Hotel, has_night: true }
-        - { name: transport, display: Transport }
-        - { name: car-rental, display: Car rental }
-        - { name: restaurant, display: Restaurant, has_end_date: false }
-        - { name: optionals, display: Optionals }
-        - { name: guide, display: Guide }
-        - { name: private-house, display: Private house, has_night: true }
-        - { name: other, display: Other }
+        hotel: { name: hotel, display: Hotel, has_night: true, voucher_title: HOTEL VOUCHER }
+        transport: { name: transport, display: Transport, voucher_title: TRANSPORT VOUCHER, has_places: true }
+        car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER }
+        restaurant: { name: restaurant, display: Restaurant, has_end_date: false, voucher_title: RESTAURANT VOUCHER }
+        optionals: { name: optionals, display: Optionals, voucher_title: OPTIONAL VOUCHER }
+        guide: { name: guide, display: Guide }
+        private-house: { name: private-house, display: Private house, has_night: true, voucher_title: HOUSE VOUCHER }
+        other: { name: other, display: Other }
 
 services:
     # KernelRequest listener

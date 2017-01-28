@@ -137,6 +137,11 @@ services:
         arguments: [ '%app.contract.models%' ]
         tags:
             - { name: form.type }
+    app.form.type.province_type:
+        class: AppBundle\Form\Type\ProvinceType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.validator.constraints.cupos:
         class: ValidCupoValidator

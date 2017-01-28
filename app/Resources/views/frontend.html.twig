@@ -88,6 +88,7 @@
                                         <li><a href="{{ path('app_clients_index') }}">{{ 'Clients'|trans }}</a></li>
                                         <li><a href="{{ path('app_suppliers_index') }}">{{ 'Suppliers'|trans }}</a></li>
                                         <li><a href="{{ path('app_contracts_index') }}">{{ 'Contracts'|trans }}</a></li>
+                                        <li><a href="{{ path("app_places_index") }}">{{ 'Places'|trans }}</a></li>
                                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                                             <li><a href="{{ path('app_users_index') }}">{{ 'Users'|trans }}</a></li>
                                         {% endif %}
@@ -104,8 +105,8 @@
                                 <li>
                                     <a href="javascript:;"><i class="fa fa-bank"></i> {{ 'Banking'|trans }}<span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ path('app_cxcobrar_index') }}">{{ 'Account receivable'|trans }}</a></li>
-                                        <li><a href="{{ path('app_cxpagar_index') }}">{{ 'Account payable'|trans }}</a></li>
+                                        <li><a href="{{ path('app_cxcobrar_index') }}">{{ 'Receivable accounts'|trans }}</a></li>
+                                        <li><a href="{{ path('app_cxpagar_index') }}">{{ 'Payable accounts'|trans }}</a></li>
                                     </ul>
                                 </li>
                                 <!--

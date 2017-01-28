@@ -40,6 +40,14 @@ class Supplier
     private $postalAddress;
 
     /**
+     * @var Province
+     * 
+     * @ORM\ManyToOne(targetEntity="Province")
+     * @ORM\JoinColumn(onDelete="set null")
+     */
+    private $province;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="bank_accounts", type="text", nullable=true)
@@ -319,5 +327,29 @@ class Supplier
     public function getBankAccounts()
     {
         return $this->bankAccounts;
+    }
+
+    /**
+     * Set province
+     *
+     * @param \AppBundle\Entity\Province $province
+     *
+     * @return Supplier
+     */
+    public function setProvince(\AppBundle\Entity\Province $province = null)
+    {
+        $this->province = $province;
+
+        return $this;
+    }
+
+    /**
+     * Get province
+     *
+     * @return \AppBundle\Entity\Province
+     */
+    public function getProvince()
+    {
+        return $this->province;
     }
 }

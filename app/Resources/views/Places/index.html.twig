@@ -1,0 +1,33 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ 'Places'|trans }}</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="pull-right"><a href="{{ path('app_places_new') }}" class="btn btn-primary">{{ 'Add new'|trans }}</a></div>
+                    <table id="datatable-x" class="table table-striped table-bordered" data-search="{{ filter.q|default('') }}"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            {% if app.session.flashBag.has('notice') %}
+                swal({
+                    title: '{{ 'Notification'|trans }}',
+                    text: '{{ app.session.flashBag.get('notice')[0] }}'
+                });
+            {% endif %}
+
+            App.Places.Index.init();
+        });
+    </script>
+{% endblock %}

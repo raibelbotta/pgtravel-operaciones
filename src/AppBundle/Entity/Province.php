@@ -7,12 +7,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Place
+ * Province
  *
- * @ORM\Table(name="place")
+ * @ORM\Table(name="province")
  * @ORM\Entity
  */
-class Place
+class Province
 {
     /**
      * @var integer
@@ -32,22 +32,6 @@ class Place
      */
     private $name;
     
-    /**
-     * @var string
-     * 
-     * @ORM\Column(name="postal_address", type="text", nullable=true)
-     * @Assert\Length(max=32000)
-     */
-    private $postalAddress;
-    
-    /**
-     * @var Province
-     * 
-     * @ORM\ManyToOne(targetEntity="Province")
-     * @ORM\JoinColumn(onDelete="set null")
-     */
-    private $province;
-
     /**
      * @var \DateTime
      * 
@@ -104,30 +88,6 @@ class Place
     }
 
     /**
-     * Set postalAddress
-     *
-     * @param string $postalAddress
-     *
-     * @return Place
-     */
-    public function setPostalAddress($postalAddress)
-    {
-        $this->postalAddress = $postalAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get postalAddress
-     *
-     * @return string
-     */
-    public function getPostalAddress()
-    {
-        return $this->postalAddress;
-    }
-
-    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -173,29 +133,5 @@ class Place
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set province
-     *
-     * @param \AppBundle\Entity\Province $province
-     *
-     * @return Place
-     */
-    public function setProvince(\AppBundle\Entity\Province $province = null)
-    {
-        $this->province = $province;
-
-        return $this;
-    }
-
-    /**
-     * Get province
-     *
-     * @return \AppBundle\Entity\Province
-     */
-    public function getProvince()
-    {
-        return $this->province;
     }
 }

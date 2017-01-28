@@ -1,0 +1,34 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Places'|trans }} <small>{{ 'view'|trans }}</small></h3>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Place data'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_context">
+            <div class="form-group col-xs-12">
+                <label for="" class="control-label">{{ 'Name'|trans }}</label>
+                <div class="form-control">{{ record.name }}</div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label for="" class="control-label">{{ 'Postal address'|trans }}</label>
+                <div class="form-control">{{ record.postalAddress }}</div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label for="" class="control-label">{{ 'Province'|trans }}</label>
+                <div class="form-control">{{ record.province }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="pull-right">
+        <a href="{{ path('app_places_edit', {'id': record.id}) }}" class="btn btn-primary">{{ 'Edit'|trans }}</a>
+        <a href="{{ path('app_places_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
+    </div>
+    <div class="clearfix"></div>
+{% endblock %}

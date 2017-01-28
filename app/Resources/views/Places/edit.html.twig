@@ -1,0 +1,26 @@
+{% extends 'frontend.html.twig' %}
+
+{% form_theme form 'Places/form.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ 'Places'|trans }} <small>{{ 'edit'|trans }}</small></h3>
+        </div>
+    </div>
+    {{ form_start(form, {'attr': {'role': 'form', 'id': 'place', 'class': 'form-horizontal form-label-left'}}) }}
+        {{ form_row(form) }}
+        <div class="pull-right">
+            <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+            <a href="{{ path('app_places_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            App.Places.Form.init();
+        });
+    </script>
+{% endblock %}

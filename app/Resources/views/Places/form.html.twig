@@ -1,0 +1,30 @@
+{% block place_form_row %}
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>{{ 'Place data'|trans }}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_context">
+            <div class="form-group">
+                {{ form_label(form.name, null, {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}}) }}
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control col-md-7 col-xs-12'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}}) }}
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control col-md-7 col-xs-12'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.province, null, {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}}) }}
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form_widget(form.province, {'attr': {'class': 'form-control col-md-7 col-xs-12'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+{% endblock %}

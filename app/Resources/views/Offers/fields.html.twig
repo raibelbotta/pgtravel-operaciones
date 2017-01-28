@@ -230,13 +230,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-xs-12 col-sm-7">
+            <div class="form-group col-xs-12 col-sm-12">
                 {{ form_label(form.clientName, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.clientName, {'attr': {'class': 'form-control input-sm'}}) }}
-            </div>
-            <div class="form-group col-xs-12 col-sm-5">
-                {{ form_label(form.clientPassport, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.clientPassport, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
         </div>
         <div class="row">
@@ -269,8 +265,8 @@
             <div class="col-sm-6 col-xs-12"><strong>{{ 'Name'|trans }}</strong></div>
             <div class="col-sm-6 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-3 text-right"><strong>PAX</strong></div>
-                    <div class="col-xs-3 text-right"><strong>{{ 'Nights'|trans }}</strong></div>
+                    <div class="col-xs-3 text-right"><strong>{{ 'Multiplier'|trans }}</strong></div>
+                    <div class="col-xs-3 text-right"><strong>{{ 'PAX'|trans }}</strong></div>
                     <div class="col-xs-3 text-right"><strong>{{ 'Price'|trans }}</strong></div>
                     <div class="col-xs-3 text-right"><strong>{{ 'Total'|trans }}</strong></div>
                 </div>
@@ -287,8 +283,8 @@
             <div class="col-sm-6 col-xs-12 form-group">{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}</div>
             <div class="col-sm-6 col-xs-12">
                 <div class="row">
+                    <div class="col-xs-3 form-group">{{ form_widget(form.multiplier, {'attr': {'class': 'form-control text-right'}}) }}</div>
                     <div class="col-xs-3 form-group">{{ form_widget(form.pax, {'attr': {'class': 'form-control text-right'}}) }}</div>
-                    <div class="col-xs-3 form-group">{{ form_widget(form.nights, {'attr': {'class': 'form-control text-right'}}) }}</div>
                     <div class="col-xs-3 form-group">{{ form_widget(form.price, {'attr': {'class': 'form-control text-right'}}) }}</div>
                     <div class="col-xs-3 form-group">{{ form_widget(form.total, {'attr': {'class': 'form-control text-right', 'placeholder': 'Total'|trans}}) }}</div>
                 </div>

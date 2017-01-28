@@ -19,7 +19,7 @@ class OfferAdministrativeChargeType extends AbstractType
     {
         $builder
                 ->add('name')
-                ->add('nights')
+                ->add('multiplier')
                 ->add('pax')
                 ->add('price')
                 ->add('total')

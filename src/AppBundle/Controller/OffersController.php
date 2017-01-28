@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Reservation;
 use AppBundle\Form\Type\OfferFormType;
+use AppBundle\Entity\ReservationAdministrativeCharge;
 
 /**
  * Description of OffersController
@@ -175,11 +176,11 @@ class OffersController extends Controller
         $offer->setOperator($this->getUser());
 
         foreach ($this->container->getParameter('app.administrative_services') as $k) {
-            $service = new \AppBundle\Entity\ReservationAdministrativeCharge();
+            $service = new ReservationAdministrativeCharge();
             $service
                     ->setName($k['name'])
                     ->setPax(0)
-                    ->setNights(0)
+                    ->setMultiplier(1)
                     ->setPrice($k['price'])
                     ->setTotal(0)
                     ;

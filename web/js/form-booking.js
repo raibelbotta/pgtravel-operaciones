@@ -295,14 +295,14 @@ App.Bookings.Form = function() {
 
             //Inputs de un cargo administrativo
             $('.item-administrative-charge').on('change', 'input', function() {
-                if (!$(this).is('[name$="[pax]"], [name$="[nights]"], [name$="[price]"]')) {
+                if (!$(this).is('[name$="[pax]"], [name$="[multiplier]"], [name$="[price]"]')) {
                     return;
                 }
 
-                var total = new Number();
-                $(this).closest('.item').find('[name$="[pax]"], [name$="[nights]"]').each(function() {
-                    total += getFloat($(this).val()) * getFloat($(this).closest('.item').find('input[name$="[price]"]').val());
-                });
+                var $item = $(this).closest('.item'),
+                    total = getFloat($item.find('input[name$="[multiplier]"]').val())
+                        * getFloat($item.find('input[name$="[pax]"]').val())
+                        * getFloat($item.find('input[name$="[price]"]').val());
 
                 $(this).closest('.item').find('input[name$="[total]"]').val(total.toFixed(2)).trigger('change');
             });

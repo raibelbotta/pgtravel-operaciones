@@ -78,10 +78,7 @@ class Vouchers extends Report
             $this->pdf->Cell(0, 0, $this->options['translator']->trans('CLIENT DETAILS'), 0, 1, 'C', true);
             $this->pdf->Cell(70);
             $this->pdf->Cell(0, 0, $this->options['translator']->trans('Name: %name%', array('%name%' => $service->getClientName(0))), 0, 1, 'L');
-            $this->pdf->Cell(70);
-            $this->pdf->Cell(0, 0, $this->options['translator']->trans('Passport: %passport%', array('%passport%' => $service->getClientPassport())), 0, 1, 'L');
-            
-            $this->pdf->Ln(4);
+            $this->pdf->Ln(8);
             
             $this->pdf->Cell(70);
             $this->pdf->Cell(0, 0, $this->options['translator']->trans('PROVIDER'), 0, 1, 'C', true);

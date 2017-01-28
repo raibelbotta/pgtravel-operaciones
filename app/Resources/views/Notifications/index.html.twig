@@ -15,8 +15,8 @@
                                 <label for="filter_state" class="control-label">{{ 'State'|trans }}</label>
                                 <select id="filter_state" name="filter[state]" class="form-control input-sm filter-state">
                                     <option value=""{% if filter.state is not defined or filter.state == '' %} selected="selected"{% endif %}></option>
-                                    <option value="yes"{% if filter.state is defined and filter.state == 'yes' %} selected="selected"{% endif %}>{{ 'Notified'|trans }}</option>
-                                    <option value="no"{% if filter.state is defined and filter.state == 'no' %} selected="selected"{% endif %}>{{ 'No notified'|trans }}</option>
+                                    <option value="yes"{% if filter.state is defined and filter.state == 'yes' %} selected="selected"{% endif %}>{{ 'Confirmed'|trans }}</option>
+                                    <option value="no"{% if filter.state is defined and filter.state == 'no' %} selected="selected"{% endif %}>{{ 'Pending'|trans }}</option>
                                 </select>
                             </div>
                         </div>

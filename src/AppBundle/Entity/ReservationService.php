@@ -64,14 +64,6 @@ class ReservationService
     private $clientName;
     
     /**
-     * @var string
-     * 
-     * @ORM\Column(name="client_passport", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
-     */
-    private $clientPassport;
-    
-    /**
      * @var integer
      *
      * @ORM\Column(name="pax", type="integer", nullable=true)
@@ -737,30 +729,6 @@ class ReservationService
     public function getClientName()
     {
         return $this->clientName;
-    }
-
-    /**
-     * Set clientPassport
-     *
-     * @param string $clientPassport
-     *
-     * @return ReservationService
-     */
-    public function setClientPassport($clientPassport)
-    {
-        $this->clientPassport = $clientPassport;
-
-        return $this;
-    }
-
-    /**
-     * Get clientPassport
-     *
-     * @return string
-     */
-    public function getClientPassport()
-    {
-        return $this->clientPassport;
     }
 
     /**

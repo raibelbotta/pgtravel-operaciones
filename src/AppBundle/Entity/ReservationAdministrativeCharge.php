@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * ReservationAdministrativeCharge
  *
  * @ORM\Table(name="reservation_administrative_charge")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservationAdministrativeChargeRepository")
+ * @ORM\Entity
  */
 class ReservationAdministrativeCharge
 {
@@ -42,14 +42,14 @@ class ReservationAdministrativeCharge
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", options={"default": 1})
      */
-    private $nights;
+    private $multiplier;
 
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     private $pax;
 
@@ -87,6 +87,11 @@ class ReservationAdministrativeCharge
     {
         return (string) $this->getName();
     }
+    
+    public function __construct()
+    {
+        $this->multiplier = 1;
+    }
 
     /**
      * Get id
@@ -122,31 +127,7 @@ class ReservationAdministrativeCharge
     {
         return $this->name;
     }
-
-    /**
-     * Set nights
-     *
-     * @param integer $nights
-     *
-     * @return ReservationAdministrativeCharge
-     */
-    public function setNights($nights)
-    {
-        $this->nights = $nights;
-
-        return $this;
-    }
-
-    /**
-     * Get nights
-     *
-     * @return integer
-     */
-    public function getNights()
-    {
-        return $this->nights;
-    }
-
+    
     /**
      * Set pax
      *
@@ -289,5 +270,29 @@ class ReservationAdministrativeCharge
     public function getReservation()
     {
         return $this->reservation;
+    }
+
+    /**
+     * Set multiplier
+     *
+     * @param integer $multiplier
+     *
+     * @return ReservationAdministrativeCharge
+     */
+    public function setMultiplier($multiplier)
+    {
+        $this->multiplier = $multiplier;
+
+        return $this;
+    }
+
+    /**
+     * Get multiplier
+     *
+     * @return integer
+     */
+    public function getMultiplier()
+    {
+        return $this->multiplier;
     }
 }

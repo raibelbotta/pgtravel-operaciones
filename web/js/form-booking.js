@@ -93,8 +93,10 @@ App.Bookings.Form = function() {
                         }
                     },
                     processResults: function (json) {
+                        var data = json.data;
+                        data.unshift({id: 0, text: ''});
                         return {
-                            results: json.data
+                            results: data
                         };
                     }
                 }

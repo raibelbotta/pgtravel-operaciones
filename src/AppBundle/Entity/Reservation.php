@@ -117,10 +117,18 @@ class Reservation
     /**
      * @var string
      *
-     * @ORM\Column(name="flies_data", type="text", nullable=true)
-     * @Assert\Length(max=32000)
+     * @ORM\Column(name="departure_fly", type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
      */
-    private $fliesData;
+    private $departureFly;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="arrival_fly", type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
+     */
+    private $arrivalFly;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -787,30 +795,6 @@ class Reservation
     }
 
     /**
-     * Set fliesData
-     *
-     * @param string $fliesData
-     *
-     * @return Reservation
-     */
-    public function setFliesData($fliesData)
-    {
-        $this->fliesData = $fliesData;
-
-        return $this;
-    }
-
-    /**
-     * Get fliesData
-     *
-     * @return string
-     */
-    public function getFliesData()
-    {
-        return $this->fliesData;
-    }
-
-    /**
      * Set directClientEmail
      *
      * @param string $directClientEmail
@@ -952,5 +936,53 @@ class Reservation
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set departureFly
+     *
+     * @param string $departureFly
+     *
+     * @return Reservation
+     */
+    public function setDepartureFly($departureFly)
+    {
+        $this->departureFly = $departureFly;
+
+        return $this;
+    }
+
+    /**
+     * Get departureFly
+     *
+     * @return string
+     */
+    public function getDepartureFly()
+    {
+        return $this->departureFly;
+    }
+
+    /**
+     * Set arrivalFly
+     *
+     * @param string $arrivalFly
+     *
+     * @return Reservation
+     */
+    public function setArrivalFly($arrivalFly)
+    {
+        $this->arrivalFly = $arrivalFly;
+
+        return $this;
+    }
+
+    /**
+     * Get arrivalFly
+     *
+     * @return string
+     */
+    public function getArrivalFly()
+    {
+        return $this->arrivalFly;
     }
 }

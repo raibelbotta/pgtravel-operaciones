@@ -81,9 +81,15 @@
                     {{ form_label(form.travelerNames, null, {'label_attr': {'class': 'cotrol-label'}}) }}
                     {{ form_widget(form.travelerNames, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <div class="col-xs-12 col-sm-6 form-group">
-                    {{ form_label(form.fliesData, null, {'label_attr': {'class': 'cotrol-label'}}) }}
-                    {{ form_widget(form.fliesData, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    {{ form_label(form.arrivalFly, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                    {{ form_widget(form.arrivalFly, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-xs-6">
+                    {{ form_label(form.departureFly, null, {'label_attr': {'class': 'cotrol-label'}}) }}
+                    {{ form_widget(form.departureFly, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
         </div>

@@ -71,20 +71,24 @@
                             {% if record.offerSummaryFileName is not empty %}
                                 <div class="form-group col-sm-4 col-xs-12">
                                     <label class="control-label">{{ 'Offer summary file'|trans }}</label>
-                                    <div class="form-control">
-                                        <a href="{{ vich_uploader_asset(record, 'offerSummaryFile') }}">{{ record.offerSummaryFilename }}</a>
-                                    </div>
+                                    <a href="{{ vich_uploader_asset(record, 'offerSummaryFile') }}" xlass="btn btn-default btn-block">{{ record.offerSummaryFilename }}</a>
                                 </div>
                             {% endif %}
                         </div>
                         <div class="row">
-                            <div class="col-sm-6 xol-xs-12 form-group">
+                            <div class="form-group col-xs-12">
                                 <label class="control-label">{{ 'Traveler names'|trans }}</label>
                                 <div class="form-control">{{ record.travelerNames }}</div>
                             </div>
-                            <div class="col-sm-6 col-xs-12 form-group">
-                                <label class="control-label">{{ 'Flies data'|trans }}</label>
-                                <div class="form-control">{{ record.fliesData }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label for="" class="control-label">{{ 'Arrival fly'|trans }}</label>
+                                <div class="form-control">{{ record.arrivalFly }}</div>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label class="control-label">{{ 'Departure fly'|trans }}</label>
+                                <div class="form-control">{{ record.departureFly }}</div>
                             </div>
                         </div>
                     </div>

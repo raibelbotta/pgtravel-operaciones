@@ -68,10 +68,8 @@ class OfferFormType extends AbstractType
                 ->add('travelerNames', null, array(
                     'required' => false
                 ))
-                ->add('fliesData', null, array(
-                    'label' => 'Arrival and departure flies',
-                    'required' => false
-                ))
+                ->add('arrivalFly')
+                ->add('departureFly')
                 ->add('services', CollectionType::class, array(
                     'entry_type' => OfferServiceType::class,
                     'allow_add' => true,

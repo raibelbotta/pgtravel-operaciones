@@ -51,7 +51,8 @@ class OffersController extends Controller
     public function viewAction(Reservation $record)
     {
         return $this->render('Offers/view.html.twig', array(
-            'record' => $record
+            'record' => $record,
+            'models' => $this->container->getParameter('app.contract.models')
         ));
     }
 
@@ -668,6 +669,34 @@ class OffersController extends Controller
         }, 200, array(
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => sprintf('inline; filename="Vouchers %s v%s.pdf"', $record->getName(), $record->getVersion())
+        ));
+    }
+    
+    /**
+     * @Route("/get-places", options={"expose": true})
+     * @Method({"get"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPlacesAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:Place')
+                ->createQueryBuilder('p')
+                ->orderBy('p.name');
+
+        if ($request->get('q')) {
+            $qb->where($qb->expr()->like('p.name', $qb->expr()->literal(sprintf('%%%s%%', $request->get('q')))));
+        }
+        
+        return new JsonResponse(array(
+            'data' => array_map(function($record) {
+                return array(
+                    'id' => $record->getId(),
+                    'text' => $record->getName(),
+                    'postalAddress' => $record->getPostalAddress()
+                );
+            }, $qb->getQuery()->getResult())
         ));
     }
 }

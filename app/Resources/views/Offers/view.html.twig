@@ -98,51 +98,81 @@
                         {% set totalExpenses = 0 %}
                         {% for service in record.services %}
                             <div class="row">
-                                <div class="col-sm-3 col-xs-6 form-group">
+                                <div class="form-group col-xs-12 col-sm-4">
+                                    <label class="control-label">{{ 'Model'|trans }}</label>
+                                    <div class="form-control">{{ models[service.model].display }}</div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-8">
                                     <label class="control-label">{{ 'Name'|trans }}</label>
                                     <div class="form-control">{{ service.name }}</div>
                                 </div>
-                                <div class="col-sm-3 col-xs-6 form-group">
-                                    <label class="control-label">{{ 'Supplier'|trans }}</label>
-                                    <div class="form-control">{{ service.supplier }}</div>
-                                </div>
-                                <div class="col-sm-2 col-xs-12 form-group">
-                                    <label class="control-label">{{ 'Pax'|trans }}</label>
-                                    <div class="form-control text-right">{{ service.pax }}</div>
-                                </div>
-                                <div class="col-sm-4 col-xs-6 form-group">
-                                    <label class="control-label">{{ 'Supplier price'|trans }}</label>
-                                    <div class="form-control text-right">{{ service.supplierPrice }}</div>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12">
+                                <div class="form-group col-xs-6 col-sm-6">
                                     <label class="control-label">{{ 'Start at'|trans }}</label>
                                     <div class="form-control">{{ service.startAt.format('d/m/Y H:i') }}</div>
                                 </div>
-                                <div class="form-group col-sm-6 col-xs-12">
+                                <div class="form-group col-xs-6 col-sm-6">
                                     <label class="control-label">{{ 'End at'|trans }}</label>
                                     <div class="form-control">{{ service.endAt.format('d/m/Y H:i') }}</div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-xs-12 form-group">
-                                    <label class="control-label">{{ 'Description'|trans }}</label>
-                                    <div class="form-control">{{ service.description }}</div>
+                                <div class="form-group col-xs-12 col-sm-3">
+                                    <label class="control-label">{{ 'Supplier'|trans }}</label>
+                                    <div class="form-control">{{ service.supplier }}</div>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-3">
+                                    <label class="control-label">{{ 'Pax'|trans }}</label>
+                                    <div class="form-control text-right">{{ service.pax }}</div>
+                                </div>
+                                <div class="form-group col-xs-6 col-sm-2">
+                                    <label class="control-label">{{ 'Nights'|trans }}</label>
+                                    <div class="form-control text-right">{{ service.nights }}</div>
+                                </div>
+                                <div class="col-xs-6 col-sm-2 form-group">
+                                    <label class="control-label">{{ 'Cost'|trans }}</label>
+                                    <div class="form-control text-right">{{ service.cost }}</div>
+                                </div>
+                                <div class="col-xs-6 col-sm-2 form-group">
+                                    <label class="control-label">{{ 'Total price'|trans }}</label>
+                                    <div class="form-control text-right">{{ service.totalPrice }}</div>
                                 </div>
                             </div>
+                            {% if models[service.model].has_places is defined and models[service.model].has_places %}
+                                <div class="row">
+                                    <div class="form-group col-sm-6 col-xs-12">
+                                        <label class="control-label">{{ 'Origin'|trans }}</label>
+                                        <div class="form-control" title="{{ service.origin ? service.origin.postalAddress : '' }}">{{ service.origin }}</div>
+                                    </div>
+                                    <div class="form-group col-sm-6 col-xs-12">
+                                        <label class="control-label">{{ 'Destination'|trans }}</label>
+                                        <div class="form-control" title="{{ service.destination ? service.destination.postalAddress : '' }}">{{ service.destination }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if service.description is not empty %}
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12 form-group">
+                                        <label class="control-label">{{ 'Description'|trans }}</label>
+                                        <textarea readonly="readonly" class="form-control">{{ service.description }}</textarea>
+                                    </div>
+                                </div>
+                            {% endif %}
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6 form-group">
                                     <label class="control-label">{{ 'Internal notes'|trans }}</label>
-                                    <div class="form-control">{{ service.internalNotes }}</div>
+                                    <textarea class="form-control" readonly="readonly">{{ service.internalNotes }}</textarea>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 form-group">
                                     <label class="control-label">{{ 'Supplier notes'|trans }}</label>
-                                    <div class="form-control">{{ service.supplierNotes }}</div>
+                                    <textarea class="form-control" readonly="readonly">{{ service.supplierNotes }}</textarea>
                                 </div>
                             </div>
                             <hr>
-                            {% set totalExpenses = totalExpenses + service.supplierPrice %}
+                            {% if service.totalPrice is not empty %}
+                                {% set totalExpenses = totalExpenses + service.totalPrice %}
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -172,8 +202,8 @@
                                 <div class="col-sm-6 col-xs-12 form-group"><div class="form-control">{{ charge.name }}</div></div>
                                 <div class="col-sm-6 col-xs-12">
                                     <div class="row">
+                                        <div class="col-xs-3 form-group"><div class="form-control text-right">{{ charge.multiplier }}</div></div>
                                         <div class="col-xs-3 form-group"><div class="form-control text-right">{{ charge.pax }}</div></div>
-                                        <div class="col-xs-3 form-group"><div class="form-control text-right">{{ charge.nights }}</div></div>
                                         <div class="col-xs-3 form-group"><div class="form-control text-right">{{ '%0.2f'|format(charge.price) }}</div></div>
                                         <div class="col-xs-3 form-group"><div class="form-control text-right">{{ '%0.2f'|format(charge.total) }}</div></div>
                                     </div>

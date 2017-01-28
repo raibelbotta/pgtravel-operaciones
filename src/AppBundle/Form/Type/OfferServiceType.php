@@ -40,8 +40,12 @@ class OfferServiceType extends AbstractType
                 ))
                 ->add('pax')
                 ->add('nights')
-                ->add('origin')
-                ->add('destination')
+                ->add('origin', PlaceType::class, array(
+                    'required' => false
+                ))
+                ->add('destination', PlaceType::class, array(
+                    'required' => false
+                ))
                 ->add('description')
                 ->add('cost')
                 ->add('totalPrice')

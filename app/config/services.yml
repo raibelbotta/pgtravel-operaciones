@@ -142,6 +142,11 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.place_type:
+        class: AppBundle\Form\Type\PlaceType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.validator.constraints.cupos:
         class: ValidCupoValidator

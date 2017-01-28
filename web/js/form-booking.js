@@ -77,8 +77,33 @@ App.Bookings.Form = function() {
             });
         }
 
+        var initPlaces = function(item) {
+            $(item).find('select[name$="[origin]"], select[name$="[destination]"]').select2({
+                minimunInputLength: 1,
+                width: '100%',
+                ajax: {
+                    url: Routing.generate('app_offers_getplaces'),
+                    dataType: 'json',
+                    delay: 250,
+                    method: 'GET',
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        }
+                    },
+                    processResults: function (json) {
+                        return {
+                            results: json.data
+                        };
+                    }
+                }
+            });
+        }
+
         $('.item.item-service').each(function() {
             initDatepickers(this);
+            initPlaces(this);
         });
 
         $('body').on('change', '.item-service input[name$="[nights]"]', function() {
@@ -114,6 +139,7 @@ App.Bookings.Form = function() {
                 }
                 $item.find('select[name$="[model]"]').trigger('change');
                 initDatepickers($item);
+                initPlaces($item);
             }
 
 
@@ -258,7 +284,7 @@ App.Bookings.Form = function() {
             var $item = $(this).closest('.item'),
                 option = this.options[this.selectedIndex],
                 $nightsControl = $item.find('input[name$="[nights]"]'),
-                $places = $item.find('input[name$="[origin]"]'),
+                $places = $item.find('select[name$="[origin]"]'),
                 $pax = $item.find('input[name$="[pax]"]');
 
             if (parseInt($(option).data('has-nights')) === 1) {

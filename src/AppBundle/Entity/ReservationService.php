@@ -57,12 +57,12 @@ class ReservationService
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="client_name", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     private $clientName;
-    
+
     /**
      * @var integer
      *
@@ -79,7 +79,7 @@ class ReservationService
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=2, nullable=true)
      * @Assert\NotNull(groups={"Promotion"})
      */
@@ -117,20 +117,20 @@ class ReservationService
 
     /**
      * @var Place
-     * 
-     * @ORM\Column(nullable=true)
-     * @Assert\Length(max=255)
+     *
+     * @ORM\ManyToOne(targetEntity="Place")
+     * @ORM\JoinColumn(onDelete="set null")
      */
     private $origin;
-    
+
     /**
      * @var Place
-     * 
-     * @ORM\Column(nullable=true)
-     * @Assert\Length(max=255)
+     *
+     * @ORM\ManyToOne(targetEntity="Place")
+     * @ORM\JoinColumn(onDelete="set null")
      */
     private $destination;
-    
+
     /**
      * @var string
      *
@@ -156,7 +156,7 @@ class ReservationService
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="supplier_reference", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
@@ -588,7 +588,7 @@ class ReservationService
         $this->payAttachments[] = $payAttachment;
 
         $payAttachment->setService($this);
-        
+
         return $this;
     }
 
@@ -685,54 +685,6 @@ class ReservationService
     }
 
     /**
-     * Set origin
-     *
-     * @param string $origin
-     *
-     * @return ReservationService
-     */
-    public function setOrigin($origin)
-    {
-        $this->origin = $origin;
-
-        return $this;
-    }
-
-    /**
-     * Get origin
-     *
-     * @return string
-     */
-    public function getOrigin()
-    {
-        return $this->origin;
-    }
-
-    /**
-     * Set destination
-     *
-     * @param string $destination
-     *
-     * @return ReservationService
-     */
-    public function setDestination($destination)
-    {
-        $this->destination = $destination;
-
-        return $this;
-    }
-
-    /**
-     * Get destination
-     *
-     * @return string
-     */
-    public function getDestination()
-    {
-        return $this->destination;
-    }
-
-    /**
      * Set cost
      *
      * @param string $cost
@@ -778,5 +730,53 @@ class ReservationService
     public function getTotalPrice()
     {
         return $this->totalPrice;
+    }
+
+    /**
+     * Set origin
+     *
+     * @param \AppBundle\Entity\Place $origin
+     *
+     * @return ReservationService
+     */
+    public function setOrigin(\AppBundle\Entity\Place $origin = null)
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * Get origin
+     *
+     * @return \AppBundle\Entity\Place
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * Set destination
+     *
+     * @param \AppBundle\Entity\Place $destination
+     *
+     * @return ReservationService
+     */
+    public function setDestination(\AppBundle\Entity\Place $destination = null)
+    {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get destination
+     *
+     * @return \AppBundle\Entity\Place
+     */
+    public function getDestination()
+    {
+        return $this->destination;
     }
 }

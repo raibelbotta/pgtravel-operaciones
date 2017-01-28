@@ -20,7 +20,7 @@
     <!-- iCheck -->
     <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/flat/green.css') }}">
 
-    {% stylesheets filter="yui_css" output="compiled/css/plugins.css"
+    {% stylesheets filter="yui_css" output="compiled/css/plugins.min.css"
         "../web/plugins/nprogress/nprogress.css"
         "../web/plugins/tooltipster/css/tooltipster.css"
         "../web/plugins/tooltipster/css/tooltipster-custom.css"
@@ -36,7 +36,7 @@
     {% endstylesheets %}
 
     <!-- Custom Theme Style -->
-    {% stylesheets filter="yui_css" output="compiled/css/custom.css"
+    {% stylesheets filter="yui_css" output="compiled/css/custom.min.css"
         "../web/css/custom.css"
         %}
         <link href="{{ asset_url }}" rel="stylesheet">

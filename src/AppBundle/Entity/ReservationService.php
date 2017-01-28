@@ -80,16 +80,18 @@ class ReservationService
     /**
      * @var string
      * 
-     * @ORM\Column(name="supplier_unit_price", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="cost", type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotNull(groups={"Promotion"})
      */
-    private $supplierUnitPrice;
+    private $cost;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="supplier_price", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="total_price", type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotNull(groups={"Promotion"})
      */
-    private $supplierPrice;
+    private $totalPrice;
 
     /**
      * @var Supplier
@@ -635,30 +637,6 @@ class ReservationService
     }
 
     /**
-     * Set supplierPrice
-     *
-     * @param string $supplierPrice
-     *
-     * @return ReservationService
-     */
-    public function setSupplierPrice($supplierPrice)
-    {
-        $this->supplierPrice = $supplierPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get supplierPrice
-     *
-     * @return string
-     */
-    public function getSupplierPrice()
-    {
-        return $this->supplierPrice;
-    }
-
-    /**
      * Set model
      *
      * @param string $model
@@ -680,31 +658,6 @@ class ReservationService
     public function getModel()
     {
         return $this->model;
-    }
-
-
-    /**
-     * Set supplierUnitPrice
-     *
-     * @param string $supplierUnitPrice
-     *
-     * @return ReservationService
-     */
-    public function setSupplierUnitPrice($supplierUnitPrice)
-    {
-        $this->supplierUnitPrice = $supplierUnitPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get supplierUnitPrice
-     *
-     * @return string
-     */
-    public function getSupplierUnitPrice()
-    {
-        return $this->supplierUnitPrice;
     }
 
     /**
@@ -777,5 +730,53 @@ class ReservationService
     public function getDestination()
     {
         return $this->destination;
+    }
+
+    /**
+     * Set cost
+     *
+     * @param string $cost
+     *
+     * @return ReservationService
+     */
+    public function setCost($cost)
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * Get cost
+     *
+     * @return string
+     */
+    public function getCost()
+    {
+        return $this->cost;
+    }
+
+    /**
+     * Set totalPrice
+     *
+     * @param string $totalPrice
+     *
+     * @return ReservationService
+     */
+    public function setTotalPrice($totalPrice)
+    {
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPrice
+     *
+     * @return string
+     */
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
     }
 }

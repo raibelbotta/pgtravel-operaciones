@@ -23,8 +23,8 @@ parameters:
         car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER }
         restaurant: { name: restaurant, display: Restaurant, has_end_date: false, voucher_title: RESTAURANT VOUCHER }
         optionals: { name: optionals, display: Optionals, voucher_title: OPTIONAL VOUCHER }
-        guide: { name: guide, display: Guide }
-        private-house: { name: private-house, display: Private house, has_night: true, voucher_title: HOUSE VOUCHER }
+        guide: { name: guide, display: Guide, has_pax: false }
+        private-house: { name: private-house, display: Private house, has_night: true, has_pax: false, voucher_title: HOUSE VOUCHER }
         other: { name: other, display: Other }
 
 services:

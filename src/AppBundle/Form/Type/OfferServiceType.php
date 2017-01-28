@@ -43,12 +43,8 @@ class OfferServiceType extends AbstractType
                 ->add('origin')
                 ->add('destination')
                 ->add('description')
-                ->add('supplierUnitPrice', null, array(
-                    'label' => 'Cost'
-                ))
-                ->add('supplierPrice', null, array(
-                    'label' => 'Total price'
-                ))
+                ->add('cost')
+                ->add('totalPrice')
                 ->add('supplier', null, array(
                     'required' => false,
                     'query_builder' => $this->getSupplierQueryBuilder()

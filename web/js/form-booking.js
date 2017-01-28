@@ -258,7 +258,8 @@ App.Bookings.Form = function() {
             var $item = $(this).closest('.item'),
                 option = this.options[this.selectedIndex],
                 $nightsControl = $item.find('input[name$="[nights]"]'),
-                $places = $item.find('input[name$="[origin]"]');
+                $places = $item.find('input[name$="[origin]"]'),
+                $pax = $item.find('input[name$="[pax]"]');
 
             if (parseInt($(option).data('has-nights')) === 1) {
                 $nightsControl.parent().show();
@@ -270,6 +271,13 @@ App.Bookings.Form = function() {
             } else {
                 $places.closest('.row').hide();
             }
+            if (parseInt($(option).data('has-pax')) == 1) {
+                $pax.parent().show();
+            } else {
+                $pax.parent().hide();
+            }
+
+            $item.find('input[name$="[cost]"]').trigger('change');
         });
 
         $('.item.item-service select[name$="[model]"]').trigger('change');
@@ -279,17 +287,34 @@ App.Bookings.Form = function() {
                 return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
             };
 
+            var updateExpense = function(item) {
+                var $item = $(item),
+                    $nights = $item.find('input[name$="[nights]"]'),
+                    $pax = $item.find('input[name$="[pax]"]'),
+                    $price = $item.find('input[name$="[cost]"]'),
+                    $total = $item.find('input[name$="[totalPrice]"]'),
+                    nights = $nights.is(':visible') ? getFloat($nights.val()) : 0,
+                    pax = $pax.is(':visible') ? getFloat($pax.val()) : 0,
+                    total = nights * getFloat($price.val()) + pax * getFloat($price.val());
+
+                $total.val(total.toFixed(2));
+            }
+
             var updateTotalExpenses = function() {
                 var total = new Number(0);
-                $('.item-service input[name$="[supplierPrice]"]').each(function() {
+                $('.item-service input[name$="[totalPrice]"]').each(function() {
                     total += getFloat($(this).val());
                 });
 
                 $('#offer_form_totalExpenses').val(total.toFixed(2)).trigger('change');
             }
 
+            $('#offer_form_services').on('change', 'input[name$="[nights]"], input[name$="[pax]"], input[name$="[cost]"]', function() {
+                updateExpense($(this).closest('.item-service'));
+            });
+
             //Todos los totales de item-service
-            $('#offer_form_services').on('change', '.item-service input[name$="[supplierPrice]"]', function() {
+            $('#offer_form_services').on('change', '.item-service input[name$="[totalPrice]"]', function() {
                 updateTotalExpenses();
             });
 

@@ -44,9 +44,13 @@
             {% endif %}
         </ul>
         {% if record.state == constant('\\AppBundle\\Entity\\Reservation::STATE_OFFER') %}
-            <a href="{{ path('app_offers_promote', {'id': record.id}) }}" role="button" class="btn btn-xs btn-promote bg-marron" title="{{ 'Promote'|trans }}"><i class="fa fa-check"></i></a>
+            <a href="{{ path('app_offers_changestate', {'id': record.id}) }}" role="button" class="btn btn-default btn-xs btn-promote" title="{{ 'Put on operation'|trans }}"><i class="fa fa-arrow-right"></i></a>
+        {% else %}
+            <a href="{{ path('app_offers_changestate', {'id': record.id}) }}" class="btn btn-default btn-xs btn-unpromote" role="button" title="{{ 'Put back on offer'|trans }}"><span class="fa fa-arrow-left"></span></a>
         {% endif %}
-        <a href="{{ path('app_offers_cancel', {'id': record.id}) }}" role="button" class="btn btn-info btn-xs btn-cancel" title="{{ 'Cancel'|trans }}"><i class="fa fa-ban"></i></a>
+        <a href="{{ path('app_offers_changecancelstate', {'id': record.id}) }}" role="button" class="btn btn-info btn-xs btn-cancel" title="{{ 'Cancel'|trans }}"><i class="fa fa-ban"></i></a>
+    {% else %}
+        <a href="{{ path('app_offers_changecancelstate', {'id': record.id}) }}" role="button" class="btn btn-info btn-xs btn-uncancel" title="{{ 'Uncancel'|trans }}"><i class="fa fa-ban"></i></a>
     {% endif %}
     <a href="{{ path('app_offers_delete', {'id': record.id}) }}" role="button" class="btn btn-danger btn-xs btn-delete" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></a>
 </div>

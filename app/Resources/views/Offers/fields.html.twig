@@ -28,7 +28,7 @@
                     {{ form_label(form.operator, null, {'label_attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.operator, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-registered"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
+                <div class="form-group col-sm-4 col-xs-12 block-clienttype block-clienttype-registered select2-md"{% if form.vars.data.clienttype == 'direct' %} style="display: none;"{% endif %}>
                     {{ form_label(form.client, null, {'required': true, 'label_attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.client, {'attr': {'class': 'form-control'}}) }}
                 </div>
@@ -188,11 +188,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-xs-12 col-sm-6">
+            <div class="form-group col-xs-12 col-sm-6 select2-sm">
                 {{ form_label(form.origin, null, {'label_attr': {'class': 'control-label'}})}}
                 {{ form_widget(form.origin, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
-            <div class="form-group col-xs-12 col-sm-6">
+            <div class="form-group col-xs-12 col-sm-6 select2-sm">
                 {{ form_label(form.destination, null, {'label_attr': {'class': 'control-label'}})}}
                 {{ form_widget(form.destination, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
@@ -222,7 +222,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-xs-12 col-sm-8">
+            <div class="form-group col-xs-12 col-sm-8 select2-sm">
                 {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.supplier, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
@@ -286,13 +286,13 @@
 {% block offer_administrative_charge_row %}
     <div class="item item-administrative-charge">
         <div class="row">
-            <div class="col-sm-6 col-xs-12 form-group">{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}</div>
+            <div class="col-sm-6 col-xs-12 form-group">{{ form_widget(form.name, {'attr': {'class': 'form-control input-sm'}}) }}</div>
             <div class="col-sm-6 col-xs-12">
                 <div class="row">
-                    <div class="col-xs-3 form-group">{{ form_widget(form.multiplier, {'attr': {'class': 'form-control text-right'}}) }}</div>
-                    <div class="col-xs-3 form-group">{{ form_widget(form.pax, {'attr': {'class': 'form-control text-right'}}) }}</div>
-                    <div class="col-xs-3 form-group">{{ form_widget(form.price, {'attr': {'class': 'form-control text-right'}}) }}</div>
-                    <div class="col-xs-3 form-group">{{ form_widget(form.total, {'attr': {'class': 'form-control text-right', 'placeholder': 'Total'|trans}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.multiplier, {'attr': {'class': 'form-control text-right input-sm'}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.pax, {'attr': {'class': 'form-control text-right input-sm'}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.price, {'attr': {'class': 'form-control text-right input-sm'}}) }}</div>
+                    <div class="col-xs-3 form-group">{{ form_widget(form.total, {'attr': {'class': 'form-control text-right input-sm', 'placeholder': 'Total'|trans}}) }}</div>
                 </div>
             </div>
         </div>

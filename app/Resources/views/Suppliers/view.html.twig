@@ -48,33 +48,41 @@
         <div class="x_content">
             {% for employee in record.employees %}
                 <div class="row item">
-                    <div class="form-group col-sm-6 col-xs-12">
+                    <div class="form-group col-xs-12 col-sm-6">
                         <label for="" class="control-label">{{ 'Full name'|trans }}</label>
                         <div class="form-control">{{ employee.fullName }}</div>
                     </div>
-                    <div class="col-xs-6 col-sm-3 form-group">
+                    <div class="form-group col-xs-6 col-sm-3">
                         <label for="" class="control-label">{{ 'Job position'|trans }}</label>
                         <div class="form-control">{{ employee.jobPosition }}</div>
                     </div>
-                    <div class="form-group col-sm-3 col-xs-6">
+                    <div class="form-group col-xs-6 col-sm-3">
                         <label for="" class="control-label">{{ 'Gender'|trans }}</label>
                         <div class="form-control">{{ employee.gender }}</div>
                     </div>
-                    <div class="form-group col-sm-6 col-xs-12">
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-12 col-sm-4">
+                        <label for="" class="control-label">{{ 'Email'|trans }}</label>
+                        <div class="form-control">{{ employee.email }}</div>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-4">
                         <label class="control-label">{{ 'Mobile phone'|trans }}</label>
                         <div class="form-control">{{ employee.mobilePhone is not empty ? phone_number_format(employee.mobilePhone, 'INTERNATIONAL') : '' }}</div>
                     </div>
-                    <div class="form-group col-sm-6 col-xs-12">
+                    <div class="form-group col-xs-6 col-sm-4">
                         <label class="control-label">{{ 'Fixed phone'|trans }}</label>
                         <div class="form-control">{{ employee.fixedPhone is not empty ? phone_number_format(employee.fixedPhone, 'INTERNATIONAL') : '' }}</div>
                     </div>
-                    {% if employee.postalAddress is not empty %}
+                </div>
+                {% if employee.postalAddress is not empty %}
+                    <div class="row">
                         <div class="form-group col-xs-12 col-sm-12">
                             <label class="control-label">{{ 'Postal address'|trans }}</label>
                             <div class="form-control" style="height: auto;">{{ employee.postalAddress }}</div>
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

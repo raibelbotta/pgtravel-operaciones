@@ -221,10 +221,6 @@ class OffersController extends Controller
         foreach ($record->getServices() as $service) {
             $originalServices[] = $service;
         }
-        $originalAdministrativeCharges = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach ($record->getAdministrativeCharges() as $charge) {
-            $originalAdministrativeCharges[] = $charge;
-        }
 
         $form = $this->createForm(OfferFormType::class, $record);
 
@@ -235,11 +231,6 @@ class OffersController extends Controller
             foreach ($originalServices as $service) {
                 if (!$record->getServices()->contains($service)) {
                     $manager->remove($service);
-                }
-            }
-            foreach ($originalAdministrativeCharges as $charge) {
-                if (!$record->getAdministrativeCharges()->contains($charge)) {
-                    $manager->remove($charge);
                 }
             }
 
@@ -256,14 +247,14 @@ class OffersController extends Controller
     }
 
     /**
-     * @Route("/{id}/cancel", requirements={"id": "\d+"})
+     * @Route("/{id}/change-cancel-state", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")
      * @return JsonResponse
      */
-    public function cancelAction(Reservation $record)
+    public function changeCancelStateAction(Reservation $record)
     {
-        $record->setIsCancelled(true);
+        $record->setIsCancelled(!$record->getIsCancelled());
 
         $manager = $this->getDoctrine()->getManager();
         $manager->flush();
@@ -272,7 +263,7 @@ class OffersController extends Controller
             'result' => 'success'
         ));
     }
-
+    
     /**
      * @Route("/{id}/delete", requirements={"id": "\d+"})
      * @Method({"post"})
@@ -317,14 +308,14 @@ class OffersController extends Controller
     }
     
     /**
-     * @Route("/{id}/promote", requirements={"id": "\d+"})
+     * @Route("/{id}/change-state", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")
      * @return JsonResponse
      */
-    public function promoteAction(Reservation $record)
+    public function changeStateAction(Reservation $record)
     {
-        $record->setState(Reservation::STATE_RESERVATION);
+        $record->setState($record->getState() === Reservation::STATE_RESERVATION ? Reservation::STATE_OFFER : Reservation::STATE_RESERVATION);
 
         $manager = $this->getDoctrine()->getManager();
         $manager->flush();

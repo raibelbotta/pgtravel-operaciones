@@ -28,15 +28,6 @@
 {% block page_javascripts %}
     <script>
         $(document).ready(function() {
-            {% if app.session.flashBag.has('notice') %}
-                +(function() {
-                    swal({
-                        title: '{{ 'Notification'|trans }}',
-                        text: '{{ app.session.flashBag.get('notice')[0] }}'
-                    });
-                }());
-            {% endif %}
-
             App.Suppliers.Index.init();
         });
     </script>

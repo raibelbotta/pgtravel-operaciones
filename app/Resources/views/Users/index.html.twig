@@ -51,15 +51,6 @@
 {% block page_javascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            {% if app.session.flashBag.has('notice') %}
-                +(function() {
-                    swal({
-                        title: Translator.trans('Notification'),
-                        text: '{{ app.session.flashBag.get('notice')[0] }}'
-                    });
-                }());
-            {% endif %}
-
             App.Users.Index.init();
         });
     </script>

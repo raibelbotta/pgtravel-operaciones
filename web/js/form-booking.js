@@ -103,9 +103,16 @@ App.Bookings.Form = function() {
             });
         }
 
+        var initSupplier = function(item) {
+            $(item).find('select[name$="[supplier]"]').select2({
+                width: '100%'
+            });
+        }
+
         $('.item.item-service').each(function() {
             initDatepickers(this);
             initPlaces(this);
+            initSupplier(this);
         });
 
         $('body').on('change', '.item-service input[name$="[nights]"]', function() {
@@ -142,6 +149,7 @@ App.Bookings.Form = function() {
                 $item.find('select[name$="[model]"]').trigger('change');
                 initDatepickers($item);
                 initPlaces($item);
+                initSupplier($item);
             }
 
 
@@ -258,6 +266,10 @@ App.Bookings.Form = function() {
                 });
                 $('.block-clienttype:not(.block-clienttype-registered)').hide();
             }
+        });
+
+        $('#offer_form_client').select2({
+            width: '100%'
         });
 
         $('#offer_form_client').on('change', function() {

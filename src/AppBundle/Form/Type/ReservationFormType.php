@@ -67,6 +67,7 @@ class ReservationFormType extends AbstractType
 
         $builder
                 ->add('notificationLine', NotificationLineType::class, array(
+                    'label' => 'Request via',
                     'required' => false
                 ))
                 ->add('name')

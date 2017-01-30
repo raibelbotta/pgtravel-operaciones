@@ -16,11 +16,13 @@ parameters:
         - { name: Miscelaneas Expenses, price: 50 }
         - { name: Bonus, price: 20 }
         - { name: Parking, price: 5 }
+        - { name: Advertising, price: 2 }
+        - { name: Water, price: 1 }
 
     app.contract.models:
         hotel: { name: hotel, display: Hotel, has_night: true, voucher_title: HOTEL VOUCHER }
         transport: { name: transport, display: Transport, voucher_title: TRANSPORT VOUCHER, has_places: true }
-        car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER, has_places: true }
+        car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER, has_places: true, has_pax: false }
         restaurant: { name: restaurant, display: Restaurant, has_end_date: false, voucher_title: RESTAURANT VOUCHER }
         optionals: { name: optionals, display: Optionals, voucher_title: OPTIONAL VOUCHER }
         guide: { name: guide, display: Guide, has_pax: false }

@@ -22,6 +22,7 @@ class SupplierEmployeeType extends AbstractType
                 ->add('gender', GenderType::class, array(
                     'required' => false
                 ))
+                ->add('email')
                 ->add('fixedPhone', PhoneNumberType::class, array(
                     'required' => false
                 ))

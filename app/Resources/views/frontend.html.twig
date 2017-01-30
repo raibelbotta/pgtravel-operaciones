@@ -287,7 +287,7 @@
     </script>
 
     <!-- plugins -->
-    {% javascripts filter="yui_js" output="compiled/js/plugins.js"
+    {% javascripts filter="yui_js" output="compiled/js/plugins.min.js"
         "../web/plugins/jquery/dist/jquery.min.js"
         "../web/plugins/jquery-migrate-1.2.1.js"
         "../web/plugins/bootstrap/dist/js/bootstrap.js"
@@ -311,7 +311,7 @@
     {% endjavascripts %}
 
     <!-- Custom Theme Scripts -->
-    {% javascripts filter="yui_js" output="compiled/js/custom.js"
+    {% javascripts filter="yui_js" output="compiled/js/custom.min.js"
         "../web/js/*.js"
         %}
         <script src="{{ asset_url }}"></script>
@@ -320,6 +320,9 @@
     <script>
         $(document).ready(function() {
             App.Main.init();
+            {% if app.session.flashBag.has('notice') %}
+                App.Main.alert('{{ app.session.flashbag.get('notice')[0] }}');
+            {% endif %}
         });
     </script>
 

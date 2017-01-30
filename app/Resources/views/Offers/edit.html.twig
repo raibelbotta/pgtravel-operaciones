@@ -13,7 +13,7 @@
             {{ form_start(form, {'attr': {'role': 'form', 'id': 'reservation'}}) }}
                 {{ form_row(form) }}
                 <div class="pull-right">
-                    <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+                    <button type="button" class="btn btn-primary" onclick="$('form#reservation').submit();">{{ 'Save'|trans }}</button>
                     <a href="{{ path('app_offers_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
                 </div>
             {{ form_end(form) }}

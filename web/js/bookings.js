@@ -5,7 +5,7 @@ App.Bookings.Index = function() {
     var init = function() {
         var $table = $('#datatable-offers');
 
-        $table.on('click', 'a.btn-cancel', function(event) {
+        var clickCancel = function(event) {
             event.preventDefault();
 
             var $a = $(this), url = $a.attr('href');
@@ -28,7 +28,111 @@ App.Bookings.Index = function() {
                     });
                 }
             });
-        });
+        }
+
+        var clickUncancel = function(event) {
+            event.preventDefault();
+
+            var $a = $(this), url = $a.attr('href');
+
+            $a.closest('td').text(Translator.trans('Updating...')).closest('tr').addClass('row-removing');
+            $.ajax(url, {
+                dataType: 'json',
+                method: 'post',
+                success: function(json) {
+                    $table.dataTable().api().draw(false);
+                }
+            });
+        }
+
+        var clickDelete = function(event) {
+            event.preventDefault();
+
+            var url = $(this).attr('href'),
+                $a = $(this);
+
+            swal({
+                title: Translator.trans('Confirm removal'),
+                text: Translator.trans('The record will be removed. Are you sure you want to continue?'),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d9534f'
+            }, function(isConfirmed) {
+                if (isConfirmed) {
+                    if (confirm('Are you sure you want to continue with removal?')) {
+                        $a.closest('td').text(Translator.trans('Removing...')).closest('tr').addClass('row-removing');
+                        $.ajax(url, {
+                            dataType: 'json',
+                            method: 'post',
+                            success: function(json) {
+                                $table.find('tr.row-removing').remove();
+                                $table.dataTable().api().draw(false);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        var clickPromote = function(event) {
+            event.preventDefault();
+
+            var url = $(this).attr('href'),
+                $a = $(this);
+
+            swal({
+                title: Translator.trans('Confirm move'),
+                text: Translator.trans('The record will be moved to the official operation. Are you sure you want to continue?'),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#337ab7'
+            }, function(isConfirmed) {
+                if (isConfirmed) {
+                    $a.closest('td').text(Translator.trans('Moving...')).closest('tr').addClass('row-promoting');
+                    $.ajax(url, {
+                        dataType: 'json',
+                        method: 'post',
+                        success: function(json) {
+                            $table.find('tr.row-promoting').remove();
+                            $table.dataTable().api().draw(false);
+                        }
+                    });
+                }
+            });
+        }
+
+        var clickUnpromote = function(event) {
+            event.preventDefault();
+
+            var url = $(this).attr('href'),
+                $a = $(this);
+
+            swal({
+                title: Translator.trans('Confirm move'),
+                text: Translator.trans('The record will be pulled off from the operation. Are you sure you want to continue?'),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#337ab7'
+            }, function(isConfirmed) {
+                if (isConfirmed) {
+                    $a.closest('td').text(Translator.trans('Moving...')).closest('tr').addClass('row-promoting');
+                    $.ajax(url, {
+                        dataType: 'json',
+                        method: 'post',
+                        success: function(json) {
+                            $table.find('tr.row-promoting').remove();
+                            $table.dataTable().api().draw(false);
+                        }
+                    });
+                }
+            });
+        }
+
+        $table.on('click', 'a.btn-promote', clickPromote);
+        $table.on('click', 'a.btn-unpromote', clickUnpromote);
+        $table.on('click', 'a.btn-delete', clickDelete);
+        $table.on('click', 'a.btn-cancel', clickCancel);
+        $table.on('click', 'a.btn-uncancel', clickUncancel);
 
         $table.dataTable({
             'order': [[ 4, 'asc' ]],
@@ -37,7 +141,7 @@ App.Bookings.Index = function() {
                     'searchable': false,
                     'sortable': false,
                     'targets': [5],
-                    'width': '155px',
+                    'width': '158px',
                     'title': Translator.trans('Actions')
                 },
                 {
@@ -90,7 +194,7 @@ App.Bookings.Index = function() {
             }
         });
 
-        +(function($) {
+        +(function() {
             $('form#filter input[name$="[fromDate]"]').parent().datetimepicker({
                 format: 'DD/MM/YYYY'
             });
@@ -111,61 +215,7 @@ App.Bookings.Index = function() {
                 $table.DataTable().draw(false);
             });
 
-        }(jQuery));
-
-        $('body').on('click', 'a.btn-delete', function(event) {
-            event.preventDefault();
-
-            var url = $(this).attr('href'),
-                $a = $(this);
-
-            swal({
-                title: Translator.trans('Confirm remove'),
-                text: Translator.trans('The record will be removed. Are you sure you want to continue?'),
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d9534f'
-            }, function(isConfirmed) {
-                if (isConfirmed) {
-                    $a.closest('td').text(Translator.trans('Removing...')).closest('tr').addClass('row-removing');
-                    $.ajax(url, {
-                        dataType: 'json',
-                        method: 'post',
-                        success: function(json) {
-                            $table.find('tr.row-removing').remove();
-                            $table.dataTable().api().draw(false);
-                        }
-                    });
-                }
-            });
-        });
-
-        $('body').on('click', 'a.btn-promote', function(event) {
-            event.preventDefault();
-
-            var url = $(this).attr('href'),
-                $a = $(this);
-
-            swal({
-                title: Translator.trans('Confirm move'),
-                text: Translator.trans('The record will be moved to the official operation. Are you sure you want to continue?'),
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#337ab7'
-            }, function(isConfirmed) {
-                if (isConfirmed) {
-                    $a.closest('td').text(Translator.trans('Moving...')).closest('tr').addClass('row-promoting');
-                    $.ajax(url, {
-                        dataType: 'json',
-                        method: 'post',
-                        success: function(json) {
-                            $table.find('tr.row-promoting').remove();
-                            $table.dataTable().api().draw(false);
-                        }
-                    });
-                }
-            });
-        });
+        }());
     }
 
     return {

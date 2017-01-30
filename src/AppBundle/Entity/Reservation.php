@@ -36,7 +36,7 @@ class Reservation
      * @ORM\Column(name="version", type="integer", options={"default": 1})
      */
     private $version;
-    
+
     /**
      * @var string
      *

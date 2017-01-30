@@ -93,12 +93,20 @@ App.Main = function() {
         });
     }
 
+    var alert = function(message) {
+        swal({
+            title: Translator.trans('Notification'),
+            text: message
+        });
+    }
+
     return {
         init: function() {
             initTooltipster();
             initiCheck();
             initPasswordModal();
-        }
+        },
+        alert: alert
     }
 }();
 

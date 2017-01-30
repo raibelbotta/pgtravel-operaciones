@@ -57,6 +57,14 @@ class SupplierEmployee
 
     /**
      * @var string
+     * 
+     * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\Email
+     */
+    private $email;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="postal_address", type="text", nullable=true)
      */
@@ -321,5 +329,29 @@ class SupplierEmployee
     public function getJobPosition()
     {
         return $this->jobPosition;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return SupplierEmployee
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

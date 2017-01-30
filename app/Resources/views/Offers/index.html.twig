@@ -56,17 +56,8 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
-            {% if app.session.flashBag.has('notice') %}
-                +(function() {
-                    swal({
-                        title: Translator.trans('Notification'),
-                        text: '{{ app.session.flashBag.get('notice')[0] }}'
-                    });
-                }());
-            {% endif %}
-
             App.Bookings.Index.init();
         });
     </script>

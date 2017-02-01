@@ -46,6 +46,9 @@ class OfferServiceType extends AbstractType
                 ->add('destination', PlaceType::class, array(
                     'required' => false
                 ))
+                ->add('rentCar', RentCarType::class, array(
+                    'required' => false
+                ))
                 ->add('description')
                 ->add('cost')
                 ->add('totalPrice')

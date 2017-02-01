@@ -15,22 +15,22 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class OfferServiceModelType extends AbstractType
 {
     private $elements;
-    
+
     public function __construct(array $elements)
     {
         $this->elements = $elements;
     }
-    
+
     public function getParent()
     {
         return ChoiceType::class;
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $elements = $this->elements;
-        
+
         $resolver
                 ->setDefaults(array(
                     'choices'           => $this->getChoices(),
@@ -39,19 +39,20 @@ class OfferServiceModelType extends AbstractType
                         return array(
                             'data-has-nights'   => $accessor->getValue($elements[$val], '[has_night]') ? 1 : 0,
                             'data-has-places'   => $accessor->getValue($elements[$val], '[has_places]') ? 1 : 0,
-                            'data-has-pax'      => null !== $accessor->getValue($elements[$val], '[has_pax]') ? true === $accessor->getValue($elements[$val], '[has_pax]') : 1
+                            'data-has-pax'      => null !== $accessor->getValue($elements[$val], '[has_pax]') ? true === $accessor->getValue($elements[$val], '[has_pax]') : 1,
+                            'data-has-rent-car' => $accessor->getValue($elements[$val], '[has_rent_cars]') ? 1 : 0,
                         );
                     }
                 ));
     }
-    
+
     private function getChoices()
     {
         $choices = array();
         foreach ($this->elements as $element) {
             $choices[$element['display']] = $element['name'];
         }
-        
+
         return $choices;
     }
 }

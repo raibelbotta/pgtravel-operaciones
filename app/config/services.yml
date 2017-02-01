@@ -22,7 +22,7 @@ parameters:
     app.contract.models:
         hotel: { name: hotel, display: Hotel, has_night: true, voucher_title: HOTEL VOUCHER }
         transport: { name: transport, display: Transport, voucher_title: TRANSPORT VOUCHER, has_places: true }
-        car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER, has_places: true, has_pax: false }
+        car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER, has_places: true, has_pax: false, has_rent_cars: true }
         restaurant: { name: restaurant, display: Restaurant, has_end_date: false, voucher_title: RESTAURANT VOUCHER }
         optionals: { name: optionals, display: Optionals, voucher_title: OPTIONAL VOUCHER }
         guide: { name: guide, display: Guide, has_pax: false }
@@ -146,6 +146,11 @@ services:
             - { name: form.type }
     app.form.type.place_type:
         class: AppBundle\Form\Type\PlaceType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+    app.form.type.rent_car_type:
+        class: AppBundle\Form\Type\RentCarType
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }

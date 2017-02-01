@@ -1,5 +1,6 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
+
 App.Suppliers.Index = function() {
     var init = function() {
         var $datatable = $('#datatable-suppliers');

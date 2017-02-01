@@ -18,11 +18,13 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('Default/index.html.twig');
+        #return $this->render('Default/index.html.twig');
+
+        return $this->redirect($this->generateUrl('app_offers_index'));
     }
 
     /**
-     * @Route("/get-calendar-events")
+     * @Route("/get-calendar-events", options={"expose": true})
      * @Method({"get"})
      * @param Request $request
      * @return JsonParam
@@ -69,16 +71,13 @@ class DefaultController extends Controller
                     'to' => $to->format('Y-m-d 23:59:59')
                 ));
 
-        $backColors = array('#ff7d71', '#7dff71', '#7d71ff', 'red', 'blue', 'olive');
-
         return new JsonResponse(array(
-            'events' => array_map(function(array $record) use ($backColors) {
+            'events' => array_map(function(array $record) {
 
                 return array(
                     'title' => $record[0]->getName(),
                     'start' => date_create($record['startAt'])->format('Y-m-d'),
-                    'end' => date_create($record['endAt'])->format('Y-m-d'),
-                    'backgroundColor' => $backColors[rand(0, count($backColors) - 1)]
+                    'end' => date_create($record['endAt'])->format('Y-m-d')
                 );
             }, $query->getResult())
         ));

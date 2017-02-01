@@ -18,8 +18,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#calendar').fullCalendar({
-                events: function(start, end, timeone, callback) {
-                    $.ajax('{{ path('app_default_getevents') }}', {
+                events: function(start, end, timezone, callback) {
+                    $.ajax(Routing.generate('app_default_getevents'), {
                         dataType: 'json',
                         data: {
                             start: start.unix(),

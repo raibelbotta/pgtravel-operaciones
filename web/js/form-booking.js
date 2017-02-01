@@ -299,7 +299,8 @@ App.Bookings.Form = function() {
                 option = this.options[this.selectedIndex],
                 $nightsControl = $item.find('input[name$="[nights]"]'),
                 $places = $item.find('select[name$="[origin]"]'),
-                $pax = $item.find('input[name$="[pax]"]');
+                $pax = $item.find('input[name$="[pax]"]'),
+                $rentCars = $item.find('select[name$="[rentCar]"]');
 
             if (parseInt($(option).data('has-nights')) === 1) {
                 $nightsControl.parent().show();
@@ -315,6 +316,11 @@ App.Bookings.Form = function() {
                 $pax.parent().show();
             } else {
                 $pax.parent().hide();
+            }
+            if (parseInt($(option).data('has-rent-car')) == 1) {
+                $rentCars.closest('.row').show();
+            } else {
+                $rentCars.closest('.row').hide();
             }
 
             $item.find('input[name$="[cost]"]').trigger('change');

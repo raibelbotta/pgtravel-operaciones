@@ -160,6 +160,14 @@
                                         </div>
                                     </div>
                                 {% endif %}
+                                {% if models[service.model].has_rent_cars %}
+                                    <div class="row">
+                                        <div class="form-group col-xs-12 col-sm-6">
+                                            <label class="control-label">{{ 'Car type'|trans }}</label>
+                                            <div class="form-control">{{ service.rentCar }}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                                 {% if service.description is not empty %}
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12 form-group">

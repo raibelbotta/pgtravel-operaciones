@@ -197,6 +197,12 @@
                 {{ form_widget(form.destination, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
         </div>
+        <div class="row" style="display: none;">
+            <div class="col-xs-12 col-sm-6 form-group">
+                {{ form_label(form.rentCar, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.rentCar, {'attr': {'class': 'form-control input-sm'}}) }}
+            </div>
+        </div>
         <div class="row">
             <div class="form-group col-xs-6 col-sm-4">
                 {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}

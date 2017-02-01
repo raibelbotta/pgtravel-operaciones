@@ -62,6 +62,7 @@ class OfferFormType extends AbstractType
                     'required' => false
                 ))
                 ->add('notificationLine', NotificationLineType::class, array(
+                    'label' => 'Request via',
                     'required' => false
                 ))
                 ->add('name')
@@ -163,7 +164,7 @@ class OfferFormType extends AbstractType
                             'required' => true
                         ))
                         ;
-                
+
                 $data['directClientFullName'] = '';
                 $data['directClientEmail'] = '';
                 $data['directClientPostalAddress'] = '';

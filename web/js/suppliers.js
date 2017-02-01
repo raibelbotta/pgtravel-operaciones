@@ -8,13 +8,23 @@ App.Suppliers.Index = function() {
         $datatable.dataTable({
             'columnDefs': [
                 {
-                    orderable: false,
-                    sortable: false,
-                    targets: [1]
+                    'orderable': false,
+                    'sortable': false,
+                    'targets': [2],
+                    'title': Translator.trans('Actions'),
+                    'width': '80px'
                 },
                 {
-                    name: 'name',
-                    targets: [0]
+                    'name': 'name',
+                    'targets': [0],
+                    'title': Translator.trans('Name')
+                },
+                {
+                    'name': 'fixedPhone',
+                    'targets': [1],
+                    'title': Translator.trans('Fixed phone'),
+                    'searchable': false,
+                    'sortable': false
                 }
             ],
             serverSide: true,
@@ -26,10 +36,6 @@ App.Suppliers.Index = function() {
         });
 
         $datatable.on('draw.dt', function() {
-            $(this).find('input').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
-            });
-
             $(this).find('a.btn-delete').on('click', function(event) {
                 event.preventDefault();
 

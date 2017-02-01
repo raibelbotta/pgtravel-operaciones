@@ -85,9 +85,11 @@ class SuppliersController extends Controller
         }
 
         $twig = $this->container->get('templating');
-        $data = array_map(function($record) use($twig) {
+        $phoneNumberUtil = $this->container->get('libphonenumber.phone_number_util');
+        $data = array_map(function($record) use($twig, $phoneNumberUtil) {
             return array(
                 $record->getName(),
+                $record->getFixedPhone() ? $phoneNumberUtil->format($record->getFixedPhone(), \libphonenumber\PhoneNumberFormat::INTERNATIONAL) : '',
                 $twig->render('Suppliers/_actions.html.twig', array(
                     'record' => $record
                 ))

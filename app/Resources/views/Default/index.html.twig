@@ -18,6 +18,10 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#calendar').fullCalendar({
+                dayClick: function(date, jsEvent, view, resourceObj) {
+                    alert('Date: ' + date.format());
+                    alert('Resource ID: ' + resourceObj.id);
+                },
                 events: function(start, end, timezone, callback) {
                     $.ajax(Routing.generate('app_default_getevents'), {
                         dataType: 'json',

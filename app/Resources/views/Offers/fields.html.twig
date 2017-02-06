@@ -187,7 +187,14 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row visible-facility">
+            <div class="form-group col-xs-12">
+                {{ form_label(form.facilityName, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.facilityName, {'attr': {'class': "form-control"}}) }}
+                <div class="help-block">{{ 'For vouchers'|trans }}</div>
+            </div>
+        </div>
+        <div class="row visible-places">
             <div class="form-group col-xs-12 col-sm-6 select2-sm">
                 {{ form_label(form.origin, null, {'label_attr': {'class': 'control-label'}})}}
                 {{ form_widget(form.origin, {'attr': {'class': 'form-control input-sm'}}) }}
@@ -197,7 +204,7 @@
                 {{ form_widget(form.destination, {'attr': {'class': 'form-control input-sm'}}) }}
             </div>
         </div>
-        <div class="row" style="display: none;">
+        <div class="row visible-rent-cars">
             <div class="col-xs-12 col-sm-6 form-group">
                 {{ form_label(form.rentCar, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.rentCar, {'attr': {'class': 'form-control input-sm'}}) }}
@@ -218,11 +225,11 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
-            <div class="form-group col-xs-6 col-sm-2">
+            <div class="form-group col-xs-6 col-sm-2 visible-nights">
                 {{ form_label(form.nights, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.nights, {'attr': {'class': 'form-control input-sm text-right'}}) }}
             </div>
-            <div class="form-group col-xs-6 col-sm-2">
+            <div class="form-group col-xs-6 col-sm-2 visible-pax">
                 {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_widget(form.pax, {'attr': {'class': 'form-control input-sm text-right'}}) }}
             </div>

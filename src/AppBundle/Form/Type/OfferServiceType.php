@@ -38,6 +38,7 @@ class OfferServiceType extends AbstractType
                 ->add('clientName', null, array(
                     'label' => 'Person in charge'
                 ))
+                ->add('facilityName')
                 ->add('pax')
                 ->add('nights')
                 ->add('origin', PlaceType::class, array(

@@ -37,10 +37,7 @@ class OfferServiceModelType extends AbstractType
                     'choices_as_values' => true,
                     'choice_attr'       => function($val, $key, $index) use($elements, $accessor) {
                         return array(
-                            'data-has-nights'   => $accessor->getValue($elements[$val], '[has_night]') ? 1 : 0,
-                            'data-has-places'   => $accessor->getValue($elements[$val], '[has_places]') ? 1 : 0,
-                            'data-has-pax'      => null !== $accessor->getValue($elements[$val], '[has_pax]') ? true === $accessor->getValue($elements[$val], '[has_pax]') : 1,
-                            'data-has-rent-car' => $accessor->getValue($elements[$val], '[has_rent_cars]') ? 1 : 0,
+                            'data-options'      => $accessor->getValue($elements[$val], '[html_options]')
                         );
                     }
                 ));

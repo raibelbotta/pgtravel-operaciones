@@ -80,10 +80,9 @@ class Vouchers extends Report
             $this->pdf->Cell(0, 0, $this->options['translator']->trans('Name: %name%', array('%name%' => $service->getClientName(0))), 0, 1, 'L');
             $this->pdf->Ln(8);
             
-            $this->pdf->Cell(70);
-            $this->pdf->Cell(0, 0, $this->options['translator']->trans('PROVIDER'), 0, 1, 'C', true);
-            
             if ($service->getModel() == 'transport') {
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('PROVIDER'), 0, 1, 'C', true);
                 $this->pdf->Cell(70);
                 $this->pdf->Cell(0, 0, $this->options['translator']->trans('From: %place%', array('%place%' => $service->getOrigin())), 'B', 1, 'L');
                 $this->pdf->Cell(70);
@@ -110,7 +109,41 @@ class Vouchers extends Report
                 $this->pdf->Cell(0, 14, '', array('LTRB' => array('width' => 1.12)), 1, 'C');
                 
             } elseif ($service->getModel() == 'hotel') {
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('SERVICE DETAILS'), 0, 1, 'C', true);
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('Hotel: %hotel%', array('%hotel%' => $service->getFacilityName())), 'B', 1, 'L');
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('Hotel Add: %service%', array('%service%' => $service->getName())), 'B', 1, 'L');
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(50, 0, $this->options['translator']->trans('Date In: %date%', array('%date%' => $service->getStartAt()->format('d/m/Y'))), 'B', 0, 'L');
+                $this->pdf->Cell(20);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('Plan: %plan%', array('%plan%' => '')), 'B', 1, 'L');
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(50, 0, $this->options['translator']->trans('Date Out: %date%', array('%date%' => $service->getEndAt()->format('d/m/Y'))), 'B', 0, 'L');
+                $this->pdf->Cell(20);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('Standard: %name%', array('%name%' => '')), 'B', 1, 'L');
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('No.Pax: Adults: %adults% Children: %childrens%', array('%adults%' => 0, '%childrens%' => 0)), 'B', 1, 'L');
+                $this->pdf->Cell(70);
+                $this->pdf->Cell(0, 0, $this->options['translator']->trans('Room Qty: %desc%', array('%desc%' => '')), 'B', 1, 'L');
                 
+                $this->pdf->Cell(70, 0, $this->options['translator']->trans('VOUCHER DETAILS'), 0, 1, 'C', true);
+                $this->pdf->Cell(30, 0, $this->options['translator']->trans('No:'), 1, 0, 'L');
+                $this->pdf->Cell(40, 0, $service->getSerialNumber(), 1, 1, 'L');
+                $this->pdf->Cell(30, 0, $this->options['translator']->trans('Date:'), 1, 0, 'L');
+                $this->pdf->Cell(40, 0, date('d/m/Y'), 1, 1, 'L');
+                $this->pdf->Ln(2);
+                $this->pdf->Cell(70, 0, $this->options['translator']->trans('CONFIRMATION NUMBER'), 0, 1, 'C', true);
+                $this->pdf->Cell(70, 0, $service->getReservation()->getSerialNumber(), 1, 1, 'L');
+                
+                $this->pdf->Ln(2);
+                $this->pdf->Cell(70, 0, 'P&G TRAVEL', 0, 1, 'C', true);
+                $this->pdf->MultiCell(70, 0, 'Edificio Avianet. Calle 23, Esquina P. Plaza de la Revolución, Havana, Cuba', 1, 'J', false, 1);
+                $this->pdf->MultiCell(70, 0, $this->options['translator']->trans('Phones: %phones%', array('%phones%' => '+5378333822 +5378333823')), 1, 'J', false, 1);
+                
+                $this->pdf->SetXY(81, 68);
+                $this->pdf->MultiCell(0, 14, 'Notes', 1, 'L', false, 1);
             }
         }
     }

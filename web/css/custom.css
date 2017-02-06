@@ -8,6 +8,11 @@ label.required:after {
 .bg-pink {background-color: #e01ab5;}
 .bg-dark-yellow {background-color: #878a18;}
 
+.help-block {
+    color: #939393;
+    font-size: 0.8em;
+}
+
 .daterangepicker .ranges li {
   color: #73879C; }
   .daterangepicker .ranges li.active, .daterangepicker .ranges li:hover {

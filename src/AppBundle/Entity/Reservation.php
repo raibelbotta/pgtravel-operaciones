@@ -248,6 +248,10 @@ class Reservation
         return (string) $this->getName();
     }
 
+    public function getSerialNumber()
+    {
+        return sprintf('%s%sv%s', $this->getStartAt()->format('Y'), $this->getId(), $this->getVersion());
+    }
     /**
      * @param File $file
      * @return Reservation

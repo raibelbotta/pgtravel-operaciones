@@ -64,6 +64,14 @@ class ReservationService
     private $clientName;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="facility_name", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $facilityName;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="pax", type="integer", nullable=true)
@@ -214,6 +222,11 @@ class ReservationService
         $this->isNotified = false;
     }
 
+    public function getSerialNumber()
+    {
+        return sprintf('%s%sv%s-%s', $this->getReservation()->getStartAt()->format('Y'), $this->getReservation()->getId(), $this->getReservation()->getVersion(), $this->getId());
+    }
+    
     /**
      * Get id
      *
@@ -810,5 +823,29 @@ class ReservationService
     public function getRentCar()
     {
         return $this->rentCar;
+    }
+
+    /**
+     * Set facilityName
+     *
+     * @param string $facilityName
+     *
+     * @return ReservationService
+     */
+    public function setFacilityName($facilityName)
+    {
+        $this->facilityName = $facilityName;
+
+        return $this;
+    }
+
+    /**
+     * Get facilityName
+     *
+     * @return string
+     */
+    public function getFacilityName()
+    {
+        return $this->facilityName;
     }
 }

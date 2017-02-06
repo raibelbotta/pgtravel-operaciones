@@ -20,13 +20,41 @@ parameters:
         - { name: Water, price: 1 }
 
     app.contract.models:
-        hotel: { name: hotel, display: Hotel, has_night: true, voucher_title: HOTEL VOUCHER }
-        transport: { name: transport, display: Transport, voucher_title: TRANSPORT VOUCHER, has_places: true }
-        car-rental: { name: car-rental, display: Car rental, voucher_title: AUTO VOUCHER, has_places: true, has_pax: false, has_rent_cars: true }
-        restaurant: { name: restaurant, display: Restaurant, has_end_date: false, voucher_title: RESTAURANT VOUCHER }
+        hotel:
+            name: hotel
+            display: Hotel
+            voucher_title: HOTEL VOUCHER
+            html_options: 'end-date nights facility -places -rent-cars'
+        transport:
+            name: transport
+            display: Transport
+            voucher_title: TRANSPORT VOUCHER
+            html_options: '-nights -facility places -rent-cars'
+        car-rental:
+            name: car-rental
+            display: Car rental
+            voucher_title: AUTO VOUCHER
+            has_places: true
+            has_pax: false
+            has_rent_cars: true
+            options: '-pax places rent-cars -nights -facility'
+        restaurant:
+            name: restaurant
+            display: Restaurant
+            has_end_date: false
+            voucher_title: RESTAURANT VOUCHER
+            options: '-end-date -places -rent-cars -nights pax facility'
         optionals: { name: optionals, display: Optionals, voucher_title: OPTIONAL VOUCHER }
-        guide: { name: guide, display: Guide, has_pax: false }
-        private-house: { name: private-house, display: Private house, has_night: true, has_pax: false, voucher_title: HOUSE VOUCHER }
+        guide:
+            name: guide
+            display: Guide
+            has_pax: false
+            options: '-pax'
+        private-house:
+            name: private-house
+            display: Private house
+            voucher_title: HOUSE VOUCHER
+            options: 'nights pax -end-date -places -rent-cars -nights pax facility'
         other: { name: other, display: Other }
 
 services:

@@ -127,6 +127,7 @@
                     $('#tab-hotel table button.btn-select-price').on('click', function() {
                         var $item = $(this).closest('.modal').data('item');
                         $item.find('[name*="[supplier]"]').val($(this).data('service-supplier'));
+                        $item.find('[name$="[facilityName]"]').val($(this).data('facility-name'));
                         $item.find('[name*="[name]"]').val($(this).data('service-name'));
                         $item.find('[name*="[pax]"]').val($(this).closest('.tab-pane').find('input.quantity').val());
                         $item.find('[name*="[supplierPrice]"]').val($(this).data('supplier-charge')).trigger('change');

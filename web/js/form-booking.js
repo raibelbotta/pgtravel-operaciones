@@ -296,32 +296,17 @@ App.Bookings.Form = function() {
 
         $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
             var $item = $(this).closest('.item'),
-                option = this.options[this.selectedIndex],
-                $nightsControl = $item.find('input[name$="[nights]"]'),
-                $places = $item.find('select[name$="[origin]"]'),
-                $pax = $item.find('input[name$="[pax]"]'),
-                $rentCars = $item.find('select[name$="[rentCar]"]');
+                option = this.options[this.selectedIndex];
 
-            if (parseInt($(option).data('has-nights')) === 1) {
-                $nightsControl.parent().show();
-            } else {
-                $nightsControl.parent().hide();
-            }
-            if (parseInt($(option).data('has-places')) == 1) {
-                $places.closest('.row').show();
-            } else {
-                $places.closest('.row').hide();
-            }
-            if (parseInt($(option).data('has-pax')) == 1) {
-                $pax.parent().show();
-            } else {
-                $pax.parent().hide();
-            }
-            if (parseInt($(option).data('has-rent-car')) == 1) {
-                $rentCars.closest('.row').show();
-            } else {
-                $rentCars.closest('.row').hide();
-            }
+            var options = $(option).data('options') ? $(option).data('options').split(' ') : [];
+            $.each(options, function(i) {
+                var className = options[i];
+                if (className.substr(0, 1) === '-') {
+                    $item.find('.visible-' + className.substr(1)).hide();
+                } else {
+                    $item.find('.visible-' + (className.substr(0, 1) == '+' ? className.substr(1) : className)).show();
+                }
+            });
 
             $item.find('input[name$="[cost]"]').trigger('change');
         });

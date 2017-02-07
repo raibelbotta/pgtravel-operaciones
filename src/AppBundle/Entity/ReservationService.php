@@ -72,6 +72,30 @@ class ReservationService
     private $facilityName;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="facility_address", nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $facilityAddress;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="restaurant_menu", nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $restaurantMenu;
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="hosting_plan", nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $hostingPlan;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="pax", type="integer", nullable=true)
@@ -146,6 +170,14 @@ class ReservationService
      * @ORM\JoinColumn(onDelete="set null")
      */
     private $rentCar;
+    
+    /**
+     * @var TransportCarType
+     *
+     * @ORM\ManyToOne(targetEntity="TransportCarType")
+     * @ORM\JoinColumn(onDelete="set null")
+     */
+    private $transportCar;
 
     /**
      * @var string
@@ -847,5 +879,101 @@ class ReservationService
     public function getFacilityName()
     {
         return $this->facilityName;
+    }
+
+    /**
+     * Set hostingPlan
+     *
+     * @param string $hostingPlan
+     *
+     * @return ReservationService
+     */
+    public function setHostingPlan($hostingPlan)
+    {
+        $this->hostingPlan = $hostingPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get hostingPlan
+     *
+     * @return string
+     */
+    public function getHostingPlan()
+    {
+        return $this->hostingPlan;
+    }
+
+    /**
+     * Set facilityAddress
+     *
+     * @param string $facilityAddress
+     *
+     * @return ReservationService
+     */
+    public function setFacilityAddress($facilityAddress)
+    {
+        $this->facilityAddress = $facilityAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get facilityAddress
+     *
+     * @return string
+     */
+    public function getFacilityAddress()
+    {
+        return $this->facilityAddress;
+    }
+
+    /**
+     * Set restaurantMenu
+     *
+     * @param string $restaurantMenu
+     *
+     * @return ReservationService
+     */
+    public function setRestaurantMenu($restaurantMenu)
+    {
+        $this->restaurantMenu = $restaurantMenu;
+
+        return $this;
+    }
+
+    /**
+     * Get restaurantMenu
+     *
+     * @return string
+     */
+    public function getRestaurantMenu()
+    {
+        return $this->restaurantMenu;
+    }
+
+    /**
+     * Set transportCar
+     *
+     * @param \AppBundle\Entity\TransportCarType $transportCar
+     *
+     * @return ReservationService
+     */
+    public function setTransportCar(\AppBundle\Entity\TransportCarType $transportCar = null)
+    {
+        $this->transportCar = $transportCar;
+
+        return $this;
+    }
+
+    /**
+     * Get transportCar
+     *
+     * @return \AppBundle\Entity\TransportCarType
+     */
+    public function getTransportCar()
+    {
+        return $this->transportCar;
     }
 }

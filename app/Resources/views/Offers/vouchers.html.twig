@@ -1,0 +1,340 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Vouchers for {{ record.name }}{% endblock %}
+
+{% block stylesheets %}
+    <style type="text/css" media="screen, print">
+        body {
+            font-family: Arial, sans-serif;
+        }
+        div.pagebreaker {
+            page-break-after: always;
+        }
+        .bg-green {
+            background-color: #88bb59;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% for service in record.services %}
+        {% if service.model == 'hotel' %}
+            <table border="1" align="center" width="100%" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td rowspan="7" align="center" colspan="2" width="28%">
+                            <img border="0" src="{{ asset('images/logo.png') }}"/>
+                        </td>
+                        <td align="center" colspan="7"><font size="10"><strong>HOTEL VOUCHER</strong></font></td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="bg-green" colspan="7">
+                            <strong>Client details</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name:</strong></td>
+                        <td colspan="6">{{ service.clientName }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="center" class="bg-green"><strong>Service Details</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hotel:</strong></td>
+                        <td colspan="6">{{ service.facilityName }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hotel Add:</strong></td>
+                        <td colspan="6">{{ service.name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-green" colspan="2" align="center"><strong>Voucher Details</strong></td>
+                        <td><strong>Date in:</strong></td>
+                        <td>{{ service.startAt|date('d/m/Y H:i') }}</td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Plan:</strong></td>
+                        <td colspan="2">{{ service.hostingPlan }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No.</strong></td>
+                        <td>{{ service.serialNumber }}</td>
+                        <td><strong>Date out:</strong></td>
+                        <td>{{ service.endAt|date('d/m/Y H:i') }}</td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Standard:</strong></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date:</strong></td>
+                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
+                        <td><strong>No pax:</strong></td>
+                        <td>Adults</td>
+                        <td>{{ service.pax }}</td>
+                        <td>Children</td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" class="bg-green"><strong>Confirmation number</strong></td>
+                        <td><strong>Room Qty</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>R-{{ record.serialNumber }}</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>P&amp;G TRAVEL</strong></td>
+                        <td colspan="6" rowspan="3" valign="top"><strong>Notes: </strong> {{ service.description }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Edificio Avianet. Calle 23, Esquina P. Plaza de la Revolución, Havana, Cuba</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Phone numbers: +5378333822 +5378333823</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% elseif service.model == 'restaurant' %}
+            <table border="1" align="center" width="100%" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td rowspan="7" align="center" colspan="2" width="28%">
+                            <img border="0" src="{{ asset('images/logo.png') }}"/>
+                        </td>
+                        <td align="center" colspan="7"><font size="10"><strong>RESTAURANT VOUCHER</strong></font></td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="bg-green" colspan="7">
+                            <strong>Client details</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name:</strong></td>
+                        <td colspan="6">{{ service.clientName }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="center" class="bg-green"><strong>Service Details</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Restaurant:</strong></td>
+                        <td colspan="6">{{ service.facilityName }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address:</strong></td>
+                        <td colspan="6">{{ service.facilityAddress }}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-green" colspan="2" align="center"><strong>Voucher Details</strong></td>
+                        <td><strong>Menu</strong></td>
+                        <td colspan="6">{{ service.restaurantMenu }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No.</strong></td>
+                        <td>{{ service.serialNumber }}</td>
+                        <td colspan="7"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date:</strong></td>
+                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
+                        <td><strong>Reservation:</strong></td>
+                        <td>Date</td>
+                        <td>{{ service.startAt|date('d/m/Y') }}</td>
+                        <td>Time</td>
+                        <td colspan="3">{{ service.startAt|date('H:i') }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" class="bg-green"><strong>Confirmation number</strong></td>
+                        <td><strong>No pax:</strong></td>
+                        <td>Adults</td>
+                        <td></td>
+                        <td>Children</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>R-{{ record.serialNumber }}</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>P&amp;G TRAVEL</strong></td>
+                        <td colspan="6" rowspan="3" valign="top"><strong>Notes: </strong> {{ service.description }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Edificio Avianet. Calle 23, Esquina P. Plaza de la Revolución, Havana, Cuba</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Phone numbers: +5378333822 +5378333823</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% elseif service.model == 'transport' %}
+            <table border="1" align="center" width="100%" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td rowspan="7" align="center" colspan="2" width="28%">
+                            <img border="0" src="{{ asset('images/logo.png') }}"/>
+                        </td>
+                        <td align="center" colspan="7"><font size="10"><strong>TRANSFER VOUCHER</strong></font></td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="bg-green" colspan="7">
+                            <strong>Client details</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name:</strong></td>
+                        <td colspan="6">{{ service.clientName }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="center" class="bg-green"><strong>Service Details</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Provider:</strong></td>
+                        <td colspan="6">{{ service.supplier.name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>From:</strong></td>
+                        <td colspan="6">{{ service.origin }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>To:</strong></td>
+                        <td colspan="6">{{ service.destination }}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-green" colspan="2" align="center"><strong>Voucher Details</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>No.</strong></td>
+                        <td>{{ service.serialNumber }}</td>
+                        <td><strong>Date</strong></td>
+                        <td>{{ service.startAt|date('d/m/Y') }}</td>
+                        <td><strong>Time:</strong></td>
+                        <td colspan="2">{{ service.startAt|date('H:i') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date:</strong></td>
+                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
+                        <td><strong>Type:</strong></td>
+                        <td colspan="6">{{ service.transportCar }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" class="bg-green"><strong>Confirmation number</strong></td>
+                        <td><strong>No pax:</strong></td>
+                        <td>Adults</td>
+                        <td></td>
+                        <td>Children</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>R-{{ record.serialNumber }}</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>P&amp;G TRAVEL</strong></td>
+                        <td colspan="6" rowspan="3" valign="top"><strong>Notes: </strong> {{ service.description }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Edificio Avianet. Calle 23, Esquina P. Plaza de la Revolución, Havana, Cuba</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Phone numbers: +5378333822 +5378333823</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% elseif service.model == 'private-house' %}
+            <table border="1" align="center" width="100%" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td rowspan="7" align="center" colspan="2" width="28%">
+                            <img border="0" src="{{ asset('images/logo.png') }}"/>
+                        </td>
+                        <td align="center" colspan="7"><font size="10"><strong>HOUSE VOUCHER</strong></font></td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="bg-green" colspan="7">
+                            <strong>Client details</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name:</strong></td>
+                        <td colspan="6">{{ service.clientName }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="center" class="bg-green"><strong>Service Details</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>House:</strong></td>
+                        <td colspan="6">{{ service.facilityName }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>House Add:</strong></td>
+                        <td colspan="6">{{ service.name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-green" colspan="2" align="center"><strong>Voucher Details</strong></td>
+                        <td><strong>Date in:</strong></td>
+                        <td>{{ service.startAt|date('d/m/Y H:i') }}</td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Plan:</strong></td>
+                        <td colspan="2">{{ service.hostingPlan }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>No.</strong></td>
+                        <td>{{ service.serialNumber }}</td>
+                        <td><strong>Date out:</strong></td>
+                        <td>{{ service.endAt|date('d/m/Y H:i') }}</td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Standard:</strong></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date:</strong></td>
+                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
+                        <td><strong>No pax:</strong></td>
+                        <td>Adults</td>
+                        <td>{{ service.pax }}</td>
+                        <td>Children</td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" class="bg-green"><strong>Confirmation number</strong></td>
+                        <td><strong>Room Qty</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>R-{{ record.serialNumber }}</strong></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><strong>P&amp;G TRAVEL</strong></td>
+                        <td colspan="6" rowspan="3" valign="top"><strong>Notes: </strong> {{ service.description }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Edificio Avianet. Calle 23, Esquina P. Plaza de la Revolución, Havana, Cuba</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Phone numbers: +5378333822 +5378333823</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <p>No vouchers defined for {{ service.model }}</p>
+        {% endif %}
+        <div class="pagebreaker"></div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% block hotel %}
+    <table border="1" width="85%">
+        <tbody>
+            <tr>
+                <td width="30%" rowspan="7" align="center">
+                    <img border="0" src="{{ path_logo }}"/>
+                </td>
+                <td align="center" colspan="7"><font size="10"><b>HOTEL VOUCHER</b></font></td>
+            </tr>
+            <tr>
+                <td align="center" bgcolor="#88bb59" colspan="7">
+                    <b>Client details</b>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Name:</b></td>
+                <td colspan="6">{{ client_name }}</td>
+            </tr>
+            <tr>
+                <td colspan="7">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="7" align="center" bgcolor="#88bb59"><b>Service Details</b></td>
+            </tr>
+            <tr>
+                <td><b>Hotel:</b></td>
+                <td colspan="6">{{ hotel }}</td>
+            </tr>
+            <tr>
+                <td><b>Hotel Add:</b></td>
+                <td colspan="6">{{ service_name }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

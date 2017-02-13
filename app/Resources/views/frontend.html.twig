@@ -11,33 +11,29 @@
 {% block title %}Operaciones P&amp;GTRAVEL{% endblock %}
 
 {% block stylesheets %}
-    <!-- Bootstrap 3 -->
-    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}">
-    <!-- Font Awesome 3 -->
-    <link rel="stylesheet" href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}">
-    <!-- intl-tel-input -->
-    <link rel="stylesheet" href="{{ asset('plugins/intl-tel-input/css/intlTelInput.min.css') }}">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/flat/green.css') }}">
 
-    {% stylesheets filter="yui_css" output="compiled/css/plugins.min.css"
-        "../web/plugins/nprogress/nprogress.css"
-        "../web/plugins/tooltipster/css/tooltipster.css"
-        "../web/plugins/tooltipster/css/tooltipster-custom.css"
-        "../web/plugins/tooltipster/css/themes/tooltipster-shadow.css"
-        "../web/plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
-        "../web/plugins/fullcalendar/fullcalendar.css"
-        "../web/plugins/datatables.net-bs/css/dataTables.bootstrap.css"
-        "../web/plugins/select2/dist/css/select2.css"
-        "../web/plugins/sweetalert/sweetalert.css"
-        "../web/plugins/bootstrap-fileupload/bootstrap-fileupload.css"
+    {% stylesheets filter="cssrewrite,?yui_css" output="compiled/css/plugins.min.css"
+        "plugins/bootstrap/dist/css/bootstrap.css"
+        "plugins/font-awesome/css/font-awesome.css"
+        "plugins/intl-tel-input/css/intlTelInput.min.css"
+        "plugins/iCheck/skins/flat/green.css"
+        "plugins/nprogress/nprogress.css"
+        "plugins/tooltipster/css/tooltipster.css"
+        "plugins/tooltipster/css/tooltipster-custom.css"
+        "plugins/tooltipster/css/themes/tooltipster-shadow.css"
+        "plugins/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
+        "plugins/fullcalendar/fullcalendar.css"
+        "plugins/datatables.net-bs/css/dataTables.bootstrap.css"
+        "plugins/select2/dist/css/select2.css"
+        "plugins/sweetalert/sweetalert.css"
+        "plugins/bootstrap-fileupload/bootstrap-fileupload.css"
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 
     <!-- Custom Theme Style -->
     {% stylesheets filter="yui_css" output="compiled/css/custom.min.css"
-        "../web/css/custom.css"
+        "css/custom.css"
         %}
         <link href="{{ asset_url }}" rel="stylesheet">
     {% endstylesheets %}
@@ -288,32 +284,33 @@
     </script>
 
     <!-- plugins -->
-    {% javascripts filter="yui_js" output="compiled/js/plugins.min.js"
-        "../web/plugins/jquery/dist/jquery.min.js"
-        "../web/plugins/jquery-migrate-1.2.1.js"
-        "../web/plugins/bootstrap/dist/js/bootstrap.js"
-        "../web/plugins/fastclick/lib/fastclick.js"
-        "../web/plugins/nprogress/nprogress.js"
-        "../web/plugins/jquery.form.js"
-        "../web/plugins/tooltipster/js/jquery.tooltipster.js"
-        "../web/plugins/jquery-validation/dist/jquery.validate.js"
-        "../web/plugins/moment/moment.js"
-        "../web/plugins/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"
-        "../web/plugins/intl-tel-input/js/intlTelInput.js"
-        "../web/plugins/fullcalendar/fullcalendar.js"
-        "../web/plugins/iCheck/icheck.js"
-        "../web/plugins/datatables.net/js/jquery.dataTables.js"
-        "../web/plugins/datatables.net-bs/js/dataTables.bootstrap.js"
-        "../web/plugins/select2/dist/js/select2.js"
-        "../web/plugins/sweetalert/sweetalert.min.js"
-        "../web/plugins/bootstrap-fileupload/bootstrap-fileupload.js"
+    {% javascripts filter="?yui_js" output="compiled/js/plugins.min.js"
+        "plugins/jquery/dist/jquery.min.js"
+        "plugins/jquery-migrate-1.2.1.js"
+        "plugins/bootstrap/dist/js/bootstrap.js"
+        "plugins/fastclick/lib/fastclick.js"
+        "plugins/nprogress/nprogress.js"
+        "plugins/jquery.form.js"
+        "plugins/tooltipster/js/jquery.tooltipster.js"
+        "plugins/jquery-validation/dist/jquery.validate.js"
+        "plugins/moment/moment.js"
+        "plugins/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"
+        "plugins/intl-tel-input/js/intlTelInput.js"
+        "plugins/fullcalendar/fullcalendar.js"
+        "plugins/iCheck/icheck.js"
+        "plugins/datatables.net/js/jquery.dataTables.js"
+        "plugins/datatables.net-bs/js/dataTables.bootstrap.js"
+        "plugins/select2/dist/js/select2.js"
+        "plugins/sweetalert/sweetalert.min.js"
+        "plugins/bootstrap-fileupload/bootstrap-fileupload.js"
+        "plugins/jquery.blockui.min.js"
          %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <!-- Custom Theme Scripts -->
     {% javascripts filter="yui_js" output="compiled/js/custom.min.js"
-        "../web/js/*.js"
+        "js/*.js"
         %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

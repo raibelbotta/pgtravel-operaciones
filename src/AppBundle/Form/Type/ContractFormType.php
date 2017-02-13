@@ -20,7 +20,7 @@ class ContractFormType extends AbstractType
     {
         $builder
                 ->add('model', ContractModelType::class)
-                ->add('supplier')
+                ->add('supplier', ContractSupplierType::class)
                 ->add('name')
                 ->add('description', TextareaType::class, array(
                     'required' => false
@@ -53,7 +53,8 @@ class ContractFormType extends AbstractType
                     'entry_type' => ContractTopServiceType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
-                    'by_reference' => false
+                    'by_reference' => false,
+                    'label' => 'General services'
                 ))
                 ->add('attachments', CollectionType::class, array(
                     'entry_type' => ContractAttachmentType::class,
@@ -65,7 +66,8 @@ class ContractFormType extends AbstractType
                     'entry_type' => ContractFacilityType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
-                    'by_reference' => false
+                    'by_reference' => false,
+                    'label' => 'Hotels'
                 ))
                 ;
     }

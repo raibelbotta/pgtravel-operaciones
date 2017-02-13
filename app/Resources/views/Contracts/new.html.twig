@@ -1,5 +1,7 @@
 {% extends 'frontend.html.twig' %}
 
+{% form_theme form "Contracts/fields.html.twig" %}
+
 {% block content %}
     <div class="page-title">
         <div class="title_left">
@@ -7,7 +9,7 @@
         </div>
     </div>
     {{ form_start(form, {'attr': {'role': 'form', 'id': 'contract'}}) }}
-        {{ include('Contracts/form.html.twig') }}
+        {{ form_row(form) }}
         <div class="pull-right">
             <a href="{{ path('app_contracts_index') }}" class="btn btn-default">{{ 'Cancel'|trans }}</a>
             <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>

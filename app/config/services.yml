@@ -182,6 +182,11 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.contract_supplier_type:
+        class: AppBundle\Form\Type\ContractSupplierType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.validator.constraints.cupos:
         class: ValidCupoValidator

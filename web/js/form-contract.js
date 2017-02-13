@@ -13,17 +13,24 @@ App.Contracts.Form = function(){
                         $(this).find('.collection:first').data('index', 0).empty();
                     }
                 });
+                $('.hiddeable-condition').each(function() {
+                    if ($(this).hasClass('hiddeable-condition-' + model)) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
             });
 
             $('#contract_form_signedAt').parent().datetimepicker({
                 format: 'DD/MM/YYYY'
             });
             $('#contract_form_startAt').parent().datetimepicker({
-                format: 'DD/MM/YYYY HH:mm'
+                format: 'DD/MM/YYYY'
             });
             $('#contract_form_endAt').parent().datetimepicker({
                 useCurrent: false,
-                format: 'DD/MM/YYYY HH:MM'
+                format: 'DD/MM/YYYY'
             });
             $('#contract_form_startAt').parent().on('dp.change', function(event) {
                  $('#contract_form_endAt').parent().data('DateTimePicker').minDate(event.date);
@@ -102,7 +109,7 @@ App.Contracts.Form = function(){
             }
 
             var clickAddItem = function(event) {
-                var $container = $(this).parent().parent().find('.collection:first'),
+                var $container = $(this).closest(':has(.collection)').find('.collection:first'),
                     prototype = $container.data('prototype'),
                     index = $container.data('index');
 
@@ -199,6 +206,49 @@ App.Contracts.Form = function(){
             $('body').on('click', '.btn-clone-item', clickCloneItem);
 
             $('.btn-remove').on('click', clickRemoveItem);
+            $('body').on('click', '.btn-create-rest-seasons', function() {
+                $.blockUI({
+                    message: Translator.trans('Calculating new seasons dates...')
+                });
+
+                var $btnAddItem = $(this).parent().find('button.btn-add-item'),
+                    $collection = $(this).closest(':has(.collection)').find('.collection:first'),
+                    laps = [];
+                $collection.find('.item').each(function() {
+                    var $item = $(this);
+                    laps.push({
+                        'from': $item.find('input:text:first').val(),
+                        'to': $item.find('input:text:last').val()
+                    });
+                });
+
+                $.ajax(Routing.generate('app_contracts_getseassons'), {
+                    'data': {
+                        'laps': laps,
+                        'startAt': $('#contract_form_startAt').val(),
+                        'endAt': $('#contract_form_endAt').val()
+                    },
+                    'dataType': 'json',
+                    'method': 'POST',
+                    'success': function(json) {
+                        for (var i = 0; i < json.laps.length; i++) {
+                            $btnAddItem.trigger('click');
+                        }
+                        $items = $collection.find('.item');
+                        for (var i = $items.length - json.laps.length; i < $items.length; i++) {
+                            var $item = $($items[i]);
+                            $item.find('input:text:first').val(json.laps[i - ($items.length - json.laps.length)].from);
+                            $item.find('input:text:last').val(json.laps[i - ($items.length - json.laps.length)].to);
+                        }
+
+                        $.unblockUI();
+                    },
+                    'error': function() {
+                        alert(Translator.trans('Error calculating dates...'));
+                        $.unblockUI();
+                    }
+                });
+            });
 
             updateContainerIndexes();
 

@@ -356,88 +356,22 @@ class OffersController extends Controller
      */
     public function searchServiceAction()
     {
-        $cupos = $this->container->getParameter('app.hotel.cupos');
         $models = $this->container->getParameter('app.contract.models');
 
         return $this->render('Offers/search_service.html.twig', array(
-            'cupos' => $cupos,
+            'cupos' => $this->container->getParameter('app.hotel.cupos'),
+            'plans' => $this->container->getParameter('app.hotel.plans'),
             'models' => $models
         ));
     }
 
     /**
-     * @Route("/search-service/{model}", requirements={"model": "[a-z\-]+"})
-     * @Method({"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function searchServiceByModelAction($model, Request $request)
-    {
-        $response = array(
-            'result' => 'success'
-        );
-        $manager = $this->getDoctrine()->getManager();
-
-        $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
-        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
-
-        switch ($model) {
-            case 'hotel':
-                $qb = $manager->getRepository('AppBundle:ContractFacility')
-                        ->createQueryBuilder('f')
-                        ->select('f.id, f.name, s.id AS supplierId, s.name AS supplierName')
-                        ->join('f.contract', 'c')
-                        ->join('c.supplier', 's')
-                        ->orderBy('f.name')
-                        ;
-
-                $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('hotel')));
-
-                if (!$from && !$to) {
-                    $andX->add($qb->expr()->andX(
-                            $qb->expr()->isNull('c.startAt'),
-                            $qb->expr()->isNull('c.endAt')
-                            ));
-                } else {
-                    if ($from) {
-                        $andX->add($qb->expr()->lte('c.startAt', $qb->expr()->literal($from->format('Y-m-d'))));
-                    }
-                    if ($to) {
-                        $andX->add($qb->expr()->gte('c.endAt', $qb->expr()->literal($to->format('Y-m-d'))));
-                    }
-                }
-
-                $qb->where($andX);
-
-                $hotels = array_map(function($record) {
-                    return array(
-                        'id'    => $record['id'],
-                        'text'  => $record['name'],
-                        'supplier' => array(
-                            'id' => $record['supplierId'],
-                            'name' => $record['supplierName']
-                        )
-                    );
-                }, $qb->getQuery()->getResult());
-
-                $response['hotels'] = $hotels;
-                break;
-
-            default:
-                $response['result'] = 'error';
-                $response['error_reason'] = 'Model no implemented yet';
-        }
-
-        return new JsonResponse($response);
-    }
-
-    /**
-     * @Route("/get-hotel-prices")
+     * @Route("/get-hotel-prices", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return Response
      */
-    public function  getHotelPricesAction(Request $request)
+    public function getHotelPricesAction(Request $request)
     {
         $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
         $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
@@ -451,30 +385,37 @@ class OffersController extends Controller
                 ;
         $andX = $qb->expr()->andX();
 
-        if ($request->get('hotel')) {
-            $andX->add($qb->expr()->eq('f.id', $qb->expr()->literal($request->get('hotel'))));
-        }
         if ($from) {
             $andX->add($qb->expr()->andX(
                     $qb->expr()->lte('c.startAt', $qb->expr()->literal($from->format('Y-m-d'))),
-                    $qb->expr()->lte('s.fromDate', $qb->expr()->literal($from->format('Y-m-d')))
+                    $qb->expr()->lte('s.fromDate', $qb->expr()->literal($from->format('Y-m-d'))),
+                    $qb->expr()->gte('s.toDate', $qb->expr()->literal($from->format('Y-m-d')))
                     ));
         }
         if ($to) {
             $andX->add($qb->expr()->andX(
                     $qb->expr()->gte('c.endAt', $qb->expr()->literal($to->format('Y-m-d'))),
-                    $qb->expr()->gte('s.toDate', $qb->expr()->literal($to->format('Y-m-d')))
+                    $qb->expr()->gte('s.toDate', $qb->expr()->literal($to->format('Y-m-d'))),
+                    $qb->expr()->lte('s.fromDate', $qb->expr()->literal($to->format('Y-m-d')))
                     ));
         }
 
-        $andX->add($qb->expr()->eq('p.cupo', $qb->expr()->literal($request->get('pax'))));
+        if ($request->get('pax')) {
+            $andX->add($qb->expr()->eq('p.cupo', $qb->expr()->literal($request->get('pax'))));
+        }
+        
+        if ($request->get('plan')) {
+            $andX->add($qb->expr()->eq('p.plan', $qb->expr()->literal($request->get('plan'))));
+        }
 
-        $qb->where($andX);
+        if ($andX->count() > 0) {
+            $qb->where($andX);
+        }
 
         return $this->render('Offers/prices_results.html.twig', array(
             'query' => $qb->getQuery(),
-            'quantity' => $request->get('quantity'),
-            'nights' => $to->diff($from, true)->days
+            'quantity' => $request->get('quantity', 0),
+            'nights' => $from && $to ? $to->diff($from, true)->days : 0
         ));
     }
 

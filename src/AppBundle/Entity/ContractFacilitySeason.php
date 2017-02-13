@@ -60,6 +60,11 @@ class ContractFacilitySeason
      */
     private $updatedAt;
 
+    public function __toString()
+    {
+        return sprintf('%s - %s', $this->fromDate ? $this->fromDate->format('d/m/Y') : '', $this->toDate ? $this->toDate->format('d/m/Y') : '');
+    }
+    
     /**
      * Get id
      *

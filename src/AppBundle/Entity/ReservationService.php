@@ -96,9 +96,9 @@ class ReservationService
     private $hostingPlan;
     
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="pax", type="integer", nullable=true)
+     * @ORM\Column(name="pax", type="string", length=25, nullable=true)
      */
     private $pax;
 
@@ -315,30 +315,6 @@ class ReservationService
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set pax
-     *
-     * @param integer $pax
-     *
-     * @return ReservationService
-     */
-    public function setPax($pax)
-    {
-        $this->pax = $pax;
-
-        return $this;
-    }
-
-    /**
-     * Get pax
-     *
-     * @return integer
-     */
-    public function getPax()
-    {
-        return $this->pax;
     }
 
     /**
@@ -975,5 +951,29 @@ class ReservationService
     public function getTransportCar()
     {
         return $this->transportCar;
+    }
+
+    /**
+     * Set pax
+     *
+     * @param string $pax
+     *
+     * @return ReservationService
+     */
+    public function setPax($pax)
+    {
+        $this->pax = $pax;
+
+        return $this;
+    }
+
+    /**
+     * Get pax
+     *
+     * @return string
+     */
+    public function getPax()
+    {
+        return $this->pax;
     }
 }

@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
-App.Bookings.Form = function() {
++(App.Bookings.Form = function($) {
     var initCollections = function() {
         var updateNights = function($item, trigger) {
             var $nights = $item.find('input[name$="[nights]"]'),
@@ -246,6 +246,82 @@ App.Bookings.Form = function() {
         });
     }
 
+    var initSearchBox = function() {
+        var $searchBox = $('#searchServiceModal');
+
+        var initHotelControls = function() {
+            var $tab = $searchBox.find('#tab-hotel');
+
+            var updateResults = function() {
+                var $dv = $tab.find('.table-responsive'),
+                    data = {
+                        'from': $tab.find('input:text.datepicker:first').val(),
+                        'to': $tab.find('input:text.datepicker:last').val(),
+                        'pax': $tab.find('select[name$="[pax]"]').val(),
+                        'plan': $tab.find('select[name$="[plan]"]').val(),
+                        'quantity': $tab.find('select[name$="[quantity]"]').val()
+                    };
+                $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_gethotelprices', {'model': 'hotel'}), data, function() {
+                    $dv.find('table').DataTable();
+                });
+            }
+
+            $tab.find('.row-datepickers').each(function() {
+                var $row = $(this);
+
+                var dps = $row.find('input.datepicker'), options = {
+                    format: 'DD/MM/YYYY',
+                    showClear: true,
+                    showTodayButton: true
+                };
+
+                $(dps[0]).parent().datetimepicker(options);
+                $(dps[1]).parent().datetimepicker($.extend({}, options, {
+                    useCurrent: false
+                }));
+                $(dps[0]).parent().on('dp.change', function(e) {
+                    $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
+                    updateResults();
+                });
+                $(dps[1]).parent().on("dp.change", function(e) {
+                    $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
+                    updateResults();
+                });
+            });
+            $tab.find('select').on('change', function() {
+                updateResults();
+            });
+
+            $tab.on('click', 'button.btn-select-service', function() {
+                var data = eval($(this).data('service'));
+
+                $searchBox.modal('hide');
+
+                var $item = $searchBox.data('item'),
+                    gControl = function(fname) {
+                        return $item.find('[name$="[' + fname + ']"]');
+                    };
+
+                gControl('model').val('hotel').trigger('change');
+                gControl('startAt').val($tab.find('input.datepicker:first').val() + ' 08:00');
+                gControl('endAt').val($tab.find('input.datepicker:last').val() + ' 08:00');
+
+                gControl('name').val(data.serviceName);
+                gControl('facilityName').val(data.hotel);
+                gControl('nights').val(data.nights);
+                gControl('supplier').val(data.supplier.id).trigger('change.select2');
+                gControl('pax').val(data.pax);
+                gControl('supplierNotes').val(data.plan);
+                gControl('cost').val(data.cost);
+                gControl('totalPrice').val(data.totalPrice);
+            });
+
+            updateResults();
+        }
+
+        initHotelControls();
+    }
+
     var init = function() {
         $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
             var value = $(this).val();
@@ -291,7 +367,7 @@ App.Bookings.Form = function() {
             $('#searchServiceModal').data('item', $item).modal({
                 backdrop: 'static'
             });
-            $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'));
+            $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
         });
 
         $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
@@ -417,4 +493,4 @@ App.Bookings.Form = function() {
             initValidation();
         }
     }
-}();
+}(jQuery));

@@ -1,8 +1,11 @@
 <table class="table table-condensed table-striped table-bordered">
     <thead>
         <tr>
+            <th>{{ 'Hotel'|trans }}</th>
             <th>{{ 'Room'|trans }}</th>
+            <th>{{ 'Seasson'|trans }}</th>
             <th>{{ 'Plan'|trans }}</th>
+            <th>{{ 'Pax'|trans }}</th>
             <th>{{ 'Price'|trans }}</th>
             <th>{{ 'Total'|trans }}</th>
             <th width="40" data-sortable="false">&nbsp;</th>
@@ -10,13 +13,29 @@
     </thead>
     <tbody>
         {% for price in query.result %}
+            {%- set data = {
+hotel: price.season.facility.name,
+serviceName: '%nights% nights(s) in %q% x %room%(s) at %hotel%'|trans({'%nights%': nights, '%q%': quantity, '%room%': price.room, '%hotel%': price.season.facility}),
+nights: nights,
+supplier: {
+    id: price.contract.supplier.id,
+    name: price.contract.supplier.name
+},
+pax: price.cupo,
+plan: 'Meal plan: %plan%'|trans({'%plan%': price.plan}),
+cost: '%0.2f'|format(price.value),
+totalPrice: '%0.2f'|format(price.value * quantity * nights)
+        } -%}
             <tr>
-                <td>{{ '%room% in %hotel% (%supplier%)'|trans({'%room%': price.room, '%hotel%': price.season.facility, '%supplier%': price.contract.supplier}) }}</td>
+                <td>{{ price.season.facility }} ({{ price.contract.supplier }})</td>
+                <td>{{ price.room }}</td>
+                <td>{{ price.season }}</td>
                 <td>{{ price.plan }}</td>
+                <td>{{ price.cupo }}</td>
                 <td class="text-right">{{ '%0.2f'|format(price.value) }}</td>
                 <td class="text-right">{{ '%0.2f'|format(price.value * quantity * nights) }}</td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-success btn-xs btn-select-price" title="{{ 'Select service'|trans }}" data-service-name="{{ '%room%x%quantity% in %hotel% for %nights% nigths'|trans({'%room%': price.room, '%hotel%': price.season.facility, '%nights%': nights, '%quantity%': quantity}) }}" data-supplier-charge="{{ '%0.2f'|format(price.value * quantity * nights) }}" data-service-supplier="{{ price.contract.supplier.id }}" data-facility-name="{{ price.season.facility }}" data-client-description="{% trans with {'%nights%': nights, '%quantity%': quantity, '%room%': price.room, '%hotel%': price.season.facility} %}%%nights%% nights in %%quantity%% %%room%% of %%hotel%%{% endtrans %}"><i class="fa fa-check"></i></button>
+                    <button type="button" class="btn btn-success btn-xs btn-select-service" title="{{ 'Select service'|trans }}" data-service="{{ data|json_encode|e }}"><i class="fa fa-check"></i></button>
                 </td>
             </tr>
         {% endfor %}

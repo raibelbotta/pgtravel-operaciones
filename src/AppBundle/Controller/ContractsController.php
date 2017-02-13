@@ -327,7 +327,7 @@ class ContractsController extends Controller
     }
     
     /**
-     * @Route("/set-price")
+     * @Route("/set-price", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return JsonResponse

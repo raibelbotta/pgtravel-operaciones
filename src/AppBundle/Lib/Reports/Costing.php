@@ -108,7 +108,7 @@ class Costing extends Report
             $this->pdf->MultiCell(25, $h, 'CUC', 1, 'C', false, 0);
             $this->pdf->MultiCell(0, $h, $service->getInternalNotes(), 1, 'J', false, 1);
 
-            $totalSuppliers += $service->getSupplierPrice();
+            $totalSuppliers += $service->getTotalPrice();
         }
 
         $this->pdf->Cell(165, 0, '', 0, 0);
@@ -120,7 +120,7 @@ class Costing extends Report
 
         $h = $this->getRowHeight(array(
             array(100, ''),
-            array(20, '# OF NIGHTS'),
+            array(20, 'MULTIPLIER'),
             array(20, '# OF PAX'),
             array(20, 'COST'),
             array(20, 'TOTAL'),
@@ -128,7 +128,7 @@ class Costing extends Report
             array(0, 'NOTES')
         ));
         $this->pdf->MultiCell(105, $h, 'ITEM', 1, 'C', false, 0);
-        $this->pdf->MultiCell(20, $h, '# OF NIGHTS', 1, 'C', false, 0);
+        $this->pdf->MultiCell(20, $h, 'MULTIPLIER', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, '# OF PAX', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, 'COST', 1, 'C', false, 0);
         $this->pdf->MultiCell(20, $h, 'TOTAL', 1, 'C', false, 0);
@@ -140,8 +140,8 @@ class Costing extends Report
         $sumCharges = 0;
         foreach ($this->offer->getAdministrativeCharges() as $charge) {
             $this->pdf->Cell(105, 0, $charge->getName(), 1, 0);
-            $this->pdf->Cell(20, 0, $charge->getNights(), 1, 0);
-            $this->pdf->Cell(20, 0, $charge->getPax(), 1, 0);
+            $this->pdf->Cell(20, 0, $charge->getMultiplier(), 1, 0, 'R');
+            $this->pdf->Cell(20, 0, $charge->getPax(), 1, 0, 'R');
             $this->pdf->Cell(20, 0, $charge->getPrice(), 1, 0, 'R');
             $this->pdf->Cell(20, 0, $charge->getTotal(), 1, 1, 'R');
 

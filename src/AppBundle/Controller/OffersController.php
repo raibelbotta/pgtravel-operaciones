@@ -420,12 +420,12 @@ class OffersController extends Controller
     }
 
     /**
-     * @Route("/get-service-prices")
+     * @Route("/get-service-prices", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return Response
      */
-    public function getServicePricesAction(Request $request)
+    public function getGeneralServicePricesAction(Request $request)
     {
         $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
         $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
@@ -439,13 +439,19 @@ class OffersController extends Controller
 
         if ($from) {
             $andX->add($qb->expr()->orX(
-                    $qb->expr()->lte('ts.startAt', $qb->expr()->literal($from->format('Y-m-d'))),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('ts.startAt'),
+                            $qb->expr()->lte('ts.startAt', $qb->expr()->literal($from->format('Y-m-d')))
+                            ),
                     $qb->expr()->isNull('ts.startAt')
                     ));
         }
         if ($to) {
             $andX->add($qb->expr()->orX(
-                    $qb->expr()->gte('ts.endAt', $qb->expr()->literal($to->format('Y-m-d'))),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('ts.endAt'),
+                            $qb->expr()->gte('ts.endAt', $qb->expr()->literal($to->format('Y-m-d')))
+                            ),
                     $qb->expr()->isNull('ts.endAt')
                     ));
         }

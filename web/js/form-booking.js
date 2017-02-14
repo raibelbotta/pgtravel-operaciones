@@ -313,13 +313,89 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 gControl('pax').val(data.pax);
                 gControl('supplierNotes').val(data.plan);
                 gControl('cost').val(data.cost);
-                gControl('totalPrice').val(data.totalPrice);
+                gControl('totalPrice').val(data.totalPrice).trigger('change');
+            });
+
+            $searchBox.find('a[role=tab][aria-controls=tab-hotel]').on('shown.bs.tab', function() {
+                updateResults();
             });
 
             updateResults();
         }
 
+        var initGeneralControls = function() {
+            $searchBox.find('.tab-content .tab-pane:not(#tab-hotel)').each(function() {
+                var $tab = $(this),
+                    model = $tab.attr('id').replace(/^tab\-/, ''),
+                    updateResults = function() {
+                        var data = {
+                            'model': model,
+                            'from': $tab.find('input.datepicker:first').val(),
+                            'to': $tab.find('input.datepicker:last').val(),
+                            'quantity': $tab.find('select[name=quantity]').val()
+                        }
+
+                        $tab.find('.table-responsive.results').empty().text(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getgeneralserviceprices'), data, function() {
+                            $tab.find('.table-responsive.results table').DataTable({});
+                        });
+                    }
+
+                $tab.find('.row-datepickers').each(function() {
+                    var $row = $(this);
+
+                    var dps = $row.find('input.datepicker'), options = {
+                        format: 'DD/MM/YYYY HH:mm',
+                        showClear: true,
+                        showTodayButton: true
+                    };
+
+                    $(dps[0]).parent().datetimepicker(options);
+                    $(dps[1]).parent().datetimepicker($.extend({}, options, {
+                        useCurrent: false
+                    }));
+                    $(dps[0]).parent().on('dp.change', function(e) {
+                        $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
+                        updateResults();
+                    });
+                    $(dps[1]).parent().on("dp.change", function(e) {
+                        $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
+                        updateResults();
+                    });
+                });
+
+                $tab.find('select').on('change', function() {
+                    updateResults();
+                });
+
+                $tab.on('click', 'button.btn-select-service', function() {
+                    var data = eval($(this).data('service'));
+
+                    $searchBox.modal('hide');
+
+                    var $item = $searchBox.data('item'),
+                        gControl = function(fname) {
+                            return $item.find('[name$="[' + fname + ']"]');
+                        };
+
+                    gControl('model').val(model).trigger('change');
+                    gControl('startAt').val($tab.find('input.datepicker:first').val());
+                    gControl('endAt').val($tab.find('input.datepicker:last').val());
+
+                    gControl('name').val(data.serviceName);
+                    gControl('supplier').val(data.supplier.id).trigger('change.select2');
+                    gControl('pax').val(data.pax);
+                    gControl('cost').val(data.cost);
+                    gControl('totalPrice').val(data.totalPrice).trigger('change');
+                });
+
+                $searchBox.find('a[role=tab][aria-controls=tab-' + model + ']').on('show.bs.tab', function() {
+                    updateResults();
+                });
+            });
+        }
+
         initHotelControls();
+        initGeneralControls();
     }
 
     var init = function() {

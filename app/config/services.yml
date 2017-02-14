@@ -29,7 +29,7 @@ parameters:
             name: transport
             display: Transport
             voucher_title: TRANSPORT VOUCHER
-            html_options: '-nights -facility places -rent-cars'
+            html_options: '-nights -facility places -rent-cars -pax'
         car-rental:
             name: car-rental
             display: Car rental

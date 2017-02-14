@@ -59,27 +59,41 @@
                 </div>
             </div>
         </div>
-        {% for model in models if model.name != 'hotel' %}
+        {% for model in models if model.name not in ['hotel'] %}
             <div class="tab-pane" role="tabpanel" id="tab-{{ model.name }}" style="padding: 16px;">
-                <div class="row">
-                    <div class="col-sm-6 form-group">
-                        <label for="" class="control-label">{{ 'From'|trans }}</label>
-                        <input type="text" name="" id="" class="form-control input-sm datepicker">
+                <form action="" role="form" id="filter-{{ model.name }}">
+                    <div class="row row-datepickers">
+                        <div class="col-sm-5 form-group">
+                            <label class="control-label">{{ 'From'|trans }}</label>
+                            <div class="input-group date">
+                                <input type="text" class="form-control input-sm datepicker">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 form-group">
+                            <label class="control-label">{{ 'To'|trans }}</label>
+                            <div class="input-group date">
+                                <input type="text" class="form-control input-sm datepicker">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label class="control-label">{{ 'Quantity'|trans }}</label>
+                            <select class="form-control input-sm" name="quantity">
+                                {% for i in 1..10 %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-6 form-group">
-                        <label for="" class="control-label">{{ 'To'|trans }}To</label>
-                        <input type="text" name="" id="" class="form-control input-sm datepicker">
+                    <div class="row">
+                        <div class="table-responsive results"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Quantity'|trans }}</label>
-                        <input type="number" class="form-control quantity" value="1">
-                    </div>
-                </div>
-                <div class="row" style="display: none;">
-                    <div class="table-responsive"></div>
-                </div>
+                </form>
             </div>
         {% endfor %}
     </div>

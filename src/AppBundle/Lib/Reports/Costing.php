@@ -30,18 +30,18 @@ class Costing extends Report
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        
+
         $resolver
                 ->setDefault('orientation', 'L')
                 ->setRequired('record')
                 ->setAllowedTypes('record', 'AppBundle\\Entity\\Reservation')
                 ;
     }
-    
+
     public function getContent()
     {
         $this->pdf->AddPage();
-        
+
         $this->renderHeader();
         $this->renderBody();
         $this->renderFooter();
@@ -94,7 +94,7 @@ class Costing extends Report
                 array(20, $service->getSupplierReference()),
                 array(20, $service->getNights()),
                 array(20, $service->getPax()),
-                array(20, sprintf('%0.2f', $service->getSupplierPrice())),
+                array(20, sprintf('%0.2f', $service->getTotalPrice())),
                 array(25, 'CUC'),
                 array(0, $service->getInternalNotes())
             ));
@@ -104,7 +104,7 @@ class Costing extends Report
             $this->pdf->MultiCell(20, $h, $service->getSupplierReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getNights(), 1, 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $service->getPax(), 1, 'C', false, 0);
-            $this->pdf->MultiCell(20, $h, sprintf('%0.2f', $service->getSupplierPrice()), 1, 'R', false, 0);
+            $this->pdf->MultiCell(20, $h, sprintf('%0.2f', $service->getTotalPrice()), 1, 'R', false, 0);
             $this->pdf->MultiCell(25, $h, 'CUC', 1, 'C', false, 0);
             $this->pdf->MultiCell(0, $h, $service->getInternalNotes(), 1, 'J', false, 1);
 
@@ -156,9 +156,9 @@ class Costing extends Report
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(165, 0, preg_match('/^\d+\%$/', $this->offer->getPercentApplied()) ? 'Percent applied' : 'Plus added', 1, 0, 'L');
         $this->pdf->Cell(20, 0, $this->offer->getPercentApplied(), 1, 1, 'R');
-        
+
         $this->pdf->Ln(5);
-        
+
         $this->pdf->Cell(165, 0, 'Total client charge', 1, 0, 'L');
         $this->pdf->Cell(20, 0, sprintf('%0.2f', $this->offer->getClientCharge()), 1, 1, 'R');
     }

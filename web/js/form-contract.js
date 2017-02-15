@@ -207,47 +207,64 @@ App.Contracts.Form = function(){
 
             $('.btn-remove').on('click', clickRemoveItem);
             $('body').on('click', '.btn-create-rest-seasons', function() {
-                $.blockUI({
-                    message: Translator.trans('Calculating new seasons dates...')
-                });
-
                 var $btnAddItem = $(this).parent().find('button.btn-add-item'),
                     $collection = $(this).closest(':has(.collection)').find('.collection:first'),
                     laps = [];
                 $collection.find('.item').each(function() {
                     var $item = $(this);
                     laps.push({
-                        'from': $item.find('input:text:first').val(),
-                        'to': $item.find('input:text:last').val()
+                        'from': moment($item.find('input:text:first').val(), 'DD/MM/YYYY', true),
+                        'to': moment($item.find('input:text:last').val(), 'DD/MM/YYYY', true)
                     });
                 });
 
-                $.ajax(Routing.generate('app_contracts_getseassons'), {
-                    'data': {
-                        'laps': laps,
-                        'startAt': $('#contract_form_startAt').val(),
-                        'endAt': $('#contract_form_endAt').val()
-                    },
-                    'dataType': 'json',
-                    'method': 'POST',
-                    'success': function(json) {
-                        for (var i = 0; i < json.laps.length; i++) {
-                            $btnAddItem.trigger('click');
+                var newLaps = [],
+                    startAt = moment($('#contract_form_startAt').val(), 'DD/MM/YYYY', true),
+                    endAt = moment($('#contract_form_endAt').val(), 'DD/MM/YYYY', true),
+                    startedLap = null,
+                    found;
+                while (startAt.isBefore(endAt, 'day')) {
+                    found = false;
+                    $.each(laps, function(i) {
+                        if (startAt.isSameOrAfter(laps[i].from, 'day') && startAt.isSameOrBefore(laps[i].to, 'day')) {
+                            if (null !== startedLap) {
+                                newLaps.push({
+                                    from: startedLap.clone(),
+                                    to: startAt.clone().subtract(1, 'days')
+                                });
+                                startedLap = null;
+                            }
+                            startAt = laps[i].to.clone();
+                            startAt.add(1, 'days');
+                            found = true;
+                            return false;
                         }
-                        $items = $collection.find('.item');
-                        for (var i = $items.length - json.laps.length; i < $items.length; i++) {
-                            var $item = $($items[i]);
-                            $item.find('input:text:first').val(json.laps[i - ($items.length - json.laps.length)].from);
-                            $item.find('input:text:last').val(json.laps[i - ($items.length - json.laps.length)].to);
+                    });
+                    if (!found) {
+                        if (null === startedLap) {
+                            startedLap = startAt.clone();
                         }
-
-                        $.unblockUI();
-                    },
-                    'error': function() {
-                        alert(Translator.trans('Error calculating dates...'));
-                        $.unblockUI();
+                        startAt.add(1, 'days');
                     }
-                });
+                }
+                if (null !== startedLap) {
+                    newLaps.push({
+                        from: startedLap.clone(),
+                        to: startAt.clone()
+                    });
+                }
+
+                if (newLaps.length > 0) {
+                    for (var i = 0; i < newLaps.length; i++) {
+                        $btnAddItem.trigger('click');
+                    }
+                    $items = $collection.find('.item');
+                    for (var i = $items.length - newLaps.length; i < $items.length; i++) {
+                        var $item = $($items[i]);
+                        $item.find('input:text:first').val(newLaps[i - ($items.length - newLaps.length)].from.format('DD/MM/YYYY'));
+                        $item.find('input:text:last').val(newLaps[i - ($items.length - newLaps.length)].to.format('DD/MM/YYYY'));
+                    }
+                }
             });
 
             updateContainerIndexes();

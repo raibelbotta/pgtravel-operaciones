@@ -272,61 +272,6 @@ class ContractsController extends Controller
     }
 
     /**
-     * @Route("/get-seassons", options={"expose": true})
-     * @Method("post")
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getSeassonsAction(Request $request)
-    {
-        $laps = array_map(function($lap) {
-            return new \DatePeriod(
-                    date_create_from_format('d/m/Y', $lap['from']),
-                    new \DateInterval('P1D'),
-                    date_create_from_format('d/m/Y', $lap['to'])
-                    );
-        }, $request->get('laps', array()));
-        
-        $newLaps = array();
-        $startAt = date_create_from_format('d/m/Y', $request->get('startAt'));
-        $endAt = date_create_from_format('d/m/Y', $request->get('endAt'));
-        
-        $startedLap = null;
-        while ($startAt < $endAt) {
-            $found = false;
-            foreach ($laps as $lap) {
-                if ($startAt >= $lap->getStartDate() && $startAt <= $lap->getEndDate()) {
-                    if (null !== $startedLap) {
-                        $newLaps[] = new \DatePeriod(new \DateTime($startedLap), new \DateInterval('P1D'), $startAt->sub(new \DateInterval('P1D')));
-                        $startedLap = null;
-                    }
-                    $startAt = new \DateTime($lap->getEndDate()->format('Y-m-d'));
-                    $startAt->add(new \DateInterval('P1D'));
-                    $found = true;
-                }
-            }
-            if (!$found) {
-                if (null === $startedLap) {
-                    $startedLap = $startAt->format('Y-m-d');
-                }
-                $startAt->add(new \DateInterval('P1D'));
-            }
-        }
-        if (null !== $startedLap) {
-            $newLaps[] = new \DatePeriod(new \DateTime($startedLap), new \DateInterval('P1D'), $startAt->sub(new \DateInterval('P1D')));
-        }
-        
-        return new JsonResponse(array(
-            'laps' => array_map(function($lap) {
-                return array(
-                    'from' => $lap->getStartDate()->format('d/m/Y'),
-                    'to' => $lap->getEndDate()->format('d/m/Y')
-                );
-            }, $newLaps)
-        ));
-    }
-    
-    /**
      * @Route("/set-price", options={"expose": true})
      * @Method({"post"})
      * @param Request $request

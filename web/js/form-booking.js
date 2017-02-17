@@ -633,6 +633,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     $item = $searchBox.data('item');
 
                 utils.translateResults($item, {
+                    'model': 'private-house',
                     'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
                     'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
                     'name': data.service,

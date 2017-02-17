@@ -108,7 +108,7 @@ class Costing extends Report
             $this->pdf->MultiCell(25, $h, 'CUC', 1, 'C', false, 0);
             $this->pdf->MultiCell(0, $h, $service->getInternalNotes(), 1, 'J', false, 1);
 
-            $totalSuppliers += $service->getSupplierPrice();
+            $totalSuppliers += $service->getTotalPrice();
         }
 
         $this->pdf->Cell(165, 0, '', 0, 0);

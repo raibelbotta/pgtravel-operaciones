@@ -2,6 +2,7 @@ App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 +(App.Bookings.Form = function($) {
+    "use strcit";
     var init = function() {
             $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
             var value = $(this).val();
@@ -422,7 +423,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         });
 
         var utils = {
-            initDatepickers: function($date0, $date1, changeCallback) {
+            initDatepickers: function($date0, $date1, callback) {
                 var options = {
                     format: 'DD/MM/YYYY',
                     showClear: true,
@@ -435,11 +436,11 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 }));
                 $date0.on('dp.change', function(e) {
                     $date1.data("DateTimePicker").minDate(e.date);
-                    changeCallback();
+                    callback();
                 });
                 $date1.on("dp.change", function(e) {
                     $date0.data("DateTimePicker").maxDate(e.date);
-                    changeCallback();
+                    callback();
                 });
             },
             translateResults: function($item, values) {
@@ -698,8 +699,83 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             });
         }
 
+        var initTransportControls = function() {
+            var $tab = $searchBox.find('#tab-transport'),
+                initTable = function() {
+                    $tab.find('.table-results').dataTable({
+                        serverSide: true,
+                        aoColumns: [
+                            {name: 'service', 'title': Translator.trans('Service')},
+                            {name: 'supplier', 'title': Translator.trans('Supplier')},
+                            {name: 'price', 'title': Translator.trans('Price')},
+                            {name: 'total', 'title': Translator.trans('Total')},
+                            {'sortable': false, searchable: false, width: '40px'}
+                        ],
+                        ajax: {
+                            url: Routing.generate('app_offers_gettransportprices'),
+                            method: 'POST',
+                            data: function(baseData) {
+                                console.log($tab.find('input:checkbox').prop('checked'));
+                                return $.extend({}, baseData, {
+                                    filter: {
+                                        'from': $tab.find('input:text.datepicker:first').val(),
+                                        'to': $tab.find('input:text.datepicker:last').val(),
+                                        'quantity': $tab.find('select[name="quantity"]').val(),
+                                        'addhalfday': $tab.find('input:checkbox').prop('checked') == true ? 1 : 0
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+                updateResults = function() {
+                    if ($tab.find('.table-results tbody').length > 0) {
+                        $tab.find('table.table-results').dataTable().api().draw();
+                    } else {
+                        initTable();
+                    }
+                }
+
+            $tab.find('form input:checkbox').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            });
+            $tab.find('form input:checkbox').on('ifChanged', function() {
+                updateResults();
+            });
+
+            utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
+
+            $tab.find('form#filter-transport').find('input:not(.datepicker), select').on('change', function() {
+                updateResults();
+            });
+
+            $searchBox.find('a[role=tab][aria-controls=tab-transport]').on('shown.bs.tab', function() {
+                updateResults();
+            });
+
+            $tab.on('click', 'button.btn-select-service', function() {
+                var data = $(this).data('service'),
+                    $item = $searchBox.data('item');
+
+                utils.translateResults($item, {
+                    'model': 'transport',
+                    'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
+                    'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
+                    'name': data.name,
+                    'supplier': data.supplier.id,
+                    'cost': data.cost,
+                    'totalPrice': data.totalPrice
+                });
+
+                $item.find('[name$="[supplier]"]').trigger('change.select2');
+                $item.find('[name$="[totalPrice]"]').trigger('change');
+
+                $searchBox.modal('hide');
+            });
+        }
+
         var initGeneralControls = function() {
-            $searchBox.find('.tab-content .tab-pane:not(#tab-hotel, #tab-private-house, #tab-car-rental)').each(function() {
+            $searchBox.find('.tab-content .tab-pane:not(#tab-hotel, #tab-private-house, #tab-car-rental, #tab-transport)').each(function() {
                 var $tab = $(this),
                     model = $tab.attr('id').replace(/^tab\-/, ''),
                     updateResults = function() {
@@ -745,22 +821,13 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $searchBox.find('a[role=tab][aria-controls=tab-' + model + ']').on('show.bs.tab', function() {
                     updateResults();
                 });
-
-                if ($tab.find('form input:checkbox').length > 0) {
-                    $tab.find('form input:checkbox').iCheck({
-                        checkboxClass: 'icheckbox_flat-green',
-                        radioClass: 'iradio_flat-green'
-                    });
-                    $tab.find('form input:checkbox').on('ifClicked', function() {
-                        updateResults();
-                    })
-                }
             });
         }
 
         initHotelControls();
         initPrivateHouseControls();
         initCarRentalControls();
+        initTransportControls();
         initGeneralControls();
     }
 

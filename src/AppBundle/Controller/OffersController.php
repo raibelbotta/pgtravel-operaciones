@@ -593,6 +593,93 @@ class OffersController extends Controller
     }
 
     /**
+     * @Route("/get-transport-prices", options={"expose": true})
+     * @Method({"post"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getTransportPricesAction(Request $request)
+    {
+        $columns = $request->get('columns');
+        $filter = $request->get('filter', array());
+        $order = $request->get('order', array());
+        $search = $request->get('search', array());
+
+        $from = isset($filter['from']) && $filter['from'] ? \DateTime::createFromFormat('d/m/Y H:i:s', $filter['from'] . ' 00:00:00') : null;
+        $to = isset($filter['to']) && $filter['to'] ? \DateTime::createFromFormat('d/m/Y H:i:s', $filter['to'] . ' 00:00:00') : null;
+
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:ContractTopService')
+                ->createQueryBuilder('s')
+                ->join('s.contract', 'c')
+                ;
+
+        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('transport')));
+
+        if ($from) {
+
+        }
+        if ($to) {
+
+        }
+
+        if ($andX->count() > 0) {
+            $qb->where($andX);
+        }
+
+        if ($order) {
+            $column = call_user_func(function($name) {
+                if ($name == 'service') {
+                    return 's.name';
+                }
+                return null;
+            }, $columns[$order[0]['column']]['name']);
+            if (null !== $column) {
+                $qb->orderBy($column, strtoupper($order[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
+
+        $list = $pagination->getItems();
+        $total = $pagination->getTotalItemCount();
+
+        $twig = $this->container->get('twig');
+        $data = array_map(function(\AppBundle\Entity\ContractTopService $service)  use ($filter, $from, $to, $twig) {
+            if ($from && $to) {
+                $days = $to->diff($from)->days + 1;
+                if (isset($filter['addhalfday']) && $filter['addhalfday']) {
+                    $days += 0.5;
+                }
+            } else {
+                $days = 0;
+            }
+
+            $qty = isset($filter['quantity']) && $filter['quantity'] ? $filter['quantity'] : 0;
+            return array(
+                $service->getName(),
+                (string) $service->getContract()->getSupplier(),
+                sprintf('%0.2f', $service->getPrice()),
+                sprintf('%0.2f', $service->getPrice() * $qty * $days),
+                $twig->render('Offers/_transport_prices.html.twig', array(
+                    'record' => $service,
+                    'quantity' => $qty,
+                    'days' => $days
+                ))
+            );
+        }, $list);
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
+        ));
+    }
+
+    /**
      * @Route("/get-service-prices", options={"expose": true})
      * @Method({"post"})
      * @param Request $request

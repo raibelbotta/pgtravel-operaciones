@@ -1,0 +1,12 @@
+{%- set data = {
+    name: record.name,
+    supplier: {
+        id: record.contract.supplier.id,
+        name: record.contract.supplier.name
+    },
+    cost: '%0.2f'|format(record.price),
+    totalPrice: '%0.2f'|format(record.price * quantity * days)
+} -%}
+<div class="text-center">
+    <button type="button" class="btn btn-success btn-xs btn-select-service" title="{{ 'Select service'|trans }}" data-service="{{ data|json_encode|e }}"><i class="fa fa-check"></i></button>
+</div>

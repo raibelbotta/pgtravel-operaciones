@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Users = typeof App.Users !== 'undefined' ? App.Users : {};
-App.Users.Form = function() {
+
++(App.Users.Form = function($) {
     var init = function() {
         App.Forms.initTelephoneControl($('input[type=tel]'));
 
@@ -11,7 +12,7 @@ App.Users.Form = function() {
             rules: {
                 '{{ form.plainPassword.first.vars.full_name }}': 'strongpassword',
                 '{{ form.plainPassword.second.vars.full_name }}': {
-                    equalTo: '#{{ form.plainPassword.first.vars.id }}'
+                    'equalTo': '#{{ form.plainPassword.first.vars.id }}'
                 }
             },
             errorPlacement: function(error, element) {
@@ -37,4 +38,4 @@ App.Users.Form = function() {
             init();
         }
     }
-}();
+}(jQuery));

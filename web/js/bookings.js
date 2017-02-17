@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
-App.Bookings.Index = function() {
++(App.Bookings.Index = function($) {
     var init = function() {
         var $table = $('#datatable-offers');
 
@@ -37,9 +37,9 @@ App.Bookings.Index = function() {
 
             $a.closest('td').text(Translator.trans('Updating...')).closest('tr').addClass('row-removing');
             $.ajax(url, {
-                dataType: 'json',
-                method: 'post',
-                success: function(json) {
+                'dataType': 'json',
+                'method': 'POST',
+                'success': function(json) {
                     $table.dataTable().api().draw(false);
                 }
             });
@@ -117,9 +117,9 @@ App.Bookings.Index = function() {
                 if (isConfirmed) {
                     $a.closest('td').text(Translator.trans('Moving...')).closest('tr').addClass('row-promoting');
                     $.ajax(url, {
-                        dataType: 'json',
-                        method: 'post',
-                        success: function(json) {
+                        'dataType': 'json',
+                        'method': 'POST',
+                        'success': function(json) {
                             $table.find('tr.row-promoting').remove();
                             $table.dataTable().api().draw(false);
                         }
@@ -153,32 +153,32 @@ App.Bookings.Index = function() {
                     'width': '20px'
                 },
                 {
-                    name: "state",
-                    searchable: false,
-                    targets: [1],
-                    title: Translator.trans('State'),
-                    width: '35px'
+                    'name': "state",
+                    'searchable': false,
+                    'targets': [1],
+                    'title': Translator.trans('State'),
+                    'width': '35px'
                 },
                 {
-                    name: 'name',
-                    targets: [2],
-                    title: Translator.trans('Name')
+                    'name': 'name',
+                    'targets': [2],
+                    'title': Translator.trans('Name')
                 },
                 {
-                    name: 'client',
-                    targets: [3],
-                    title: Translator.trans('Client')
+                    'name': 'client',
+                    'targets': [3],
+                    'title': Translator.trans('Client')
                 },
                 {
-                    name: 'startAt',
-                    searchable: false,
-                    targets: [4],
-                    title: Translator.trans('Date')
+                    'name': 'startAt',
+                    'searchable': false,
+                    'targets': [4],
+                    'title': Translator.trans('Date')
                 }
             ],
-            processing: true,
-            serverSide: true,
-            ajax: {
+            'processing': true,
+            'serverSide': true,
+            'ajax': {
                 "method": 'post',
                 "url": Routing.generate('app_offers_getdata'),
                 "data": function(baseData) {
@@ -223,4 +223,4 @@ App.Bookings.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

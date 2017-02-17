@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Notifications = typeof App.Notifications !== 'undefined' ? App.Notifications : {};
 
-App.Notifications.Index = function() {
++(App.Notifications.Index = function($) {
     var init = function() {
         var $table = $('#datatable-x');
 
@@ -63,10 +63,10 @@ App.Notifications.Index = function() {
             $table.dataTable().api().draw(true);
         });
     }
-    
+
     return {
         init: function() {
             init();
         }
     }
-}();
+}(jQuery));

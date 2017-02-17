@@ -56,6 +56,20 @@ class ContractFormType extends AbstractType
                     'by_reference' => false,
                     'label' => 'General services'
                 ))
+                ->add('privateHouseServices', CollectionType::class, array(
+                    'entry_type' => ContractPrivateHouseServiceType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'label' => 'Private house services'
+                ))
+                ->add('carRentalServices', CollectionType::class, array(
+                    'entry_type' => ContractCarRentalServiceType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'label' => 'Services'
+                ))
                 ->add('attachments', CollectionType::class, array(
                     'entry_type' => ContractAttachmentType::class,
                     'allow_add' => true,

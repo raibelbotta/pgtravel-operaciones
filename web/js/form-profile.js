@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Profile = typeof App.Profile !== 'undefined' ? App.Profile : {};
 
-App.Profile.Form = function() {
++(App.Profile.Form = function($) {
     var init = function() {
         App.Forms.initTelephoneControl($('input[type=tel]'));
 
@@ -39,4 +39,4 @@ App.Profile.Form = function() {
             init();
         }
     }
-}();
+}(jQuery));

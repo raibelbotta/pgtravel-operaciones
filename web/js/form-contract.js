@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
-App.Contracts.Form = function(){
+
++(App.Contracts.Form = function($){
     var init = function() {
         +(function($) {
             $('#contract_form_model').on('change', function() {
@@ -18,6 +19,13 @@ App.Contracts.Form = function(){
                         $(this).hide();
                     } else {
                         $(this).show();
+                    }
+                });
+                $('.visible-condition-only').each(function() {
+                    if ($(this).hasClass('visible-condition-only-' + model)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
                     }
                 });
             });
@@ -58,13 +66,13 @@ App.Contracts.Form = function(){
         }(jQuery));
 
         $('#contract').validate({
-            errorPlacement: function(error, element) {
+            'errorPlacement': function(error, element) {
                 if (!element.data('tooltipster-ns')) {
                     element.tooltipster({
-                        trigger: 'custom',
-                        onlyOne: false,
-                        position: 'bottom-left',
-                        positionTracker: true
+                        'trigger': 'custom',
+                        'onlyOne': false,
+                        'position': 'bottom-left',
+                        'positionTracker': true
                     });
                 }
                 element.tooltipster('update', $(error).text());
@@ -72,15 +80,15 @@ App.Contracts.Form = function(){
             },
             rules: {
                 'contract_form[startAt]': {
-                    required: {
-                        depends: function() {
+                    'required': {
+                        'depends': function() {
                             return '' !== $('#contract_form_endAt').val();
                         }
                     }
                 },
                 'contract_form[endAt]': {
-                    required: {
-                        depends: function() {
+                    'required': {
+                        'depends': function() {
                             return '' !== $('#contract_form_startAt').val();
                         }
                     }
@@ -92,6 +100,22 @@ App.Contracts.Form = function(){
         });
 
         +(function() {
+            var initServiceDates = function($item) {
+                $item.find('.date:has(.datepicker):first').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
+                $item.find('.date:has(.datepicker):last').datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    useCurrent: false
+                });
+                $item.find('.date:has(.datepicker):first').on("dp.change", function(event) {
+                    $item.find('.date:has(.datepicker):last').data("DateTimePicker").minDate(event.date);
+                });
+                $item.find('.date:has(.datepicker):last').on("dp.change", function(event) {
+                    $item.find('.date:has(.datepicker):first').data("DateTimePicker").maxDate(event.date);
+                });
+            }
+
             var clickRemoveItem = function(event) {
                 event.preventDefault();
 
@@ -119,46 +143,16 @@ App.Contracts.Form = function(){
                     var $item = $(prototype.replace(/__name__/g, index));
                 }
 
-                 $container.data('index', index + 1);
-                 $container.append($item);
+                $container.data('index', index + 1);
+                $container.append($item);
 
-                 if ($item.find('.collection').length > 0) {
+                if ($item.find('.collection').length > 0) {
                     updateContainerIndexes($item);
-                 }
+                }
 
-                 if ($item.hasClass('item-top-service')) {
-                    var $controls = $item.find('.datetimepicker');
-                    $($controls[0]).datetimepicker({
-                        format: 'DD/MM/YYYY HH:mm'
-                    });
-                    $($controls[1]).datetimepicker({
-                        format: 'DD/MM/YYYY HH:mm',
-                        useCurrent: false
-                    });
-                    $($controls[0]).on("dp.change", function(event) {
-                        $($controls[1]).data("DateTimePicker").minDate(event.date);
-                    });
-                    $($controls[1]).on("dp.change", function(event) {
-                        $($controls[0]).data("DateTimePicker").maxDate(event.date);
-                    });
-                 }
+                initServiceDates($item);
 
-                 if ($item.hasClass('item-facility-season')) {
-                    var $controls = $item.find('.datetimepicker');
-                    $($controls[0]).on('dp.change', function(e) {
-                        $($controls[1]).data('DateTimePicker').minDate(e.date);
-                    }).datetimepicker({
-                        format: 'DD/MM/YYYY'
-                    });
-                    $($controls[1]).on("dp.change", function(event) {
-                        $($controls[0]).data("DateTimePicker").maxDate(event.date);
-                    }).datetimepicker({
-                        format: 'DD/MM/YYYY',
-                        useCurrent: false
-                    });
-                 }
-
-                 $($item.find('input:text:visible, select:visible')[0]).focus();
+                $($item.find('input:text:visible, select:visible')[0]).focus();
             }
 
             var clickCloneItem = function(event) {
@@ -269,37 +263,8 @@ App.Contracts.Form = function(){
 
             updateContainerIndexes();
 
-            $('.item-top-service').each(function() {
-                var $controls = $(this).find('.datetimepicker');
-                $($controls[0]).datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
-                });
-                $($controls[1]).datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm',
-                    useCurrent: false
-                });
-                $($controls[0]).on("dp.change", function(event) {
-                    $($controls[1]).data("DateTimePicker").minDate(event.date);
-                });
-                $($controls[1]).on("dp.change", function(event) {
-                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
-                });
-            });
-            $('.item-facility-season').each(function() {
-                var $controls = $(this).find('.datetimepicker');
-                $($controls[0]).datetimepicker({
-                    format: 'DD/MM/YYYY'
-                });
-                $($controls[1]).datetimepicker({
-                    format: 'DD/MM/YYYY',
-                    useCurrent: false
-                });
-                $($controls[0]).on('dp.change', function(event) {
-                    $($controls[1]).data('DateTimePicker').minDate(event.date);
-                });
-                $($controls[1]).on("dp.change", function(event) {
-                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
-                });
+            $('.item-top-service, .item-facility-season, .item-private-house-service, .item-car-rental-service').each(function() {
+                initServiceDates($(this));
             });
         }());
     }
@@ -309,4 +274,4 @@ App.Contracts.Form = function(){
             init();
         }
     }
-}();
+}(jQuery));

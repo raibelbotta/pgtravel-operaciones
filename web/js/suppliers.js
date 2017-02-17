@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
 
-App.Suppliers.Index = function() {
++(App.Suppliers.Index = function($) {
     var init = function() {
         var $datatable = $('#datatable-suppliers');
 
@@ -27,11 +27,11 @@ App.Suppliers.Index = function() {
                     'sortable': false
                 }
             ],
-            serverSide: true,
-            processing: true,
+            'serverSide': true,
+            'processing': true,
             ajax: {
-                method: 'post',
-                url: Routing.generate('app_suppliers_getdata')
+                'method': 'POST',
+                'url': Routing.generate('app_suppliers_getdata')
             }
         });
 
@@ -43,18 +43,18 @@ App.Suppliers.Index = function() {
                     $a = $(this);
 
                 swal({
-                    title: Translator.trans('Confirm remove'),
-                    text: Translator.trans('The record will be removed. Are you sure you want to continue?'),
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d9534f'
+                    'title': Translator.trans('Confirm remove'),
+                    'text': Translator.trans('The record will be removed. Are you sure you want to continue?'),
+                    'type': 'warning',
+                    'showCancelButton': true,
+                    'confirmButtonColor': '#d9534f'
                 }, function(isConfirmed) {
                     if (isConfirmed) {
                         $a.closest('td').text(Translator.trans('Removing...')).closest('tr').addClass('row-removing');
                         $.ajax(url, {
-                            dataType: 'json',
-                            method: 'post',
-                            success: function(json) {
+                            'dataType': 'json',
+                            'method': 'POST',
+                            'success': function(json) {
                                 $datatable.find('tr.row-removing').remove();
                                 $datatable.dataTable().api().draw(false);
                             }
@@ -70,4 +70,4 @@ App.Suppliers.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

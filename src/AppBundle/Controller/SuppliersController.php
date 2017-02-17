@@ -202,4 +202,32 @@ class SuppliersController extends Controller
             'result' => 'success'
         ));
     }
+    
+    /**
+     * @Route("/get-places", options={"expose": true})
+     * @Method({"get"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPlacesAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:Place')
+                ->createQueryBuilder('p')
+                ->orderBy('p.name');
+
+        if ($request->get('q')) {
+            $qb->where($qb->expr()->like('p.name', $qb->expr()->literal(sprintf('%%%s%%', $request->get('q')))));
+        }
+        
+        return new JsonResponse(array(
+            'data' => array_map(function($record) {
+                return array(
+                    'id' => $record->getId(),
+                    'text' => $record->getName(),
+                    'postalAddress' => $record->getPostalAddress()
+                );
+            }, $qb->getQuery()->getResult())
+        ));
+    }
 }

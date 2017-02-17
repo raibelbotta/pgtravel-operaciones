@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Clients = typeof App.Clients !== 'undefined' ? App.Clients : {};
-App.Clients.Index = function() {
+
++(App.Clients.Index = function($) {
     var init = function() {
         var $datatable = $('#datatable-clients');
 
@@ -21,8 +22,8 @@ App.Clients.Index = function() {
             "processing": true,
             "serverSide": true,
             "ajax": {
-                method: 'post',
-                url: Routing.generate('app_clients_getdata')
+                'method': 'POST',
+                'url': Routing.generate('app_clients_getdata')
             }
         });
 
@@ -65,4 +66,4 @@ App.Clients.Index = function() {
             init();
         }
     };
-}();
+}(jQuery));

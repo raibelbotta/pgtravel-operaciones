@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.ReceivableAccounts = typeof App.ReceivableAccounts !== 'undefined' ? App.ReceivableAccounts : {};
 
-App.ReceivableAccounts.Index = function() {
++(App.ReceivableAccounts.Index = function($) {
     var init = function() {
         var $table = $('#datatable-x');
 
@@ -16,7 +16,7 @@ App.ReceivableAccounts.Index = function() {
             $modal.find('.modal-content').empty().append($('<div class="modal-body"><p>' + Translator.trans('Loading data...') + '</p></div>')).load($(this).attr('href'), function() {
                 $modal.data('process').removeAttr('disabled');
                 $modal.find('form').ajaxForm({
-                    dataType: 'json',
+                    'dataType': 'json',
                     success: function(json) {
                         $modal.modal('hide');
                         $($modal.data('process')).parent().text(Translator.trans('Updating...'));
@@ -51,29 +51,29 @@ App.ReceivableAccounts.Index = function() {
         });
 
         $table.dataTable({
-            order: [[2, 'desc']],
-            aoColumns: [
-                {name: 'client'},
-                {name: 'name'},
-                {name: 'startAt', searchable: false},
-                {name: 'endAt', searchable: false},
-                {name: 'price', searchable: false},
-                {name: 'date'},
-                {name: 'notes'},
+            'order': [[2, 'desc']],
+            'aoColumns': [
+                {'name': 'client'},
+                {'name': 'name'},
+                {'name': 'startAt', searchable: false},
+                {'name': 'endAt', searchable: false},
+                {'name': 'price', searchable: false},
+                {'name': 'date'},
+                {'name': 'notes'},
                 {
                     sortable: false,
                     searchable: false
                 }
             ],
-            serverSide: true,
-            processing: true,
+            'serverSide': true,
+            'processing': true,
             ajax: {
-                method: 'post',
-                url: Routing.generate('app_cxcobrar_getdata'),
-                data: function(params) {
+                'method': 'POST',
+                'url': Routing.generate('app_cxcobrar_getdata'),
+                'data': function(params) {
                     return $.extend({}, params, {
-                        filter: {
-                            state: $('form#filter select[name$="[state]"]').val()
+                        'filter': {
+                            'state': $('form#filter select[name$="[state]"]').val()
                         }
                     });
                 }
@@ -90,4 +90,4 @@ App.ReceivableAccounts.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

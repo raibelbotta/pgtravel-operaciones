@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.PayableAccounts = typeof App.PayableAccounts !== 'undefined' ? App.PayableAccounts : {};
 
-App.PayableAccounts.Index = function() {
++(App.PayableAccounts.Index = function($) {
     var init = function() {
         var $table = $('#datatable-x');
 
@@ -106,4 +106,4 @@ App.PayableAccounts.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Places = typeof App.Places !== 'undefined' ? App.Places : {};
 
-App.Places.Form = function($) {
++(App.Places.Form = function($) {
     var initValidator = function() {
         $('form#place').validate({
             errorPlacement: function(error, element) {
@@ -27,4 +27,4 @@ App.Places.Form = function($) {
             initValidator();
         }
     }
-}(jQuery);
+}(jQuery));

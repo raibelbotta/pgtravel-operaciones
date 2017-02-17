@@ -146,7 +146,7 @@ class ContractsController extends Controller
 
             return $this->redirect($this->generateUrl('app_contracts_index'));
         }
-        
+
         return $this->render('Contracts/new.html.twig', array(
             'form' => $form->createView()
         ));
@@ -221,7 +221,7 @@ class ContractsController extends Controller
 
             return $this->redirect($this->generateUrl('app_contracts_index'));
         }
-        
+
         return $this->render('Contracts/edit.html.twig', array(
             'form' => $form->createView()
         ));

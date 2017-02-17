@@ -2,6 +2,170 @@ App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 +(App.Bookings.Form = function($) {
+    var init = function() {
+            $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
+            var value = $(this).val();
+            if (value === 'direct') {
+                $('.block-clienttype.block-clienttype-direct').show();
+                $('.block-clienttype:not(.block-clienttype-direct)').find('input:text, select').each(function() {
+                    if ($(this).data('tooltipster-ns')) {
+                        $(this).tooltipster('hide');
+                    }
+                });
+                $('.block-clienttype:not(.block-clienttype-direct)').hide();
+            } else if (value === 'registered') {
+                $('.block-clienttype.block-clienttype-registered').show();
+                $('.block-clienttype:not(.block-clienttype-registered)').find('input:text, select').each(function() {
+                    if ($(this).data('tooltipster-ns')) {
+                        $(this).tooltipster('hide');
+                    }
+                });
+                $('.block-clienttype:not(.block-clienttype-registered)').hide();
+            }
+        });
+
+        $('#offer_form_client').select2({
+            width: '100%'
+        });
+
+        $('#offer_form_client').on('change', function() {
+            $('#offer_form_notificationContact').empty();
+            var id = $(this).val();
+            $.getJSON(Routing.generate('app_offers_getclientcontacts') + '?client=' + id, function(json) {
+                $('#offer_form_notificationContact').append($('<option value=""></option>'));
+                $.each(json.elements, function(i, e) {
+                    $('#offer_form_notificationContact').append($('<option value="' + e.id + '">' + e.text + '</option>'));
+                });
+            });
+        });
+
+        App.Forms.initTelephoneControl($('#offer_form_directClientMobilePhone'));
+
+        $('body').on('click', '.btn-search-service', function() {
+            var $item = $(this).closest('.item');
+
+            $('#searchServiceModal').data('item', $item).modal({
+                backdrop: 'static'
+            });
+            $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
+        });
+
+        $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
+            var $item = $(this).closest('.item'),
+                option = this.options[this.selectedIndex];
+
+            var options = $(option).data('options') ? $(option).data('options').split(' ') : [];
+            $.each(options, function(i) {
+                var className = options[i];
+                if (className.substr(0, 1) === '-') {
+                    $item.find('.visible-' + className.substr(1)).hide();
+                } else {
+                    $item.find('.visible-' + (className.substr(0, 1) == '+' ? className.substr(1) : className)).show();
+                }
+            });
+
+            $item.find('input[name$="[cost]"]').trigger('change');
+        });
+
+        $('.item.item-service select[name$="[model]"]').trigger('change');
+
+        +(function() {
+            var getFloat = function(val) {
+                return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+            };
+
+            var updateExpense = function(item) {
+                var $item = $(item),
+                    $nights = $item.find('input[name$="[nights]"]'),
+                    $pax = $item.find('input[name$="[pax]"]'),
+                    $price = $item.find('input[name$="[cost]"]'),
+                    $total = $item.find('input[name$="[totalPrice]"]'),
+                    nights = $nights.is(':visible') ? getFloat($nights.val()) : 0,
+                    pax = $pax.is(':visible') ? getFloat($pax.val()) : 0,
+                    total = nights * getFloat($price.val()) + pax * getFloat($price.val());
+
+                $total.val(total.toFixed(2));
+            }
+
+            var updateTotalExpenses = function() {
+                var total = new Number(0);
+                $('.item-service input[name$="[totalPrice]"]').each(function() {
+                    total += getFloat($(this).val());
+                });
+
+                $('#offer_form_totalExpenses').val(total.toFixed(2)).trigger('change');
+            }
+
+            $('#offer_form_services').on('change', 'input[name$="[nights]"], input[name$="[pax]"], input[name$="[cost]"]', function() {
+                updateExpense($(this).closest('.item-service'));
+            });
+
+            //Todos los totales de item-service
+            $('#offer_form_services').on('change', '.item-service input[name$="[totalPrice]"]', function() {
+                updateTotalExpenses();
+            });
+
+            //Inputs de un cargo administrativo
+            $('.item-administrative-charge').on('change', 'input', function() {
+                if (!$(this).is('[name$="[pax]"], [name$="[multiplier]"], [name$="[price]"]')) {
+                    return;
+                }
+
+                var $item = $(this).closest('.item'),
+                    total = getFloat($item.find('input[name$="[multiplier]"]').val())
+                        * getFloat($item.find('input[name$="[pax]"]').val())
+                        * getFloat($item.find('input[name$="[price]"]').val());
+
+                $(this).closest('.item').find('input[name$="[total]"]').val(total.toFixed(2)).trigger('change');
+            });
+
+            var updateTotalCharges = function() {
+                var $total = $('#offer_form_totalCharges'),
+                    $items = $('.item-administrative-charge input[name$="[total]"]'),
+                    total = new Number(0);
+
+                $items.each(function() {
+                    total += getFloat($(this).val());
+                });
+
+                $total.val(total.toFixed(2)).trigger('change');
+            }
+
+            //Totales de cargos administrativos
+            $('.item-administrative-charge').on('change', 'input[name$="[total]"]', function() {
+                updateTotalCharges();
+            });
+
+            //Las line charges
+            $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
+                var $controls = $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
+
+                var sum = getFloat($('#offer_form_totalExpenses').val()),
+                    sum2 = getFloat($('#offer_form_totalCharges').val()),
+                    $plus = $('#offer_form_percentApplied_percent'), charge;
+
+                if ($plus.val() === 'plus') {
+                    charge = new Number(sum + sum2 + getFloat($('#offer_form_percentApplied_plus').val()));
+                } else {
+                    charge = new Number(sum * ($plus.val() / 100) + sum + sum2);
+                }
+
+                $('#offer_form_clientCharge').val(charge.toFixed(2));
+            });
+
+            $('#offer_form_totalExpenses').trigger('change');
+
+            $('#offer_form_percentApplied_percent').on('change', function() {
+                if ($(this).val() !== 'plus') {
+                    $('#offer_form_percentApplied_plus').val(0);
+                }
+            });
+
+            updateTotalExpenses();
+            updateTotalCharges();
+        }());
+    }
+
     var initCollections = function() {
         var updateNights = function($item, trigger) {
             var $nights = $item.find('input[name$="[nights]"]'),
@@ -195,41 +359,41 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
     var initValidation = function() {
         $('#reservation').validate({
-            errorPlacement: function(error, element) {
+            'errorPlacement': function(error, element) {
                 if (element.is(':hidden')) {
                     element = element.closest(':visible');
                 }
                 if (!element.data('tooltipster-ns')) {
                     element.tooltipster({
-                        trigger: 'custom',
-                        onlyOne: false,
-                        position: 'bottom-left',
-                        positionTracker: true
+                        'trigger': 'custom',
+                        'onlyOne': false,
+                        'position': 'bottom-left',
+                        'positionTracker': true
                     });
                 }
                 element.tooltipster('update', $(error).text());
                 element.tooltipster('show');
             },
-            ignore: ':hidden:not(input[name="servicesCounter"])',
-            messages: {
+            'ignore': ':hidden:not(input[name="servicesCounter"])',
+            'messages': {
                 'servicesCounter': {
-                    min: Translator.trans('Add a service at least')
+                    'min': Translator.trans('Add a service at least')
                 }
             },
-            rules: {
+            'rules': {
                 'servicesCounter': {
-                    min: 1
+                    'min': 1
                 },
                 'offer_form[directClientFullName]': {
-                    required: {
-                        depends: function() {
+                    'required': {
+                        'depends': function() {
                             return $('#offer_form_clientType_1').prop('checked') === true;
                         }
                     }
                 },
                 'offer_form[client]': {
-                    required: {
-                        depends: function() {
+                    'required': {
+                        'depends': function() {
                             return $('#offer_form_clientType_0').prop('checked') === true;
                         }
                     }
@@ -249,6 +413,41 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
     var initSearchBox = function() {
         var $searchBox = $('#searchServiceModal');
 
+        var utils = {
+            initDatepickers: function($date0, $date1, changeCallback) {
+                var options = {
+                    format: 'DD/MM/YYYY',
+                    showClear: true,
+                    showTodayButton: true
+                };
+
+                $date0.datetimepicker(options);
+                $date1.datetimepicker($.extend({}, options, {
+                    useCurrent: false
+                }));
+                $date0.on('dp.change', function(e) {
+                    $date1.data("DateTimePicker").minDate(e.date);
+                    changeCallback();
+                });
+                $date1.on("dp.change", function(e) {
+                    $date0.data("DateTimePicker").maxDate(e.date);
+                    changeCallback();
+                });
+            },
+            translateResults: function($item, values) {
+                var gControl = function(fname) {
+                    return $item.find('[name$="[' + fname + ']"]');
+                };
+
+                gControl('model').val(values.model).trigger('change');
+
+                $.each(values, function(name, value) {
+                    gControl(name).val(value);
+                });
+            }
+        }
+
+
         var initHotelControls = function() {
             var $tab = $searchBox.find('#tab-hotel');
 
@@ -261,59 +460,40 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                         'plan': $tab.find('select[name$="[plan]"]').val(),
                         'quantity': $tab.find('select[name$="[quantity]"]').val()
                     };
-                $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_gethotelprices', {'model': 'hotel'}), data, function() {
+                $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_gethotelprices'), data, function() {
                     $dv.find('table').DataTable();
                 });
             }
 
-            $tab.find('.row-datepickers').each(function() {
-                var $row = $(this);
+            utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
 
-                var dps = $row.find('input.datepicker'), options = {
-                    format: 'DD/MM/YYYY',
-                    showClear: true,
-                    showTodayButton: true
-                };
-
-                $(dps[0]).parent().datetimepicker(options);
-                $(dps[1]).parent().datetimepicker($.extend({}, options, {
-                    useCurrent: false
-                }));
-                $(dps[0]).parent().on('dp.change', function(e) {
-                    $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
-                    updateResults();
-                });
-                $(dps[1]).parent().on("dp.change", function(e) {
-                    $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
-                    updateResults();
-                });
-            });
             $tab.find('select').on('change', function() {
                 updateResults();
             });
 
             $tab.on('click', 'button.btn-select-service', function() {
-                var data = eval($(this).data('service'));
+                var data = $(this).data('service');
 
                 $searchBox.modal('hide');
 
-                var $item = $searchBox.data('item'),
-                    gControl = function(fname) {
-                        return $item.find('[name$="[' + fname + ']"]');
-                    };
+                var $item = $searchBox.data('item');
 
-                gControl('model').val('hotel').trigger('change');
-                gControl('startAt').val($tab.find('input.datepicker:first').val() + ' 08:00');
-                gControl('endAt').val($tab.find('input.datepicker:last').val() + ' 08:00');
+                utils.translateResults($item, {
+                    'model': 'hotel',
+                    'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
+                    'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
+                    'name': data.serviceName,
+                    'facilityName': data.hotel,
+                    'nights': data.nights,
+                    'supplier': data.supplier.id,
+                    'pax': data.pax,
+                    'supplierNotes': data.plan,
+                    'cost': data.cost,
+                    'totalPrice': data.totalPrice
+                });
 
-                gControl('name').val(data.serviceName);
-                gControl('facilityName').val(data.hotel);
-                gControl('nights').val(data.nights);
-                gControl('supplier').val(data.supplier.id).trigger('change.select2');
-                gControl('pax').val(data.pax);
-                gControl('supplierNotes').val(data.plan);
-                gControl('cost').val(data.cost);
-                gControl('totalPrice').val(data.totalPrice).trigger('change');
+                $item.find('select[name$="[supplier]"]').trigger('change.select2');
+                $item.find('input[name$="[totalPrice]"]').trigger('change');
             });
 
             $searchBox.find('a[role=tab][aria-controls=tab-hotel]').on('shown.bs.tab', function() {
@@ -323,8 +503,106 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             updateResults();
         }
 
+        var initPrivateHouseControls = function() {
+            $tab = $searchBox.find('#tab-private-house');
+
+            var updateResults = function() {
+                var $dv = $tab.find('.table-responsive'),
+                    data = {
+                        'from': $tab.find('input:text.datepicker:first').val(),
+                        'to': $tab.find('input:text.datepicker:last').val(),
+                        'quantity': $tab.find('select[name="quantity"]').val(),
+                        'address': $tab.find('input[name="address"]').val(),
+                        'plan': $tab.find('select[name="plan"]').val()
+                    };
+                $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getprivatehouseprices'), data, function() {
+                    $dv.find('table').DataTable();
+                });
+            }
+
+            utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
+
+            $tab.find('form#filter-private-house').find('input:not(.datepicker), select').on('change', function() {
+                updateResults();
+            });
+
+            $searchBox.find('a[role=tab][aria-controls=tab-private-house]').on('shown.bs.tab', function() {
+                updateResults();
+            });
+
+            $tab.on('click', 'button.btn-select-service', function() {
+                var data = $(this).data('service'),
+                    $item = $searchBox.data('item');
+
+                utils.translateResults($item, {
+                    'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
+                    'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
+                    'name': data.service,
+                    'supplier': data.supplier.id,
+                    'facilityName': data.supplier.name,
+                    'nights': data.nights,
+                    'pax': 1,
+                    'cost': data.cost,
+                    'totalPrice': data.totalPrice,
+                    'supplierNotes': data.supplierNotes
+                });
+
+                $item.find('[name$="[supplier]"]').trigger('change.select2');
+                $item.find('[name$="[totalPrice]"]').trigger('change');
+
+                $searchBox.modal('hide');
+            });
+        }
+
+        var initCarRentalControls = function() {
+            var $tab = $searchBox.find('#tab-car-rental'),
+                updateResults = function() {
+                    var $dv = $tab.find('.table-responsive'),
+                        data = {
+                            'from': $tab.find('input:text.datepicker:first').val(),
+                            'to': $tab.find('input:text.datepicker:last').val(),
+                            'quantity': $tab.find('select[name="quantity"]').val(),
+                            'cartype': $tab.find('select[name="cartype"]').val()
+                        };
+                    $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getcarrentalprices'), data, function() {
+                        $dv.find('table').DataTable();
+                    });
+                }
+
+            utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
+
+            $tab.find('form#filter-car-rental').find('input:not(.datepicker), select').on('change', function() {
+                updateResults();
+            });
+
+            $searchBox.find('a[role=tab][aria-controls=tab-car-rental]').on('shown.bs.tab', function() {
+                updateResults();
+            });
+
+            $tab.on('click', 'button.btn-select-service', function() {
+                var data = $(this).data('service'),
+                    $item = $searchBox.data('item');
+
+                utils.translateResults($item, {
+                    'model': 'car-rental',
+                    'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
+                    'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
+                    'name': data.name,
+                    'supplier': data.supplier.id,
+                    'rentCar': data.carType,
+                    'cost': data.cost,
+                    'totalPrice': data.totalPrice
+                });
+
+                $item.find('[name$="[supplier]"]').trigger('change.select2');
+                $item.find('[name$="[totalPrice]"]').trigger('change');
+
+                $searchBox.modal('hide');
+            });
+        }
+
         var initGeneralControls = function() {
-            $searchBox.find('.tab-content .tab-pane:not(#tab-hotel)').each(function() {
+            $searchBox.find('.tab-content .tab-pane:not(#tab-hotel, #tab-private-house, #tab-car-rental)').each(function() {
                 var $tab = $(this),
                     model = $tab.attr('id').replace(/^tab\-/, ''),
                     updateResults = function() {
@@ -340,52 +618,31 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                         });
                     }
 
-                $tab.find('.row-datepickers').each(function() {
-                    var $row = $(this);
+                utils.initDatepickers($tab.find('.date:has(.datepicker):first'), $tab.find('.date:has(.datepicker):last'), updateResults);
 
-                    var dps = $row.find('input.datepicker'), options = {
-                        format: 'DD/MM/YYYY HH:mm',
-                        showClear: true,
-                        showTodayButton: true
-                    };
-
-                    $(dps[0]).parent().datetimepicker(options);
-                    $(dps[1]).parent().datetimepicker($.extend({}, options, {
-                        useCurrent: false
-                    }));
-                    $(dps[0]).parent().on('dp.change', function(e) {
-                        $(dps[1]).parent().data("DateTimePicker").minDate(e.date);
-                        updateResults();
-                    });
-                    $(dps[1]).parent().on("dp.change", function(e) {
-                        $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
-                        updateResults();
-                    });
-                });
-
-                $tab.find('select').on('change', function() {
+                $tab.find('form').find('select, input:not(.datepicker)').on('change', function() {
                     updateResults();
                 });
 
                 $tab.on('click', 'button.btn-select-service', function() {
-                    var data = eval($(this).data('service'));
+                    var data = $(this).data('service'),
+                        $item = $searchBox.data('item');
 
                     $searchBox.modal('hide');
 
-                    var $item = $searchBox.data('item'),
-                        gControl = function(fname) {
-                            return $item.find('[name$="[' + fname + ']"]');
-                        };
+                    utils.translateResults($item, {
+                        'model': model,
+                        'startAt': $tab.find('input.datepicker:first').val(),
+                        'endAt': $tab.find('input.datepicker:last').val(),
+                        'name': data.serviceName,
+                        'supplier': data.supplier.id,
+                        'pax': data.pax,
+                        'cost': data.cost,
+                        'totalPrice': data.totalPrice
+                    });
 
-                    gControl('model').val(model).trigger('change');
-                    gControl('startAt').val($tab.find('input.datepicker:first').val());
-                    gControl('endAt').val($tab.find('input.datepicker:last').val());
-
-                    gControl('name').val(data.serviceName);
-                    gControl('supplier').val(data.supplier.id).trigger('change.select2');
-                    gControl('pax').val(data.pax);
-                    gControl('cost').val(data.cost);
-                    gControl('totalPrice').val(data.totalPrice).trigger('change');
+                    $item.find('[name$="[supplier]"]').trigger('change.select2');
+                    $item.find('[name$="[totalPrice]"]').trigger('change');
                 });
 
                 $searchBox.find('a[role=tab][aria-controls=tab-' + model + ']').on('show.bs.tab', function() {
@@ -395,171 +652,9 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         }
 
         initHotelControls();
+        initPrivateHouseControls();
+        initCarRentalControls();
         initGeneralControls();
-    }
-
-    var init = function() {
-        $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
-            var value = $(this).val();
-            if (value === 'direct') {
-                $('.block-clienttype.block-clienttype-direct').show();
-                $('.block-clienttype:not(.block-clienttype-direct)').find('input:text, select').each(function() {
-                    if ($(this).data('tooltipster-ns')) {
-                        $(this).tooltipster('hide');
-                    }
-                });
-                $('.block-clienttype:not(.block-clienttype-direct)').hide();
-            } else if (value === 'registered') {
-                $('.block-clienttype.block-clienttype-registered').show();
-                $('.block-clienttype:not(.block-clienttype-registered)').find('input:text, select').each(function() {
-                    if ($(this).data('tooltipster-ns')) {
-                        $(this).tooltipster('hide');
-                    }
-                });
-                $('.block-clienttype:not(.block-clienttype-registered)').hide();
-            }
-        });
-
-        $('#offer_form_client').select2({
-            width: '100%'
-        });
-
-        $('#offer_form_client').on('change', function() {
-            $('#offer_form_notificationContact').empty();
-            var id = $(this).val();
-            $.getJSON(Routing.generate('app_offers_getclientcontacts') + '?client=' + id, function(json) {
-                $('#offer_form_notificationContact').append($('<option value=""></option>'));
-                $.each(json.elements, function(i, e) {
-                    $('#offer_form_notificationContact').append($('<option value="' + e.id + '">' + e.text + '</option>'));
-                });
-            });
-        });
-
-        App.Forms.initTelephoneControl($('#offer_form_directClientMobilePhone'));
-
-        $('body').on('click', '.btn-search-service', function() {
-            var $item = $(this).closest('.item');
-
-            $('#searchServiceModal').data('item', $item).modal({
-                backdrop: 'static'
-            });
-            $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
-        });
-
-        $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
-            var $item = $(this).closest('.item'),
-                option = this.options[this.selectedIndex];
-
-            var options = $(option).data('options') ? $(option).data('options').split(' ') : [];
-            $.each(options, function(i) {
-                var className = options[i];
-                if (className.substr(0, 1) === '-') {
-                    $item.find('.visible-' + className.substr(1)).hide();
-                } else {
-                    $item.find('.visible-' + (className.substr(0, 1) == '+' ? className.substr(1) : className)).show();
-                }
-            });
-
-            $item.find('input[name$="[cost]"]').trigger('change');
-        });
-
-        $('.item.item-service select[name$="[model]"]').trigger('change');
-
-        +(function($) {
-            var getFloat = function(val) {
-                return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
-            };
-
-            var updateExpense = function(item) {
-                var $item = $(item),
-                    $nights = $item.find('input[name$="[nights]"]'),
-                    $pax = $item.find('input[name$="[pax]"]'),
-                    $price = $item.find('input[name$="[cost]"]'),
-                    $total = $item.find('input[name$="[totalPrice]"]'),
-                    nights = $nights.is(':visible') ? getFloat($nights.val()) : 0,
-                    pax = $pax.is(':visible') ? getFloat($pax.val()) : 0,
-                    total = nights * getFloat($price.val()) + pax * getFloat($price.val());
-
-                $total.val(total.toFixed(2));
-            }
-
-            var updateTotalExpenses = function() {
-                var total = new Number(0);
-                $('.item-service input[name$="[totalPrice]"]').each(function() {
-                    total += getFloat($(this).val());
-                });
-
-                $('#offer_form_totalExpenses').val(total.toFixed(2)).trigger('change');
-            }
-
-            $('#offer_form_services').on('change', 'input[name$="[nights]"], input[name$="[pax]"], input[name$="[cost]"]', function() {
-                updateExpense($(this).closest('.item-service'));
-            });
-
-            //Todos los totales de item-service
-            $('#offer_form_services').on('change', '.item-service input[name$="[totalPrice]"]', function() {
-                updateTotalExpenses();
-            });
-
-            //Inputs de un cargo administrativo
-            $('.item-administrative-charge').on('change', 'input', function() {
-                if (!$(this).is('[name$="[pax]"], [name$="[multiplier]"], [name$="[price]"]')) {
-                    return;
-                }
-
-                var $item = $(this).closest('.item'),
-                    total = getFloat($item.find('input[name$="[multiplier]"]').val())
-                        * getFloat($item.find('input[name$="[pax]"]').val())
-                        * getFloat($item.find('input[name$="[price]"]').val());
-
-                $(this).closest('.item').find('input[name$="[total]"]').val(total.toFixed(2)).trigger('change');
-            });
-
-            var updateTotalCharges = function() {
-                var $total = $('#offer_form_totalCharges'),
-                    $items = $('.item-administrative-charge input[name$="[total]"]'),
-                    total = new Number(0);
-
-                $items.each(function() {
-                    total += getFloat($(this).val());
-                });
-
-                $total.val(total.toFixed(2)).trigger('change');
-            }
-
-            //Totales de cargos administrativos
-            $('.item-administrative-charge').on('change', 'input[name$="[total]"]', function() {
-                updateTotalCharges();
-            });
-
-            //Las line charges
-            $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
-                var $controls = $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
-
-                var sum = getFloat($('#offer_form_totalExpenses').val()),
-                    sum2 = getFloat($('#offer_form_totalCharges').val()),
-                    $plus = $('#offer_form_percentApplied_percent'), charge;
-
-                if ($plus.val() === 'plus') {
-                    charge = new Number(sum + sum2 + getFloat($('#offer_form_percentApplied_plus').val()));
-                } else {
-                    charge = new Number(sum * ($plus.val() / 100) + sum + sum2);
-                }
-
-                $('#offer_form_clientCharge').val(charge.toFixed(2));
-            });
-
-            $('#offer_form_totalExpenses').trigger('change');
-
-            $('#offer_form_percentApplied_percent').on('change', function() {
-                if ($(this).val() !== 'plus') {
-                    $('#offer_form_percentApplied_plus').val(0);
-                }
-            });
-
-            updateTotalExpenses();
-            updateTotalCharges();
-        }(jQuery));
     }
 
     return {
@@ -567,6 +662,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             init();
             initCollections();
             initValidation();
+            initSearchBox();
         }
     }
 }(jQuery));

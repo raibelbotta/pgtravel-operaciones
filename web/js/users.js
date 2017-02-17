@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Users = typeof App.Users !== 'undefined' ? App.Users : {};
-App.Users.Index = function() {
+
++(App.Users.Index = function($) {
     var init = function() {
         var $datatable = $('#datatable-users');
 
@@ -8,8 +9,8 @@ App.Users.Index = function() {
             'order': [[ 1, 'asc' ]],
             'columnDefs': [
                 {
-                    orderable: false,
-                    targets: [0, 3]
+                    'orderable': false,
+                    'targets': [0, 3]
                 }
             ],
             'processing': true
@@ -17,7 +18,7 @@ App.Users.Index = function() {
 
         $datatable.on('draw.dt', function() {
             $(this).find('input').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
+                'checkboxClass': 'icheckbox_flat-green'
             });
         });
 
@@ -45,4 +46,4 @@ App.Users.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

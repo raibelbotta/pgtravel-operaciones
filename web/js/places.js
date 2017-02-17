@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Places = typeof App.Places !== 'undefined' ? App.Places : {};
 
-App.Places.Index = function($) {
++(App.Places.Index = function($) {
     var init = function() {
         var $datatable = $('#datatable-x');
 
@@ -72,4 +72,4 @@ App.Places.Index = function($) {
             init();
         }
     }
-}(jQuery);
+}(jQuery));

@@ -34,27 +34,23 @@ parameters:
             name: car-rental
             display: Car rental
             voucher_title: AUTO VOUCHER
-            has_places: true
-            has_pax: false
-            has_rent_cars: true
-            options: '-pax places rent-cars -nights -facility'
+            html_options: '-pax places rent-cars -nights -facility'
         restaurant:
             name: restaurant
             display: Restaurant
-            has_end_date: false
             voucher_title: RESTAURANT VOUCHER
-            options: '-end-date -places -rent-cars -nights pax facility'
+            html_options: '-end-date -places -rent-cars -nights pax facility'
         optionals: { name: optionals, display: Optionals, voucher_title: OPTIONAL VOUCHER }
         guide:
             name: guide
             display: Guide
             has_pax: false
-            options: '-pax'
+            html_options: '-pax'
         private-house:
             name: private-house
             display: Private house
             voucher_title: HOUSE VOUCHER
-            options: 'nights pax -end-date -places -rent-cars -nights pax facility'
+            html_options: 'nights pax -end-date -places -rent-cars -nights pax facility'
         other: { name: other, display: Other }
 
 services:
@@ -117,6 +113,11 @@ services:
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
+    app.form.type.meal_plan_type:
+        class: AppBundle\Form\Type\MealPlanType
+        arguments: [ %app.hotel.plans% ]
+        tags:
+            - { name: form.type }
     app.form.type.profile_form_type:
         class: AppBundle\Form\Type\ProfileFormType
         arguments: [ %fos_user.model.user.class% ]

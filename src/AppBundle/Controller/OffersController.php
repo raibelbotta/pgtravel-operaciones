@@ -263,7 +263,7 @@ class OffersController extends Controller
             'result' => 'success'
         ));
     }
-    
+
     /**
      * @Route("/{id}/delete", requirements={"id": "\d+"})
      * @Method({"post"})
@@ -291,22 +291,22 @@ class OffersController extends Controller
         $response = array(
             'id' => $request->query->get('id')
         );
-        
+
         if ($request->request->has('to')) {
             $to = \DateTime::createFromFormat('d/m/Y', preg_replace('/ \d{2}:\d{2}/', '', $request->get('to')));
-            
+
             $diff = date_diff($to, $from, true);
-            
+
             $response['nights'] = $diff->days;
         } elseif ($request->request->has('nights')) {
             $to = $from->add(new \DateInterval(sprintf('P%sD', $request->request->get('nights'))));
-            
+
             $response['to'] = $to->format('d/m/Y H:i');
         }
-        
+
         return new JsonResponse($response);
     }
-    
+
     /**
      * @Route("/{id}/change-state", requirements={"id": "\d+"})
      * @Method({"post"})
@@ -357,11 +357,13 @@ class OffersController extends Controller
     public function searchServiceAction()
     {
         $models = $this->container->getParameter('app.contract.models');
+        $manager = $this->getDoctrine()->getManager();
 
         return $this->render('Offers/search_service.html.twig', array(
             'cupos' => $this->container->getParameter('app.hotel.cupos'),
             'plans' => $this->container->getParameter('app.hotel.plans'),
-            'models' => $models
+            'models' => $models,
+            'car_types' => $manager->createQuery('SELECT t FROM AppBundle:RentCarType t ORDER BY t.name')
         ));
     }
 
@@ -403,7 +405,7 @@ class OffersController extends Controller
         if ($request->get('pax')) {
             $andX->add($qb->expr()->eq('p.cupo', $qb->expr()->literal($request->get('pax'))));
         }
-        
+
         if ($request->get('plan')) {
             $andX->add($qb->expr()->eq('p.plan', $qb->expr()->literal($request->get('plan'))));
         }
@@ -412,10 +414,126 @@ class OffersController extends Controller
             $qb->where($andX);
         }
 
-        return $this->render('Offers/prices_results.html.twig', array(
+        return $this->render('Offers/hotel_prices_results.html.twig', array(
             'query' => $qb->getQuery(),
             'quantity' => $request->get('quantity', 0),
             'nights' => $from && $to ? $to->diff($from, true)->days : 0
+        ));
+    }
+
+    /**
+     * @Route("/get-private-house-prices", options={"expose": true})
+     * @Method({"post"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getPrivateHousePricesAction(Request $request)
+    {
+        $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
+        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
+
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:ContractPrivateHouseService')
+                ->createQueryBuilder('s')
+                ->join('s.contract', 'c')
+                ;
+        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('private-house')));
+
+        if ($from) {
+            $andX->add($qb->expr()->orX(
+                    $qb->expr()->isNull('s.startAt'),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('s.startAt'),
+                            $qb->expr()->lte('s.startAt', $qb->expr()->literal($from->format('Y-m-d')))
+                            )
+                    ));
+        }
+        if ($to) {
+            $andX->add($qb->expr()->orX(
+                    $qb->expr()->isNull('s.endAt'),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('s.endAt'),
+                            $qb->expr()->gte('s.endAt', $qb->expr()->literal($to->format('Y-m-d')))
+                            )
+                    ));
+        }
+        if ($request->get('plan')) {
+            $andX->add($qb->expr()->eq('s.mealPlan', $qb->expr()->literal($request->get('plan'))));
+        }
+        if ($request->get('address')) {
+            $qb->join('c.supplier', 'spp');
+            $qb->leftJoin('spp.place', 'pl');
+            $andX->add($qb->expr()->orX(
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('spp.postalAddress'),
+                            $qb->expr()->like('spp.postalAddress', $qb->expr()->literal(sprintf('%%%s%%', $request->get('address'))))
+                            ),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('spp.place'),
+                            $qb->expr()->like('pl.name', $qb->expr()->literal(sprintf('%%%s%%', $request->get('address'))))
+                            )
+                    ));
+        }
+
+        $qb->where($andX);
+
+        return $this->render('Offers/private_house_prices_results.html.twig', array(
+            'query' => $qb->getQuery(),
+            'quantity' => $request->get('quantity', 0),
+            'nights' => $from && $to ? $to->diff($from, true)->days : 0
+        ));
+    }
+
+    /**
+     * @Route("/get-car-rental-prices", options={"expose": true})
+     * @Method({"post"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getCarRentalPricesAction(Request $request)
+    {
+        $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
+        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
+
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:ContractCarRentalService')
+                ->createQueryBuilder('s')
+                ->join('s.contract', 'c')
+                ;
+        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('car-rental')));
+
+        if ($from) {
+            $andX->add($qb->expr()->orX(
+                    $qb->expr()->isNull('s.startAt'),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('s.startAt'),
+                            $qb->expr()->lte('s.startAt', $qb->expr()->literal($from->format('Y-m-d')))
+                            )
+                    ));
+        }
+        if ($to) {
+            $andX->add($qb->expr()->orX(
+                    $qb->expr()->isNull('s.endAt'),
+                    $qb->expr()->andX(
+                            $qb->expr()->isNotNull('s.endAt'),
+                            $qb->expr()->gte('s.endAt', $qb->expr()->literal($to->format('Y-m-d')))
+                            )
+                    ));
+        }
+
+        if ($request->get('cartype')) {
+            $qb->join('s.carType', 'ct');
+            $andX->add($qb->expr()->eq('ct.id', $qb->expr()->literal($request->get('cartype'))));
+        }
+
+        if ($andX->count() > 0) {
+            $qb->where($andX);
+        }
+
+        return $this->render('Offers/car_rental_prices_results.html.twig', array(
+            'query' => $qb->getQuery(),
+            'quantity' => $request->get('quantity', 0),
+            'days' => $from && $to ? $to->diff($from, true)->days : 0
         ));
     }
 
@@ -598,7 +716,7 @@ class OffersController extends Controller
             'record' => $record
         ));
     }
-    
+
     /**
      * @Route("/get-places", options={"expose": true})
      * @Method({"get"})
@@ -615,7 +733,7 @@ class OffersController extends Controller
         if ($request->get('q')) {
             $qb->where($qb->expr()->like('p.name', $qb->expr()->literal(sprintf('%%%s%%', $request->get('q')))));
         }
-        
+
         return new JsonResponse(array(
             'data' => array_map(function($record) {
                 return array(

@@ -745,6 +745,16 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $searchBox.find('a[role=tab][aria-controls=tab-' + model + ']').on('show.bs.tab', function() {
                     updateResults();
                 });
+
+                if ($tab.find('form input:checkbox').length > 0) {
+                    $tab.find('form input:checkbox').iCheck({
+                        checkboxClass: 'icheckbox_flat-green',
+                        radioClass: 'iradio_flat-green'
+                    });
+                    $tab.find('form input:checkbox').on('ifClicked', function() {
+                        updateResults();
+                    })
+                }
             });
         }
 

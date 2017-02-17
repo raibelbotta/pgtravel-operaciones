@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Clients = typeof App.Clients !== 'undefined' ? App.Clients : {};
-App.Clients.Form = function() {
+
++(App.Clients.Form = function($) {
     var init = function() {
         +(function() {
             $('.collection').each(function() {
@@ -80,4 +81,4 @@ App.Clients.Form = function() {
             init();
         }
     }
-}();
+}(jQuery));

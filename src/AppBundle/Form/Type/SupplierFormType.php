@@ -30,6 +30,7 @@ class SupplierFormType extends AbstractType
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
                 ))
+                ->add('place', PlaceType::class)
                 ->add('employees', CollectionType::class, array(
                     'entry_type' => SupplierEmployeeType::class,
                     'allow_add' => true,

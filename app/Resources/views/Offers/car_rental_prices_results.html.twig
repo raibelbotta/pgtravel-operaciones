@@ -1,0 +1,34 @@
+<table class="table table-condensed table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>{{ 'Supplier'|trans }}</th>
+            <th>{{ 'Car'|trans }}</th>
+            <th>{{ 'Cost'|trans }}</th>
+            <th>{{ 'Price'|trans }}</th>
+            <th data-sortable="false" width="40"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in query.result %}
+            {%- set data = {
+name: service.name,
+supplier: {
+    id: service.contract.supplier.id,
+    name: service.contract.supplier.name
+},
+carType: service.carType.id,
+cost: '%0.2f'|format(service.price),
+totalPrice: '%0.2f'|format(service.price * days * quantity)
+        } -%}
+            <tr>
+                <td>{{ service.contract.supplier.name }}</td>
+                <td>{{ service.carType }}</td>
+                <td>{{ '%0.2f'|format(service.price) }}</td>
+                <td>{{ '%0.2f'|format(service.price * days * quantity) }}</td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-success btn-xs btn-select-service" title="{{ 'Select service'|trans }}" data-service="{{ data|json_encode|e }}"><i class="fa fa-check"></i></button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

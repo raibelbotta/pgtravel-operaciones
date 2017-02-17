@@ -7,7 +7,7 @@
         <div class="tab-pane active" role="tabpanel" id="tab-hotel" style="padding: 16px;">
             <form action="" id="filter-hotel">
                 <div class="row row-datepickers">
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'From'|trans }}</label>
                         <div class="input-group date">
                             <input type="text" class="form-control input-sm datepicker">
@@ -16,7 +16,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'To'|trans }}</label>
                         <div class="input-group date">
                             <input type="text" class="form-control input-sm datepicker">
@@ -24,6 +24,10 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Nights'|trans }}</label>
+                        <input type="number" name="nights" class="form-control input-sm text-right">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'Pax'|trans }}</label>
@@ -44,7 +48,7 @@
                         </select>
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Quantity'|trans }}</label>
+                        <label class="control-label">{{ 'Number of roms'|trans }}</label>
                         <select name="filter[quantity]" class="form-control input-sm pax">
                             {% for i in 1..10 %}
                                 <option value="{{ i }}">{{ i }}</option>
@@ -55,11 +59,154 @@
             </form>
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="table-responsive"></div>
+                    <div class="table-responsive">
+                        <table class="table table-results table-condensed table-striped table-bordered"></table>
+                    </div>
                 </div>
             </div>
         </div>
-        {% for model in models if model.name not in ['hotel'] %}
+        <div class="tab-pane" role="tabpanel" id="tab-private-house" style="padding: 16px;">
+            <form action="" role="form" id="filter-private-house">
+                <div class="row row-datepickers">
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'From'|trans }}</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control input-sm datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'To'|trans }}</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control input-sm datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Nights'|trans }}</label>
+                        <input type="number" name="nights" class="form-control input-sm text-right">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Address'|trans }}</label>
+                        <input type="text" name="addresss" class="form-control input-sm">
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Plan'|trans }}</label>
+                        <select name="plan" class="form-control input-sm">
+                            <option value=""></option>
+                            {% for plan in plans %}
+                                <option value="{{ plan }}">{{ plan }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Number of rooms'|trans }}</label>
+                        <select class="form-control input-sm" name="quantity">
+                            {% for i in 1..10 %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive results"></div>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane" role="tabpanel" id="tab-car-rental" style="padding: 16px;">
+            <form action="" role="form" id="filter-car-rental">
+                <div class="row row-datepickers">
+                    <div class="col-sm-4 form-group">
+                        <label class="control-label">{{ 'From'|trans }}</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control input-sm datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label class="control-label">{{ 'To'|trans }}</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control input-sm datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Car type'|trans }}</label>
+                        <select name="cartype" class="form-control input-sm">
+                            <option value=""></option>
+                            {% for type in car_types.result %}
+                                <option value="{{ type.id }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Quantity'|trans }}</label>
+                        <select class="form-control input-sm" name="quantity">
+                            {% for i in 1..10 %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive results"></div>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane" role="tabpanel" id="tab-transport" style="padding: 16px;">
+            <form action="" role="form" id="filter-transport">
+                <div class="row">
+                    <div class="col-sm-5 form-group">
+                        <label class="control-label">{{ 'From'|trans }}</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control input-sm datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 form-group">
+                        <label class="control-label">{{ 'To'|trans }}</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control input-sm datepicker">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Quantity'|trans }}</label>
+                        <select class="form-control input-sm" name="quantity">
+                            {% for i in 1..10 %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-10 col-sm-2 form-group">
+                        <label class="">
+                            <input type="checkbox" name="plushalfday" checked="checked" class="flat">
+                            {{ 'Add half day'|trans }}
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-results table-condensed table-striped table-bordered"></table>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% for model in models if model.name not in ['hotel', 'car-rental', 'private-house', 'transport'] %}
             <div class="tab-pane" role="tabpanel" id="tab-{{ model.name }}" style="padding: 16px;">
                 <form action="" role="form" id="filter-{{ model.name }}">
                     <div class="row row-datepickers">

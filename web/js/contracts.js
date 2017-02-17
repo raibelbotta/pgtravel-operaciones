@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
-App.Contracts.Index = function() {
+
++(App.Contracts.Index = function($) {
     var init = function() {
         var $datatable = $('#datatable-x');
 
@@ -8,8 +9,8 @@ App.Contracts.Index = function() {
             'order': [[ 1, 'asc' ]],
             aoColumns: [
                 {
-                    sortable: false,
-                    searchable: false
+                    'sortable': false,
+                    'searchable': false
                 },
                 {name: 'name'},
                 {name: 'model'},
@@ -18,22 +19,22 @@ App.Contracts.Index = function() {
                 {name: 'startAt'},
                 {name: 'endAt'},
                 {
-                    sortable: false,
-                    searchable: false,
-                    width: 80
+                    'sortable': false,
+                    'searchable': false,
+                    'width': 80
                 }
             ],
-            serverSide: true,
-            processing: true,
-            ajax: {
-                method: 'post',
-                url: Routing.generate('app_contracts_getdata')
+            'serverSide': true,
+            'processing': true,
+            'ajax': {
+                'method': 'POST',
+                'url': Routing.generate('app_contracts_getdata')
             }
         });
 
         $datatable.on('draw.dt', function() {
             $(this).find('input').iCheck({
-                checkboxClass: 'icheckbox_flat-green'
+                'checkboxClass': 'icheckbox_flat-green'
             });
 
             $(this).find('a.btn-delete').on('click', function(event) {
@@ -70,4 +71,4 @@ App.Contracts.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

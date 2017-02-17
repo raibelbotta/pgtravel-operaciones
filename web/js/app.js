@@ -1,5 +1,5 @@
 App = typeof App !== 'undefined' ? App : {};
-App.Main = function() {
++(App.Main = function($) {
     var initTooltipster = function() {
         $('[title]:not(.sidebar-footer *)').tooltipster({theme: 'tooltipster-shadow'});
         $('body').on('draw.dt', 'table', function() {
@@ -108,9 +108,9 @@ App.Main = function() {
         },
         alert: alert
     }
-}();
+}(jQuery));
 
-App.Forms = function() {
++(App.Forms = function($) {
     var initCollectionControls = function() {
         var clickRemoveItem = function(event) {
             event.preventDefault();
@@ -179,4 +179,4 @@ App.Forms = function() {
         },
         initTelephoneControl: initTelephoneControl
     }
-}();
+}(jQuery));

@@ -95,7 +95,21 @@ class Contract
      * @ORM\OneToMany(targetEntity="ContractTopService", mappedBy="contract", cascade={"persist", "remove"})
      */
     private $topServices;
-    
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractPrivateHouseService", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $privateHouseServices;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractCarRentalService", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $carRentalServices;
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -125,16 +139,6 @@ class Contract
      * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->topServices = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->hotelFacilities = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -434,7 +438,7 @@ class Contract
         $this->attachments[] = $attachment;
 
         $attachment->setContract($this);
-        
+
         return $this;
     }
 
@@ -516,5 +520,91 @@ class Contract
     public function getExtraConditions()
     {
         return $this->extraConditions;
+    }
+
+    /**
+     * Add privateHouseService
+     *
+     * @param \AppBundle\Entity\ContractPrivateHouseService $privateHouseService
+     *
+     * @return Contract
+     */
+    public function addPrivateHouseService(\AppBundle\Entity\ContractPrivateHouseService $privateHouseService)
+    {
+        if (!$this->privateHouseServices->contains($privateHouseService)) {
+            $this->privateHouseServices[] = $privateHouseService;
+            $privateHouseService->setContract($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove privateHouseService
+     *
+     * @param \AppBundle\Entity\ContractPrivateHouseService $privateHouseService
+     */
+    public function removePrivateHouseService(\AppBundle\Entity\ContractPrivateHouseService $privateHouseService)
+    {
+        $this->privateHouseServices->removeElement($privateHouseService);
+    }
+
+    /**
+     * Get privateHouseServices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrivateHouseServices()
+    {
+        return $this->privateHouseServices;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->topServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privateHouseServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->carRentalServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facilities = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add carRentalService
+     *
+     * @param \AppBundle\Entity\ContractCarRentalService $carRentalService
+     *
+     * @return Contract
+     */
+    public function addCarRentalService(\AppBundle\Entity\ContractCarRentalService $carRentalService)
+    {
+        if (!$this->carRentalServices->contains($carRentalService)) {
+            $this->carRentalServices[] = $carRentalService;
+            $carRentalService->setContract($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove carRentalService
+     *
+     * @param \AppBundle\Entity\ContractCarRentalService $carRentalService
+     */
+    public function removeCarRentalService(\AppBundle\Entity\ContractCarRentalService $carRentalService)
+    {
+        $this->carRentalServices->removeElement($carRentalService);
+    }
+
+    /**
+     * Get carRentalServices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarRentalServices()
+    {
+        return $this->carRentalServices;
     }
 }

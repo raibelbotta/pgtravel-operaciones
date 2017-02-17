@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.RentCarTypes = typeof App.RentCarTypes !== 'undefined' ? App.RentCarTypes : {};
 
-App.RentCarTypes.Form = function($) {
++(App.RentCarTypes.Form = function($) {
     var initValidator = function() {
         $('#car').validate({
             errorPlacement: function(error, element) {
@@ -27,4 +27,4 @@ App.RentCarTypes.Form = function($) {
             initValidator();
         }
     }
-}(jQuery);
+}(jQuery));

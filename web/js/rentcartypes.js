@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 App.RentCarTypes = typeof App.RentCarTypes !== 'undefined' ? App.RentCarTypes : {};
 
-App.RentCarTypes.Index = function() {
++(App.RentCarTypes.Index = function($) {
     var init = function() {
         var $datatable = $('#datatable-x');
 
@@ -53,4 +53,4 @@ App.RentCarTypes.Index = function() {
             init();
         }
     }
-}();
+}(jQuery));

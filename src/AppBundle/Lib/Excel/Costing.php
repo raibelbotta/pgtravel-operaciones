@@ -7,75 +7,75 @@ use AppBundle\Entity\Reservation;
 
 /**
  * Description of Costing
- * 
+ *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
 class Costing extends ExportableBook
-{    
+{
     /**
      * @var \PHPExcel
      */
     private $book;
-    
+
     /**
      * @var Reservation
      */
     private $record;
-    
+
     public function __construct(array $options = array())
     {
         parent::__construct($options);
-        
+
         $this->book = $this->phpexcel->createPHPExcelObject();
         $this->record = $this->options['record'];
     }
-    
+
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        
+
         $resolver
                 ->setRequired('record')
                 ->setAllowedTypes('record', 'AppBundle\\Entity\\Reservation')
                 ;
     }
-    
+
     public function getBookContent()
     {
         $this->renderHeader();
         $this->renderSuppliersBlock();
         $this->renderAdministrativeBlock();
-        
+
         $writer = $this->phpexcel->createWriter($this->book, 'Excel5');
-        
+
         return $this->phpexcel->createStreamedResponse($writer);
     }
-    
+
     private function renderHeader()
     {
         $this->book->setActiveSheetIndex(0);
         $sheet = $this->book->getActiveSheet();
-        
+
         $sheet->setCellValue('A1', sprintf('COSTING %s', $this->options['record']->getName()));
-        
+
         $sheet->mergeCells('A1:L4');
         $sheet->getStyle('A1:L4')->getFont()->setBold(true);
         $sheet->getStyle('A1:L4')->getAlignment()
                 ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
                 ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
                 ;
-        
+
         $sheet->getStyle('A5:L6')->getFont()->setBold(true);
         $sheet->getStyle('A5:L6')->getAlignment()
                 ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
                 ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
                 ;
     }
-    
+
     private function renderSuppliersBlock()
     {
         $sheet = $this->book->getActiveSheet();
-        
+
         $sheet->mergeCells('A5:A6');
         $sheet->setCellValue('A5', 'SUPPLIER');
         $sheet->mergeCells('B5:B6');
@@ -96,7 +96,7 @@ class Costing extends ExportableBook
         $sheet->setCellValue('I5', 'NOTES');
 
         $firstRowIndex = 7;
-        
+
         foreach ($this->record->getServices() as $k => $service) {
             $sheet->mergeCells(sprintf('I%s:L%s', $firstRowIndex + $k, $firstRowIndex + $k));
             $sheet->fromArray(array(
@@ -110,10 +110,10 @@ class Costing extends ExportableBook
                 'CUC',
                 $service->getInternalNotes()
             ), null, sprintf('A%s', $firstRowIndex + $k));
-            
+
             $sheet->getStyle(sprintf('F%s:G%s', $firstRowIndex + $k, $firstRowIndex + $k))->getNumberFormat()->setFormatCode('0.00');
-            $sheet->getCell(sprintf('F%s', $firstRowIndex + $k))->setValueExplicit(sprintf('%0.2f', $service->getSupplierPrice()), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            $sheet->getCell(sprintf('G%s', $firstRowIndex + $k))->setValueExplicit(sprintf('%0.2f', $service->getSupplierPrice()), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $sheet->getCell(sprintf('F%s', $firstRowIndex + $k))->setValueExplicit(sprintf('%0.2f', $service->getTotalPrice()), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+            $sheet->getCell(sprintf('G%s', $firstRowIndex + $k))->setValueExplicit(sprintf('%0.2f', $service->getTotalPrice()), \PHPExcel_Cell_DataType::TYPE_NUMERIC);
         }
 
         $sheet->mergeCells(sprintf('D%s:F%s', $firstRowIndex + $this->record->getServices()->count() + 2, $firstRowIndex + $this->record->getServices()->count() + 2));
@@ -135,17 +135,17 @@ class Costing extends ExportableBook
                 ->setFormatCode('0.00')
                 ;
     }
-    
+
     private function renderAdministrativeBlock()
     {
         $firstRow = 7 + $this->record->getServices()->count() + 4;
         $sheet = $this->book->getActiveSheet();
-        
+
         foreach ($this->record->getAdministrativeCharges() as $k => $charge) {
             $sheet->fromArray(array(
                 $charge->getName(),
                 '-',
-                $charge->getNights(),
+                $charge->getMultiplier(),
                 $charge->getPax(),
                 $charge->getPrice(),
                 $charge->getTotal()
@@ -156,7 +156,7 @@ class Costing extends ExportableBook
                 ->getNumberFormat()
                 ->setFormatCode('0.00')
                 ;
-        
+
         $totalRow = $firstRow + $this->record->getAdministrativeCharges()->count() + 1;
         $sheet->fromArray(array(
             'TOTAL EXPENSES',

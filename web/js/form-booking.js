@@ -413,6 +413,14 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
     var initSearchBox = function() {
         var $searchBox = $('#searchServiceModal');
 
+        $searchBox.on('preDraw.dt','table', function() {
+            $(this).parent().block({
+                'message': 'Loading services...'
+            });
+        }).on('draw.dt', 'table', function() {
+            $(this).parent().unblock();
+        });
+
         var utils = {
             initDatepickers: function($date0, $date1, changeCallback) {
                 var options = {
@@ -449,29 +457,44 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 
         var initHotelControls = function() {
-            var $tab = $searchBox.find('#tab-hotel');
+            //Este estáhecho con un datatable dinámico (serverSide: true)
+            var $tab = $searchBox.find('#tab-hotel'),
+                $table = $tab.find('table.table-results');
 
-            var updateResults = function() {
-                var $dv = $tab.find('.table-responsive'),
-                    data = {
-                        'from': $tab.find('input:text.datepicker:first').val(),
-                        'to': $tab.find('input:text.datepicker:last').val(),
-                        'pax': $tab.find('select[name$="[pax]"]').val(),
-                        'plan': $tab.find('select[name$="[plan]"]').val(),
-                        'quantity': $tab.find('select[name$="[quantity]"]').val()
-                    };
-                $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_gethotelprices'), data, function() {
-                    $dv.find('table').DataTable();
-                });
-            }
-
-            utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
-
-            $tab.find('select').on('change', function() {
-                updateResults();
+            $table.dataTable({
+                'serverSide': true,
+                'ajax': {
+                    'url': Routing.generate('app_offers_gethotelprices'),
+                    'data': function(baseData) {
+                        return $.extend({}, baseData, {
+                            'filter': {
+                                'from': $tab.find('input:text.datepicker:first').val(),
+                                'to': $tab.find('input:text.datepicker:last').val(),
+                                'pax': $tab.find('select[name$="[pax]"]').val(),
+                                'plan': $tab.find('select[name$="[plan]"]').val(),
+                                'quantity': $tab.find('select[name$="[quantity]"]').val()
+                            }
+                        });
+                    },
+                    'method': 'POST'
+                },
+                'aoColumns': [
+                    {name: 'hotel', title: Translator.trans('Hotel')},
+                    {name: 'room', title: Translator.trans('Room')},
+                    {name: 'seasson', title: Translator.trans('Season')},
+                    {name: 'plan', title: Translator.trans('Plan')},
+                    {name: 'pax', title: Translator.trans('Pax')},
+                    {name: 'price', title: Translator.trans('Price')},
+                    {name: 'total', title: Translator.trans('Total')},
+                    {sortable: false, searchable: false, width: '40px'}
+                ]
             });
 
-            $tab.on('click', 'button.btn-select-service', function() {
+            var updateResults = function() {
+                $table.dataTable().api().draw();
+            }
+
+            $table.on('click', 'button.btn-select-service', function() {
                 var data = $(this).data('service');
 
                 $searchBox.modal('hide');
@@ -496,11 +519,15 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $item.find('input[name$="[totalPrice]"]').trigger('change');
             });
 
-            $searchBox.find('a[role=tab][aria-controls=tab-hotel]').on('shown.bs.tab', function() {
+            utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
+
+            $tab.find('select').on('change', function() {
                 updateResults();
             });
 
-            updateResults();
+            $searchBox.find('a[role=tab][aria-controls=tab-hotel]').on('shown.bs.tab', function() {
+                updateResults();
+            });
         }
 
         var initPrivateHouseControls = function() {

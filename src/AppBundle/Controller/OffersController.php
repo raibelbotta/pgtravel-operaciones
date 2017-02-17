@@ -375,8 +375,13 @@ class OffersController extends Controller
      */
     public function getHotelPricesAction(Request $request)
     {
-        $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
-        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
+        $columns = $request->get('columns');
+        $filter = $request->get('filter', array());
+        $order = $request->get('order', array());
+        $search = $request->get('search', array());
+
+        $from = isset($filter['from']) && $filter['from'] ? \DateTime::createFromFormat('d/m/Y H:i:s', $filter['from'] . ' 00:00:00') : null;
+        $to = isset($filter['to']) && $filter['to'] ? \DateTime::createFromFormat('d/m/Y H:i:s', $filter['to'] . ' 00:00:00') : null;
 
         $manager = $this->getDoctrine()->getManager();
         $qb = $manager->getRepository('AppBundle:ContractHotelPrice')
@@ -384,6 +389,7 @@ class OffersController extends Controller
                 ->join('p.season', 's')
                 ->join('p.contract', 'c')
                 ->join('s.facility', 'f')
+                ->join('p.room', 'r')
                 ;
         $andX = $qb->expr()->andX();
 
@@ -402,22 +408,71 @@ class OffersController extends Controller
                     ));
         }
 
-        if ($request->get('pax')) {
-            $andX->add($qb->expr()->eq('p.cupo', $qb->expr()->literal($request->get('pax'))));
+        if (isset($filter['pax']) && $filter['pax']) {
+            $andX->add($qb->expr()->eq('p.cupo', $qb->expr()->literal($filter['pax'])));
         }
 
-        if ($request->get('plan')) {
-            $andX->add($qb->expr()->eq('p.plan', $qb->expr()->literal($request->get('plan'))));
+        if (isset($filter['plan']) && $filter['plan']) {
+            $andX->add($qb->expr()->eq('p.plan', $qb->expr()->literal($filter['plan'])));
         }
 
         if ($andX->count() > 0) {
             $qb->where($andX);
         }
 
-        return $this->render('Offers/hotel_prices_results.html.twig', array(
-            'query' => $qb->getQuery(),
-            'quantity' => $request->get('quantity', 0),
-            'nights' => $from && $to ? $to->diff($from, true)->days : 0
+        if ($order) {
+            $column = call_user_func(function($name) {
+                if ($name == 'hotel') {
+                    return 'f.name';
+                } elseif ($name == 'room') {
+                    return 'r.name';
+                } elseif ($name == 'season') {
+                    return 's.startAt';
+                } elseif ($name == 'price') {
+                    return 'p.value';
+                } elseif ($name == 'total') {
+                    return 'p.value';
+                }
+                return null;
+            }, $columns[$order[0]['column']]['name']);
+            if (null !== $column) {
+                $qb->orderBy($column, strtoupper($order[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
+
+        $list = $pagination->getItems();
+        $total = $pagination->getTotalItemCount();
+
+        $nights = $from && $to ? $to->diff($from, true)->days : 0;
+        $twig = $this->container->get('twig');
+
+        $data = array_map(function(\AppBundle\Entity\ContractHotelPrice $price)  use ($twig, $filter, $nights) {
+            $qty = isset($filter['quantity']) && $filter['quantity'] ? $filter['quantity'] : 0;
+            return array(
+                (string) $price->getSeason()->getFacility(),
+                (string) $price->getRoom(),
+                (string) $price->getSeason(),
+                $price->getPlan(),
+                $price->getCupo(),
+                sprintf('<div class="text-right">%0.2f</div>', $price->getValue()),
+                sprintf('<div class="text-right">%0.2f</div>', $price->getValue() * $qty * $nights),
+                $twig->render('Offers/_hotel_prices.html.twig', array(
+                    'price' => $price,
+                    'quantity' => $qty,
+                    'nights' => $nights
+                ))
+            );
+        }, $list);
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
         ));
     }
 

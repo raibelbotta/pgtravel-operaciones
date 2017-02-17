@@ -519,6 +519,41 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $item.find('input[name$="[totalPrice]"]').trigger('change');
             });
 
+            $tab.find('form .date:first').on('dp.change', function(e) {
+                var from = e.date ? e.date.clone() : null,
+                    to = $tab.find('form input.datepicker:last').val() ? moment($tab.find('form input.datepicker:last').val(), 'DD/MM/YYYY') : null;
+
+                if (!from || !to) {
+                    $tab.find('form input[name=nights]').val('');
+                } else {
+                    var nights = to.startOf('day').diff(from.startOf('day'), 'days');
+                    $tab.find('form input[name=nights]').val(nights);
+                }
+            });
+            $tab.find('form .date:last').on('dp.change', function(e) {
+                var from = $tab.find('form input.datepicker:first').val() ? moment($tab.find('form input.datepicker:first').val(), 'DD/MM/YYYY') : null,
+                    to = e.date ? e.date.clone() : null;
+
+                if (!from || !to) {
+                    $tab.find('form input[name=nights]').val('');
+                } else {
+                    var nights = to.startOf('day').diff(from.startOf('day'), 'days');
+                    $tab.find('form input[name=nights]').val(nights);
+                }
+            });
+            $tab.find('input[name=nights]').on('change', function() {
+                var from = $tab.find('form input.datepicker:first').val() ? moment($tab.find('form input.datepicker:first').val(), 'DD/MM/YYYY') : null,
+                    nights = $(this).val();
+
+                if ('' === nights) {
+                    $tab.find('form input.datepicker:last').val('');
+                } else {
+                    from.add(nights, 'days');
+                    $tab.find('form input.datepicker:last').val(from.format('DD/MM/YYYY'));
+                }
+                updateResults();
+            });
+
             utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
 
             $tab.find('select').on('change', function() {
@@ -547,9 +582,44 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 });
             }
 
+            $tab.find('form .date:first').on('dp.change', function(e) {
+                var from = e.date ? e.date.clone() : null,
+                    to = $tab.find('form input.datepicker:last').val() ? moment($tab.find('form input.datepicker:last').val(), 'DD/MM/YYYY') : null;
+
+                if (!from || !to) {
+                    $tab.find('form input[name=nights]').val('');
+                } else {
+                    var nights = to.startOf('day').diff(from.startOf('day'), 'days');
+                    $tab.find('form input[name=nights]').val(nights);
+                }
+            });
+            $tab.find('form .date:last').on('dp.change', function(e) {
+                var from = $tab.find('form input.datepicker:first').val() ? moment($tab.find('form input.datepicker:first').val(), 'DD/MM/YYYY') : null,
+                    to = e.date ? e.date.clone() : null;
+
+                if (!from || !to) {
+                    $tab.find('form input[name=nights]').val('');
+                } else {
+                    var nights = to.startOf('day').diff(from.startOf('day'), 'days');
+                    $tab.find('form input[name=nights]').val(nights);
+                }
+            });
+            $tab.find('input[name=nights]').on('change', function() {
+                var from = $tab.find('form input.datepicker:first').val() ? moment($tab.find('form input.datepicker:first').val(), 'DD/MM/YYYY') : null,
+                    nights = $(this).val();
+
+                if ('' === nights) {
+                    $tab.find('form input.datepicker:last').val('');
+                } else {
+                    from.add(nights, 'days');
+                    $tab.find('form input.datepicker:last').val(from.format('DD/MM/YYYY'));
+                }
+                updateResults();
+            });
+
             utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
 
-            $tab.find('form#filter-private-house').find('input:not(.datepicker), select').on('change', function() {
+            $tab.find('form#filter-private-house').find('input:not(.datepicker, [name=nights]), select').on('change', function() {
                 updateResults();
             });
 

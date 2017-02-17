@@ -7,7 +7,7 @@
         <div class="tab-pane active" role="tabpanel" id="tab-hotel" style="padding: 16px;">
             <form action="" id="filter-hotel">
                 <div class="row row-datepickers">
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'From'|trans }}</label>
                         <div class="input-group date">
                             <input type="text" class="form-control input-sm datepicker">
@@ -16,7 +16,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'To'|trans }}</label>
                         <div class="input-group date">
                             <input type="text" class="form-control input-sm datepicker">
@@ -24,6 +24,10 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Nights'|trans }}</label>
+                        <input type="number" name="nights" class="form-control input-sm text-right">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'Pax'|trans }}</label>
@@ -82,7 +86,11 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-sm-4 form-group">
+                    <div class="col-sm-2 form-group">
+                        <label class="control-label">{{ 'Nights'|trans }}</label>
+                        <input type="number" name="nights" class="form-control input-sm text-right">
+                    </div>
+                    <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'Address'|trans }}</label>
                         <input type="text" name="addresss" class="form-control input-sm">
                     </div>

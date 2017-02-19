@@ -157,9 +157,16 @@ class SuppliersController extends Controller
     {
         $form = $this->createForm(SupplierFormType::class, $record);
 
+        $originalEmails = array();
         $originalEmployees = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($record->getEmployees() as $employee) {
             $originalEmployees[] = $employee;
+            if (!isset($originalEmails[$employee->getId()])) {
+                $originalEmails[$employee->getId()] = new \Doctrine\Common\Collections\ArrayCollection();
+            }
+            foreach ($employee->getEmails() as $email) {
+                $originalEmails[$employee->getId()][] = $email;
+            }
         }
 
         $form->handleRequest($request);
@@ -169,6 +176,16 @@ class SuppliersController extends Controller
             foreach ($originalEmployees as $employee) {
                 if (false === $record->getEmployees()->contains($employee)) {
                     $em->remove($employee);
+                }
+            }
+            
+            foreach ($record->getEmployees() as $employee) {
+                if (null !== $employee->getId()) {
+                    foreach ($originalEmails[$employee->getId()] as $email) {
+                        if (!$employee->getEmails()->contains($email)) {
+                            $em->remove($email);
+                        }
+                    }
                 }
             }
 

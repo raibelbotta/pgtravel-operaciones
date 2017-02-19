@@ -57,14 +57,6 @@ class SupplierEmployee
 
     /**
      * @var string
-     * 
-     * @ORM\Column(type="string", length=100, nullable=true)
-     * @Assert\Email
-     */
-    private $email;
-
-    /**
-     * @var string
      *
      * @ORM\Column(name="postal_address", type="text", nullable=true)
      */
@@ -85,8 +77,15 @@ class SupplierEmployee
     private $fixedPhone;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SupplierEmployeeEmail", mappedBy="employee", cascade={"persist", "remove"})
+     */
+    private $emails;
+
+    /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(name="created_at", type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -330,28 +329,48 @@ class SupplierEmployee
     {
         return $this->jobPosition;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->emails = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * Set email
+     * Add email
      *
-     * @param string $email
+     * @param \AppBundle\Entity\SupplierEmployeeEmail $email
      *
      * @return SupplierEmployee
      */
-    public function setEmail($email)
+    public function addEmail(\AppBundle\Entity\SupplierEmployeeEmail $email)
     {
-        $this->email = $email;
+        if (!$this->emails->contains($email)) {
+            $this->emails[] = $email;
+            $email->setEmployee($this);
+        }
 
         return $this;
     }
 
     /**
-     * Get email
+     * Remove email
      *
-     * @return string
+     * @param \AppBundle\Entity\SupplierEmployeeEmail $email
      */
-    public function getEmail()
+    public function removeEmail(\AppBundle\Entity\SupplierEmployeeEmail $email)
     {
-        return $this->email;
+        $this->emails->removeElement($email);
+    }
+
+    /**
+     * Get emails
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmails()
+    {
+        return $this->emails;
     }
 }

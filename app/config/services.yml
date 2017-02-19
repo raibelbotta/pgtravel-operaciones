@@ -53,6 +53,8 @@ parameters:
             html_options: 'nights pax -end-date -places -rent-cars -nights pax facility'
         other: { name: other, display: Other }
 
+    app.email_positions: [ Home, Work, Mobile, Other ]
+
 services:
     # KernelRequest listener
     extension.listener:
@@ -188,7 +190,17 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.email_position_type:
+        class: AppBundle\Form\Type\EmailPositionType
+        arguments: [ '%app.email_positions%' ]
+        tags:
+            - { name: form.type }
 
+    app.validator.constraints.email_position:
+        class: ValidEmailPositionValidator
+        arguments: [ %app.email_positions% ]
+        tags:
+            - { name: validator.constraint_validator, alias: validator_email_position }
     app.validator.constraints.cupos:
         class: ValidCupoValidator
         arguments: [ %app.hotel.cupos% ]

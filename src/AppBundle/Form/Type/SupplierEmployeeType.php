@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 /**
@@ -22,7 +23,6 @@ class SupplierEmployeeType extends AbstractType
                 ->add('gender', GenderType::class, array(
                     'required' => false
                 ))
-                ->add('email')
                 ->add('fixedPhone', PhoneNumberType::class, array(
                     'required' => false
                 ))
@@ -33,6 +33,13 @@ class SupplierEmployeeType extends AbstractType
                     'required' => false
                 ))
                 ->add('jobPosition')
+                ->add('emails', CollectionType::class, array(
+                    'entry_type' => SupplierEmployeeEmailType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'required' => false
+                ))
                 ;
     }
 

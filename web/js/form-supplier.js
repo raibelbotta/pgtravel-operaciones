@@ -2,12 +2,57 @@ App = typeof App !== 'undefined' ? App : {};
 App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
 
 +(App.Suppliers.Form = function($) {
+    "use strict";
+
+    var initEmployeeCollection = function() {
+        var $container = $('#supplier_form_employees');
+
+        $container.data('index', $container.find('> .item').length);
+
+        $('#btnAddEmployee').on('click', function(event) {
+            event.preventDefault();
+
+            var index = $container.data('index'),
+                prototype = $container.data('prototype'),
+                $item = $(prototype.replace(/form_employees___name___/g, 'form_employees_' + index + '_').replace(/employees\]\[__name__\]/g, 'employees][' + index + ']'));
+
+            $container.append($item);
+
+            App.Forms.initTelephoneControl($item.find('input[type=tel]'));
+            $item.find('.collection-emails').data('index', 0);
+
+            $container.data('index', index + 1);
+        });
+
+        $('.collection-emails').each(function() {
+            $(this).data('index', $(this).find('.item').length);
+        });
+
+        $container.on('click', '.btn-add-email', function(event) {
+            event.preventDefault();
+
+            var $container = $(this).closest('.row').find('.collection-emails'),
+                index = $container.data('index'),
+                prototype = $container.data('prototype'),
+                $item = $(prototype.replace(/__name__/g, index));
+
+            $container.append($item);
+
+            $container.data('index', index + 1);
+        });
+
+        $container.on('click', '.btn-remove-item', function(event) {
+            event.preventDefault();
+
+            console.log($(this).parents());
+            $(this).closest('.item').fadeOut(function() {
+                $(this).remove();
+            });
+        });
+    }
+
     var initControls = function() {
         App.Forms.initTelephoneControl($('form#supplier input[type=tel]'));
-
-        $('form#supplier .collection-employees').on('item-added.app', function(event, data) {
-            App.Forms.initTelephoneControl($(data.item).find('input[type=tel]'));
-        });
 
         $('form#supplier select[name$="[place]"]').select2({
             width: '100%',
@@ -52,6 +97,7 @@ App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
         init: function() {
             initControls();
             initValidator();
+            initEmployeeCollection();
         }
     }
 }(jQuery));

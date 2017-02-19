@@ -62,19 +62,31 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-xs-12 col-sm-4">
-                        <label for="" class="control-label">{{ 'Email'|trans }}</label>
-                        <div class="form-control">{{ employee.email }}</div>
-                    </div>
-                    <div class="form-group col-xs-6 col-sm-4">
+                    <div class="form-group col-xs-6 col-sm-6">
                         <label class="control-label">{{ 'Mobile phone'|trans }}</label>
                         <div class="form-control">{{ employee.mobilePhone is not empty ? phone_number_format(employee.mobilePhone, 'INTERNATIONAL') : '' }}</div>
                     </div>
-                    <div class="form-group col-xs-6 col-sm-4">
+                    <div class="form-group col-xs-6 col-sm-6">
                         <label class="control-label">{{ 'Fixed phone'|trans }}</label>
                         <div class="form-control">{{ employee.fixedPhone is not empty ? phone_number_format(employee.fixedPhone, 'INTERNATIONAL') : '' }}</div>
                     </div>
                 </div>
+                {% if employee.emails|length > 0 %}
+                    <div class="row">
+                        <div class="col-xs-12"><label class="control-label">Emails</label></div>
+                        <div class="col-xs-12">
+                            <div class="row">
+                                {% for email in employee.emails %}
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="form-control">
+                                            {{ email.email }} ({{ email.position }})
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                 {% if employee.postalAddress is not empty %}
                     <div class="row">
                         <div class="form-group col-xs-12 col-sm-12">

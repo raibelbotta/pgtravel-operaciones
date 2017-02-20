@@ -235,7 +235,7 @@ class Reservation
     public function __construct()
     {
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->administrativeAharges = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->administrativeCharges = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payAttachments = new \Doctrine\Common\Collections\ArrayCollection();
         
         $this->state = 'offer';

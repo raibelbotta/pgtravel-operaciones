@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use AppBundle\Model\AlertableInterface;
 
 /**
  * ReservationService
@@ -12,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="reservation_service")
  * @ORM\Entity
  */
-class ReservationService
+class ReservationService implements AlertableInterface
 {
     /**
      * @var int

@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use AppBundle\Model\AlertableInterface;
 
 /**
  * Reservation
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * @Vich\Uploadable
  * @AppBundle\Validator\Constraints\OfferHasOneServiceAtLeast
  */
-class Reservation
+class Reservation implements AlertableInterface
 {
     const STATE_OFFER = 'offer';
     const STATE_RESERVATION = 'reservation';
@@ -215,6 +216,15 @@ class Reservation
      * @ORM\JoinColumn(onDelete="set null")
      */
     private $operator;
+    
+    /**
+     * No encontré nombre en inglés para la propiedad que dice que esta reserva
+     * ya apareció en las alertas
+     * @var boolean
+     * 
+     * @ORM\Column(name="cone", type="boolean", options={"default": false})
+     */
+    private $cone;
 
     /**
      * @var \DateTime
@@ -238,6 +248,7 @@ class Reservation
         $this->administrativeCharges = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payAttachments = new \Doctrine\Common\Collections\ArrayCollection();
         
+        $this->cone = false;
         $this->state = 'offer';
         $this->isCancelled = false;
         $this->version = 1;
@@ -988,5 +999,29 @@ class Reservation
     public function getArrivalFly()
     {
         return $this->arrivalFly;
+    }
+
+    /**
+     * Set cone
+     *
+     * @param boolean $cone
+     *
+     * @return Reservation
+     */
+    public function setCone($cone)
+    {
+        $this->cone = $cone;
+
+        return $this;
+    }
+
+    /**
+     * Get cone
+     *
+     * @return boolean
+     */
+    public function getCone()
+    {
+        return $this->cone;
     }
 }

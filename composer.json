@@ -32,7 +32,8 @@
         "jms/i18n-routing-bundle": "^2.0",
         "symfony/assetic-bundle": "^2.8",
         "friendsofsymfony/jsrouting-bundle": "^1.6",
-        "willdurand/js-translation-bundle": "^2.6"
+        "willdurand/js-translation-bundle": "^2.6",
+        "nesbot/carbon": "^1.22"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

@@ -16,7 +16,7 @@
     <link href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-    {% stylesheets filter="yui_css" output="compiled/css/login.min.css"
+    {% stylesheets filter="?scssphp" output="compiled/css/login.min.css"
         "../web/plugins/tooltipster/css/tooltipster.css"
         "../web/plugins/tooltipster/css/tooltipster-custom.css"
         "../web/plugins/nprogress/nprogress.css"
@@ -116,7 +116,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts filter="yui_js" output="compiled/js/login.min.js"
+    {% javascripts filter="?jsqueeze" output="compiled/js/login.min.js"
         "../web/plugins/jquery/dist/jquery.min.js"
         "../web/plugins/bootstrap/dist/js/bootstrap.js"
         "../web/plugins/tooltipster/js/jquery.tooltipster.js"

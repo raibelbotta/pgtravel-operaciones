@@ -12,7 +12,7 @@
 
 {% block stylesheets %}
 
-    {% stylesheets filter="cssrewrite,?yui_css" output="compiled/css/plugins.min.css"
+    {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/plugins.min.css"
         "plugins/bootstrap/dist/css/bootstrap.css"
         "plugins/font-awesome/css/font-awesome.css"
         "plugins/intl-tel-input/css/intlTelInput.min.css"
@@ -32,7 +32,7 @@
     {% endstylesheets %}
 
     <!-- Custom Theme Style -->
-    {% stylesheets filter="yui_css" output="compiled/css/custom.min.css"
+    {% stylesheets filter="?scssphp" output="compiled/css/custom.min.css"
         "css/custom.css"
         %}
         <link href="{{ asset_url }}" rel="stylesheet">
@@ -219,7 +219,7 @@
     </script>
 
     <!-- plugins -->
-    {% javascripts filter="?yui_js" output="compiled/js/plugins.min.js"
+    {% javascripts filter="?jsqueeze" output="compiled/js/plugins.min.js"
         "plugins/jquery/dist/jquery.min.js"
         "plugins/jquery-migrate-1.2.1.js"
         "plugins/bootstrap/dist/js/bootstrap.js"
@@ -244,7 +244,7 @@
     {% endjavascripts %}
 
     <!-- Custom Theme Scripts -->
-    {% javascripts filter="yui_js" output="compiled/js/custom.min.js"
+    {% javascripts filter="?jsqueeze" output="compiled/js/custom.min.js"
         "js/*.js"
         %}
         <script src="{{ asset_url }}"></script>

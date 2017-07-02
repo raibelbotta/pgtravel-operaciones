@@ -19,9 +19,13 @@
                     <div class="help-block"></div>
                 </div>
                 <div class="col-xs-12">
-                    <label for="" class="control-label">{{ 'Fixed phone'|trans }}</label>
+                    <label>{{ 'Fixed phone'|trans }}</label>
                     <div class="form-control">{{ record.fixedPhone is not empty ? phone_number_format(record.fixedPhone, 'INTERNATIONAL') : '' }}</div>
                     <div class="help-block"></div>
+                </div>
+                <div class="col-xs-12">
+                    <label>{{ "Email"|trans }}</label>
+                    <div class="form-control">{{ record.email }}</div>
                 </div>
                 {% if record.postalAddress is not empty %}
                     <div class="col-xs-6">
@@ -40,64 +44,66 @@
             </dirv>
         </div>
     </div>
-    <div class="x_panel">
-        <div class="x_title">
-            <h2>{{ 'Employees'|trans }}</h2>
-            <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-            {% for employee in record.employees %}
-                <div class="row item">
-                    <div class="form-group col-xs-12 col-sm-6">
-                        <label for="" class="control-label">{{ 'Full name'|trans }}</label>
-                        <div class="form-control">{{ employee.fullName }}</div>
+    {% if record.employees|length > 0 %}
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>{{ 'Employees'|trans }}</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                {% for employee in record.employees %}
+                    <div class="row item">
+                        <div class="form-group col-xs-12 col-sm-6">
+                            <label for="" class="control-label">{{ 'Full name'|trans }}</label>
+                            <div class="form-control">{{ employee.fullName }}</div>
+                        </div>
+                        <div class="form-group col-xs-6 col-sm-3">
+                            <label for="" class="control-label">{{ 'Job position'|trans }}</label>
+                            <div class="form-control">{{ employee.jobPosition }}</div>
+                        </div>
+                        <div class="form-group col-xs-6 col-sm-3">
+                            <label for="" class="control-label">{{ 'Gender'|trans }}</label>
+                            <div class="form-control">{{ employee.gender }}</div>
+                        </div>
                     </div>
-                    <div class="form-group col-xs-6 col-sm-3">
-                        <label for="" class="control-label">{{ 'Job position'|trans }}</label>
-                        <div class="form-control">{{ employee.jobPosition }}</div>
-                    </div>
-                    <div class="form-group col-xs-6 col-sm-3">
-                        <label for="" class="control-label">{{ 'Gender'|trans }}</label>
-                        <div class="form-control">{{ employee.gender }}</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-xs-6 col-sm-6">
-                        <label class="control-label">{{ 'Mobile phone'|trans }}</label>
-                        <div class="form-control">{{ employee.mobilePhone is not empty ? phone_number_format(employee.mobilePhone, 'INTERNATIONAL') : '' }}</div>
-                    </div>
-                    <div class="form-group col-xs-6 col-sm-6">
-                        <label class="control-label">{{ 'Fixed phone'|trans }}</label>
-                        <div class="form-control">{{ employee.fixedPhone is not empty ? phone_number_format(employee.fixedPhone, 'INTERNATIONAL') : '' }}</div>
-                    </div>
-                </div>
-                {% if employee.emails|length > 0 %}
                     <div class="row">
-                        <div class="col-xs-12"><label class="control-label">Emails</label></div>
-                        <div class="col-xs-12">
-                            <div class="row">
-                                {% for email in employee.emails %}
-                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                        <div class="form-control">
-                                            {{ email.email }} ({{ email.position }})
+                        <div class="form-group col-xs-6 col-sm-6">
+                            <label class="control-label">{{ 'Mobile phone'|trans }}</label>
+                            <div class="form-control">{{ employee.mobilePhone is not empty ? phone_number_format(employee.mobilePhone, 'INTERNATIONAL') : '' }}</div>
+                        </div>
+                        <div class="form-group col-xs-6 col-sm-6">
+                            <label class="control-label">{{ 'Fixed phone'|trans }}</label>
+                            <div class="form-control">{{ employee.fixedPhone is not empty ? phone_number_format(employee.fixedPhone, 'INTERNATIONAL') : '' }}</div>
+                        </div>
+                    </div>
+                    {% if employee.emails|length > 0 %}
+                        <div class="row">
+                            <div class="col-xs-12"><label class="control-label">Emails</label></div>
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    {% for email in employee.emails %}
+                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                            <div class="form-control">
+                                                {{ email.email }} ({{ email.position }})
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
-                {% if employee.postalAddress is not empty %}
-                    <div class="row">
-                        <div class="form-group col-xs-12 col-sm-12">
-                            <label class="control-label">{{ 'Postal address'|trans }}</label>
-                            <div class="form-control" style="height: auto;">{{ employee.postalAddress }}</div>
+                    {% endif %}
+                    {% if employee.postalAddress is not empty %}
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-sm-12">
+                                <label class="control-label">{{ 'Postal address'|trans }}</label>
+                                <div class="form-control" style="height: auto;">{{ employee.postalAddress }}</div>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class="pull-right">
         <a href="{{ path('app_suppliers_edit', {'id': record.id}) }}" class="btn btn-primary">{{ 'Edit'|trans }}</a>
         <a href="{{ path('app_suppliers_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>

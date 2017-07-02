@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * ContractAttachment
  *
  * @ORM\Table(name="contract_attachment")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ContractAttachmentRepository")
+ * @ORM\Entity
  * @Vich\Uploadable
  */
 class ContractAttachment
@@ -44,7 +44,7 @@ class ContractAttachment
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="file_name", type="string", length=255)
      * @Assert\NotBlank
      */

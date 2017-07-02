@@ -339,38 +339,60 @@
 
 {% block contract_private_house_service_row %}
     <div class="row item item-private-house-service">
-        <div class="col-sm-4 col-xs-8 form-group">
-            {{ form_label(form.roomName, null, {'label_attr': {'class': 'cntrol-label'}}) }}
+        <div class="col-md-2 col-xs-6 form-group">
+            {{ form_label(form.roomName) }}
             {{ form_widget(form.roomName, {'attr': {'class': 'form-control input-sm'}}) }}
         </div>
-        <div class="col-sm-2 col-xs-4 form-group">
-            {{ form_label(form.mealPlan, null, {'label_attr': {'class': 'control-label'}}) }}
+        <div class="col-md-2 col-xs-6 form-group">
+            {{ form_label(form.province) }}
+            {{ form_widget(form.province, {'attr': {'class': 'form-control input-sm'}}) }}
+        </div>
+        <div class="col-md-2 col-xs-12 form-group">
+            {{ form_label(form.mealPlan) }}
             {{ form_widget(form.mealPlan, {'attr': {'class': 'form-control input-sm'}}) }}
         </div>
-        <div class="col-sm-2 col-xs-5 form-group">
-            {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
+        <div class="col-md-2 col-xs-6 form-group">
+            {{ form_label(form.startAt) }}
             <div class="input-group date">
                 {{ form_widget(form.startAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
                 <span class="input-group-addon">
                     <span class="fa fa-calendar"></span>
                 </span>
             </div>
+            {% if form.startAt.vars.errors|length > 0 %}
+                <div class="error text-danger" id="error-{{ form.startAt.vars.id }}">
+                    {{ form_errors(form.startAt)|striptags }}
+                </div>
+            {% endif %}
         </div>
-        <div class="col-sm-2 col-xs-5 form-group">
-            {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
+        <div class="col-md-2 col-xs-6 form-group">
+            {{ form_label(form.endAt) }}
             <div class="input-group date">
                 {{ form_widget(form.endAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
                 <span class="input-group-addon">
                     <span class="fa fa-calendar"></span>
                 </span>
             </div>
+            {% if form.endAt.vars.errors|length > 0 %}
+                <div class="error text-danger" id="error-{{ form.endAt.vars.id }}">
+                    {{ form_errors(form.endAt)|striptags }}
+                </div>
+            {% endif %}
         </div>
-        <div class="col-sm-2 col-xs-2 form-group">
-            {{ form_label(form.price, null, {'label_attr': {'class': 'control-label'}}) }}
+        <div class="col-md-2 col-xs-12 form-group">
+            {{ form_label(form.price) }}
             {{ form_widget(form.price, {'attr': {'class': 'form-control input-sm text-right'}}) }}
         </div>
+        {{ form_rest(form) }}
+        <div class="col-md-12 col-xs-12">
+            <button type="button" class="btn btn-danger btn-block btn-xs btn-remove">
+                <i class="fa fa-trash"></i>
+            </button>
+            <hr class="visible-xs">
+            <br class="hidden-xs">
+        </div>
     </div>
-    {{ form_rest(form) }}
+
 {% endblock %}
 
 {% block contract_car_rental_service_row %}

@@ -88,30 +88,30 @@ class ContractsController extends Controller
 
         $getModelName = function(Contract $record) {
             $models = array(
-                'Hotel'         => 'hotel',
-                'Transport'     => 'transport',
-                'Car rental'    => 'car-rental',
-                'Restaurant'    => 'restaurant',
-                'Optionals'     => 'optionals',
-                'Guide'         => 'guide',
-                'Other'         => 'other'
+                'Hotel'             => 'hotel',
+                'Transportation'    => 'transport',
+                'Car rental'        => 'car-rental',
+                'Restaurant'        => 'restaurant',
+                'Optionals'         => 'optionals',
+                'Private house'     => 'private-house',
+                'Guide'             => 'guide',
+                'Other'             => 'other'
             );
 
             return array_search($record->getModel(), $models);
         };
 
-        $data = array_map(function($record) use($getModelName) {
+        $template = $this->container->get('twig')->loadTemplate('Contracts/_row.html.twig');
+        $data = array_map(function($record) use($getModelName, $template) {
             return array(
-                '<input type="checkbox" class="flat">',
+                $template->renderBlock('checkbox', array('record' => $record)),
                 $record->getName(),
                 $getModelName($record),
                 (string) $record->getSupplier(),
                 $record->getSignedAt() ? $record->getSignedAt()->format('Y-m-d') : '',
                 $record->getStartAt() ? $record->getStartAt()->format('Y-m-d') : '',
                 $record->getEndAt() ? $record->getEndAt()->format('Y-m-d') : '',
-                $this->renderView('Contracts/_actions.html.twig', array(
-                    'record' => $record
-                ))
+                $template->renderBlock('actions', array('record' => $record))
             );
         }, $list);
 

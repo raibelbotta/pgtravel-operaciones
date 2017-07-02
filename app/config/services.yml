@@ -27,7 +27,7 @@ parameters:
             html_options: 'end-date nights facility -places -rent-cars'
         transport:
             name: transport
-            display: Transport
+            display: Transportation
             voucher_title: TRANSPORT VOUCHER
             html_options: '-nights -facility places -rent-cars -pax'
         car-rental:

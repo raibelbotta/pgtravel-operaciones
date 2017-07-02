@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * ContractTopService
  *
  * @ORM\Table(name="contract_top_service")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ContractTopServiceRepository")
+ * @ORM\Entity
  */
 class ContractTopService
 {
@@ -30,7 +30,7 @@ class ContractTopService
      * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     private $contract;
-    
+
     /**
      * @var string
      *

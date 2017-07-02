@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use AppBundle\Entity\Supplier;
 
 /**
  * Description of SupplierFormType
@@ -23,6 +24,7 @@ class SupplierFormType extends AbstractType
                 ->add('fixedPhone', PhoneNumberType::class, array(
                     'required' => false
                 ))
+                ->add('email')
                 ->add('bankAccounts', null, array(
                     'label' => 'Bank data',
                     'required' => false
@@ -30,7 +32,9 @@ class SupplierFormType extends AbstractType
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
                 ))
-                ->add('place', PlaceType::class)
+                ->add('place', PlaceType::class, array(
+                    'required' => false
+                ))
                 ->add('employees', CollectionType::class, array(
                     'entry_type' => SupplierEmployeeType::class,
                     'allow_add' => true,
@@ -42,6 +46,6 @@ class SupplierFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\Supplier');
+        $resolver->setDefault('data_class', Supplier::class);
     }
 }

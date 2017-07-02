@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * ContractHotelPrice
  *
  * @ORM\Table(name="contract_hotel_price")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ContractHotelPriceRepository")
+ * @ORM\Entity
  */
 class ContractHotelPrice
 {

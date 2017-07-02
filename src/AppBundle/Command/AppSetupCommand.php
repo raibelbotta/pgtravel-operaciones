@@ -7,6 +7,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * Description of AppSetupCommand
@@ -36,10 +39,28 @@ class AppSetupCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->loadFixtures();
+
         $this->createAdminUser($input->getArgument('username'),
                 $input->getArgument('password'));
 
         $output->writeln('Done!');
+    }
+
+    private function loadFixtures()
+    {
+        $kernel = $this->getContainer()->get('kernel');
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput(array(
+            'command' => 'doctrine:fixtures:load'
+        ));
+        $input->setInteractive(false);
+
+        // You can use NullOutput() if you don't need the output
+        $output = new NullOutput();
+        $application->run($input, $output);
     }
 
     private function createAdminUser($username, $password)

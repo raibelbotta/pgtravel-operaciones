@@ -45,10 +45,12 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         $('body').on('click', '.btn-search-service', function() {
             var $item = $(this).closest('.item');
 
-            $('#searchServiceModal').data('item', $item).modal({
+            $('#searchServiceModal').remove();
+            var $m = $('<div id="searchServiceModal" class="modal fade in"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">' + Translator.trans('Search service') + '</h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-default">' + Translator.trans('Close') + '</button></div></div></div></div>').appendTo($('body'));
+            $m.data('item', $item).modal({
                 backdrop: 'static'
             });
-            $('#searchServiceModal .modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
+            $m.find('.modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
         });
 
         $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
@@ -414,9 +416,9 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
     var initSearchBox = function() {
         var $searchBox = $('#searchServiceModal');
 
-        $searchBox.on('preDraw.dt','table', function() {
+        $searchBox.on('preDraw.dt', 'table', function() {
             $(this).parent().block({
-                'message': 'Loading services...'
+                'message': Translator.trans('Loading services...')
             });
         }).on('draw.dt', 'table', function() {
             $(this).parent().unblock();
@@ -425,7 +427,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         var utils = {
             initDatepickers: function($date0, $date1, callback) {
                 var options = {
-                    format: 'DD/MM/YYYY',
+                    format: $date0.data('format') ? $date0.data('format') : 'DD/MM/YYYY',
                     showClear: true,
                     showTodayButton: true
                 };
@@ -458,15 +460,15 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 
         var initHotelControls = function() {
-            //Este estáhecho con un datatable dinámico (serverSide: true)
+            //Este está hecho con un datatable dinámico (serverSide: true)
             var $tab = $searchBox.find('#tab-hotel'),
                 $table = $tab.find('table.table-results');
 
             $table.dataTable({
-                'serverSide': true,
-                'ajax': {
-                    'url': Routing.generate('app_offers_gethotelprices'),
-                    'data': function(baseData) {
+                serverSide: true,
+                ajax: {
+                    url: Routing.generate('app_offers_gethotelprices'),
+                    data: function(baseData) {
                         return $.extend({}, baseData, {
                             'filter': {
                                 'from': $tab.find('input:text.datepicker:first').val(),
@@ -477,9 +479,9 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                             }
                         });
                     },
-                    'method': 'POST'
+                    method: 'POST'
                 },
-                'aoColumns': [
+                aoColumns: [
                     {name: 'hotel', title: Translator.trans('Hotel')},
                     {name: 'room', title: Translator.trans('Room')},
                     {name: 'seasson', title: Translator.trans('Season')},
@@ -504,8 +506,8 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
                 utils.translateResults($item, {
                     'model': 'hotel',
-                    'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
-                    'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
+                    'startAt': $tab.find('input.datepicker:first').val() + ' 12:00',
+                    'endAt': $tab.find('input.datepicker:last').val() + ' 16:00',
                     'name': data.serviceName,
                     'facilityName': data.hotel,
                     'nights': data.nights,
@@ -576,13 +578,17 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                         'to': $tab.find('input:text.datepicker:last').val(),
                         'quantity': $tab.find('select[name="quantity"]').val(),
                         'address': $tab.find('input[name="address"]').val(),
-                        'plan': $tab.find('select[name="plan"]').val()
+                        'plan': $tab.find('select[name="plan"]').val(),
+                        'province': $tab.find('select[name=province]').val()
                     };
                 $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getprivatehouseprices'), data, function() {
                     $dv.find('table').DataTable();
                 });
             }
 
+            $tab.find('select[name=province]').on('change', function() {
+                updateResults();
+            });
             $tab.find('form .date:first').on('dp.change', function(e) {
                 var from = e.date ? e.date.clone() : null,
                     to = $tab.find('form input.datepicker:last').val() ? moment($tab.find('form input.datepicker:last').val(), 'DD/MM/YYYY') : null;
@@ -634,8 +640,8 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
                 utils.translateResults($item, {
                     'model': 'private-house',
-                    'startAt': $tab.find('input.datepicker:first').val() + ' 08:00',
-                    'endAt': $tab.find('input.datepicker:last').val() + ' 08:00',
+                    'startAt': $tab.find('input.datepicker:first').val() + ' 12:00',
+                    'endAt': $tab.find('input.datepicker:last').val() + ' 16:00',
                     'name': data.service,
                     'supplier': data.supplier.id,
                     'facilityName': data.supplier.name,
@@ -716,7 +722,6 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                             url: Routing.generate('app_offers_gettransportprices'),
                             method: 'POST',
                             data: function(baseData) {
-                                console.log($tab.find('input:checkbox').prop('checked'));
                                 return $.extend({}, baseData, {
                                     filter: {
                                         'from': $tab.find('input:text.datepicker:first').val(),
@@ -830,6 +835,11 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         initCarRentalControls();
         initTransportControls();
         initGeneralControls();
+
+        +(function() {
+            var model = $searchBox.data('item').find('select[name$="[model]"]').val();
+            $searchBox.find('.nav.nav-tabs a[href="#tab-' + model + '"]').tab('show');
+        }());
     }
 
     return {
@@ -837,7 +847,6 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             init();
             initCollections();
             initValidation();
-            initSearchBox();
         }
     }
 }(jQuery));

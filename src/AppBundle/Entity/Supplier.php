@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Supplier
  *
  * @ORM\Table(name="supplier")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\SupplierRepository")
+ * @ORM\Entity
  */
 class Supplier
 {
@@ -41,7 +41,7 @@ class Supplier
 
     /**
      * @var Place
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Place")
      * @ORM\JoinColumn(onDelete="set null")
      */
@@ -49,7 +49,7 @@ class Supplier
 
     /**
      * @var Province
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Province")
      * @ORM\JoinColumn(onDelete="set null")
      */
@@ -69,6 +69,14 @@ class Supplier
      * @ORM\Column(name="fixed_phone", type="phone_number", nullable=true)
      */
     private $fixedPhone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     * @Assert\Email
+     */
+    private $email;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -106,6 +114,7 @@ class Supplier
     public function __construct()
     {
         $this->contracts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -289,7 +298,7 @@ class Supplier
         $this->employees[] = $employee;
 
         $employee->setSupplier($this);
-        
+
         return $this;
     }
 
@@ -383,5 +392,29 @@ class Supplier
     public function getPlace()
     {
         return $this->place;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Supplier
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

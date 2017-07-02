@@ -363,7 +363,8 @@ class OffersController extends Controller
             'cupos' => $this->container->getParameter('app.hotel.cupos'),
             'plans' => $this->container->getParameter('app.hotel.plans'),
             'models' => $models,
-            'car_types' => $manager->createQuery('SELECT t FROM AppBundle:RentCarType t ORDER BY t.name')
+            'car_types' => $manager->createQuery('SELECT t FROM AppBundle:RentCarType AS t ORDER BY t.name'),
+            'provinces' => $manager->createQuery('SELECT p FROM AppBundle:Province AS p ORDER BY p.name')
         ));
     }
 
@@ -485,7 +486,7 @@ class OffersController extends Controller
     public function getPrivateHousePricesAction(Request $request)
     {
         $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
-        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
+        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 23:59:59') : null;
 
         $manager = $this->getDoctrine()->getManager();
         $qb = $manager->getRepository('AppBundle:ContractPrivateHouseService')
@@ -528,6 +529,13 @@ class OffersController extends Controller
                             $qb->expr()->like('pl.name', $qb->expr()->literal(sprintf('%%%s%%', $request->get('address'))))
                             )
                     ));
+        }
+        if ($request->get('province')) {
+            $qb
+                    ->join('s.province', 'p')
+                    ->setParameter('province', $request->get('province'));
+                    ;
+            $andX->add($qb->expr()->eq('p.id', ':province'));
         }
 
         $qb->where($andX);

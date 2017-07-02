@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContractPrivateHouseServiceType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,9 +32,12 @@ class ContractPrivateHouseServiceType extends AbstractType
                     'required'  => false
                 ))
                 ->add('price')
+                ->add('province', ProvinceType::class, array(
+                    'required' => false
+                ))
                 ;
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('data_class', 'AppBundle\Entity\ContractPrivateHouseService');

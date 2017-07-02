@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * ContractPrivateHouseService
  *
  * @ORM\Table(name="contract_private_house_service")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ContractPrivateHouseServiceRepository")
+ * @ORM\Entity
  */
 class ContractPrivateHouseService
 {
@@ -24,12 +24,12 @@ class ContractPrivateHouseService
 
     /**
      * @var Contract
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Contract", inversedBy="privateHouseServices")
      * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     private $contract;
-    
+
     /**
      * @var string
      *
@@ -37,6 +37,14 @@ class ContractPrivateHouseService
      * @Assert\NotBlank
      */
     private $roomName;
+
+    /**
+     * @var Province
+     *
+     * @ORM\ManyToOne(targetEntity="Province")
+     * @ORM\JoinColumn(onDelete="set null")
+     */
+    private $province;
 
     /**
      * @var string
@@ -56,14 +64,14 @@ class ContractPrivateHouseService
 
     /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(name="start_at", type="date", nullable=true)
      */
     private $startAt;
-    
+
     /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(name="end_at", type="date", nullable=true)
      */
     private $endAt;
@@ -220,5 +228,29 @@ class ContractPrivateHouseService
     public function getContract()
     {
         return $this->contract;
+    }
+
+    /**
+     * Set province
+     *
+     * @param \AppBundle\Entity\Province $province
+     *
+     * @return ContractPrivateHouseService
+     */
+    public function setProvince(\AppBundle\Entity\Province $province = null)
+    {
+        $this->province = $province;
+
+        return $this;
+    }
+
+    /**
+     * Get province
+     *
+     * @return \AppBundle\Entity\Province
+     */
+    public function getProvince()
+    {
+        return $this->province;
     }
 }

@@ -1,7 +1,0 @@
-<div class="btn-group">
-    <a href="{{ path('app_contracts_edit', {'id': record.id}) }}" title="{{ 'Edit'|trans }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
-    {% if record.model == 'hotel' %}
-        <a href="{{ path('app_contracts_prices', {'id': record.id}) }}" class="btn btn-default btn-xs" title="{{ 'Prices'|trans }}"><i class="fa fa-money"></i></a></li>
-    {% endif %}
-    <a href="{{ path('app_contracts_delete', {'id': record.id}) }}" title="{{ 'Delete'|trans }}" class="btn btn-danger btn-xs btn-delete"><i class="fa fa-remove"></i></a>
-</div>

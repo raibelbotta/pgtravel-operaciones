@@ -330,6 +330,8 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             $('body').animate({
                 scrollTop: $item.offset().top
             }, 500);
+
+            $item.find('.btn-search-service').trigger('click');
         });
 
         $('body').on('click', '.btn-remove-item', function(event) {

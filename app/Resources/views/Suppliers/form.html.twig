@@ -31,6 +31,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    {{ form_label(form.province, null, {label_attr: {'class': 'control-label col-sm-3 col-xs-12'}}) }}
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_widget(form.province, {attr: {class: 'form-control col-sm-7 col-xs-12'}}) }}
+                    </div>
+                </div>
+                <div class="form-group">
                     {{ form_label(form.bankAccounts, null, {'label_attr': {'class': 'control-label col-sm-3 col-xs-12'}}) }}
                     <div class="col-sm-6 col-xs-12">
                         {{ form_widget(form.bankAccounts, {'attr': {'class': 'form-control col-sm-7 col-xs-12'}}) }}

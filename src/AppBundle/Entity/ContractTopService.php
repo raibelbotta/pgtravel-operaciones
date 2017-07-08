@@ -51,6 +51,7 @@ class ContractTopService
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     * @Assert\Length(max=32000)
      */
     private $description;
 
@@ -58,6 +59,7 @@ class ContractTopService
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
+     * @Assert\Length(max=32000)
      */
     private $notes;
 

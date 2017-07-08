@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Entity\RentCarType as Entity;
 
 class RentCarType extends AbstractType
 {
@@ -27,7 +28,7 @@ class RentCarType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'class' => 'AppBundle\Entity\RentCarType',
+            'class' => Entity::class,
             'query_builder' => $this->manager->getRepository('AppBundle:RentCarType')
                     ->createQueryBuilder('c')
                     ->orderBy('c.name')

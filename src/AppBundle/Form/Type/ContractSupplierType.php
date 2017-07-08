@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Entity\Supplier;
 
 class ContractSupplierType extends AbstractType
 {
@@ -27,7 +28,7 @@ class ContractSupplierType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'class' => 'AppBundle\Entity\Supplier',
+            'class' => Supplier::class,
             'query_builder' => $this->manager->getRepository('AppBundle:Supplier')
                     ->createQueryBuilder('s')
                     ->orderBy('s.name')

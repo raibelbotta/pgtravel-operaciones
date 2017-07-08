@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity;
 
-use FOS\UserBundle\Entity\User as BaseUser;
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,7 +13,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * Description of User
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * 
+ *
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
  * @Vich\Uploadable
@@ -29,7 +29,7 @@ class User extends BaseUser
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      * @Assert\NotBlank(groups={"Profile"})
      */
@@ -68,11 +68,11 @@ class User extends BaseUser
 
     /**
      * @var \Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
-     * 
+     *
      * @ORM\Column(name="mobile_phone", type="phone_number", nullable=true)
      */
     private $mobilePhone;
-    
+
     /**
      * @var string
      *
@@ -100,7 +100,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->username = uniqid();
     }
 

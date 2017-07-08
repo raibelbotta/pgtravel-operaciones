@@ -5,8 +5,8 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Entity\ReservationService;
 
 /**
  * Description of OfferServiceType
@@ -32,9 +32,7 @@ class OfferServiceType extends AbstractType
                 ->add('model', OfferServiceModelType::class, array(
                     'label' => 'Type'
                 ))
-                ->add('description', TextareaType::class, array(
-                    'required' => false
-                ))
+                ->add('description')
                 ->add('clientName', null, array(
                     'label' => 'Person in charge'
                 ))
@@ -50,7 +48,6 @@ class OfferServiceType extends AbstractType
                 ->add('rentCar', RentCarType::class, array(
                     'required' => false
                 ))
-                ->add('description')
                 ->add('cost')
                 ->add('totalPrice')
                 ->add('supplier', null, array(
@@ -67,18 +64,14 @@ class OfferServiceType extends AbstractType
                     'html5'     => false,
                     'widget'    => 'single_text'
                 ))
-                ->add('internalNotes', TextareaType::class, array(
-                    'required' => false
-                ))
-                ->add('supplierNotes', TextareaType::class, array(
-                    'required' => false
-                ))
+                ->add('internalNotes')
+                ->add('supplierNotes')
                 ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\ReservationService');
+        $resolver->setDefault('data_class', ReservationService::class);
     }
 
     private function getSupplierQueryBuilder()

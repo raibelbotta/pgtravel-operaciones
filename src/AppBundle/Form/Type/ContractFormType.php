@@ -6,8 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use AppBundle\Entity\Contract;
 
 /**
  * Description of ContractFormType
@@ -22,12 +22,8 @@ class ContractFormType extends AbstractType
                 ->add('model', ContractModelType::class)
                 ->add('supplier', ContractSupplierType::class)
                 ->add('name')
-                ->add('description', TextareaType::class, array(
-                    'required' => false
-                ))
-                ->add('notes', TextareaType::class, array(
-                    'required' => false
-                ))
+                ->add('description')
+                ->add('notes')
                 ->add('signedAt', null, array(
                     'format'    => 'dd/MM/yyyy',
                     'html5'     => false,
@@ -88,6 +84,6 @@ class ContractFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\Contract');
+        $resolver->setDefault('data_class', Contract::class);
     }
 }

@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-xs-12">
                     <label class="control-label">{{ "Fixed phone"|trans }}</label>
-                    <div class="form-control">{{ record.fixedPhone is not empty ? phone_number_format(record.fixedPhone, 'INTERNATIONAL') : '' }}</div>
+                    <div class="form-control">{{ record.fixedPhone is not empty ? record.fixedPhone|phone_number_format('INTERNATIONAL') : '' }}</div>
                     <div class="help-block"></div>
                 </div>
                 {% if record.postalAddress is not empty %}
@@ -65,11 +65,11 @@
                     </div>
                     <div class="col-sm-4 col-xs-12 form-group">
                         <label for="" class="control-label">{{ 'Mobile phone'|trans }}</label>
-                        <div class="form-control">{{ contact.mobilePhone is not empty ? phone_number_format(contact.mobilePhone, 'INTERNATIONAL') : '' }}</div>
+                        <div class="form-control">{{ contact.mobilePhone is not empty ? contact.mobilePhone|phone_number_format('INTERNATIONAL') : '' }}</div>
                     </div>
                     <div class="col-sm-4 col-xs-12 form-group">
                         <label for="" class="control-label">{{ 'Fixed phone'|trans }}</label>
-                        <div class="form-control">{{ contact.fixedPhone is not empty ? phone_number_format(contact.fixedPhone, 'INTERNATIONAL') : '' }}</div>
+                        <div class="form-control">{{ contact.fixedPhone is not empty ? contact.fixedPhone|phone_number_format('INTERNATIONAL') : '' }}</div>
                     </div>
                     {% if contact.postalAddress is not empty %}
                         <div class="col-sm-6 col-xs-12 form-group">

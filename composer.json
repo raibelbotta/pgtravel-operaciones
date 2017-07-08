@@ -1,11 +1,20 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "license": "MIT",
+    "name": "raibel/pgtravel-operations",
+    "license": "proprietary",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "psr-4": { "": "src/" },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+        "psr-4": {
+            "AppBundle\\": "src/AppBundle"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
+    },
+    "autoload-dev": {
+        "files": [
+            "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
+        ]
     },
     "require": {
         "php": ">=5.6",
@@ -17,18 +26,17 @@
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/user-bundle": "^1.3",
+        "friendsofsymfony/user-bundle": "^2.0",
         "gedmo/doctrine-extensions": "dev-master",
         "liuggio/excelbundle": "^2.1",
-        "misd/phone-number-bundle": "^1.1",
-        "hwi/oauth-bundle": "^0.5.0",
-        "egeloen/ckeditor-bundle": "^4.0",
+        "misd/phone-number-bundle": "^1.2",
+        "egeloen/ckeditor-bundle": "^5.0",
         "jms/translation-bundle": "^1.3",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "vich/uploader-bundle": "^0.14.0",
+        "vich/uploader-bundle": "^1.4",
         "liip/imagine-bundle": "^1.6",
         "oneup/flysystem-bundle": "^1.5",
-        "knplabs/knp-paginator-bundle": "^2.5",
+        "knplabs/knp-paginator-bundle": "^2.6",
         "jms/i18n-routing-bundle": "^2.0",
         "symfony/assetic-bundle": "^2.8",
         "friendsofsymfony/jsrouting-bundle": "^1.6",
@@ -73,18 +81,5 @@
         "branch-alias": {
             "dev-master": "2.8-dev"
         }
-    },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "tcpdf/tcpdf",
-                "version": "6.2.11",
-                "dist": {
-                    "url": "http://www.smarty.net/files/Smarty-3.1.7.zip",
-                    "type": "zip"
-                }
-            }
-        }
-    ]
+    }
 }

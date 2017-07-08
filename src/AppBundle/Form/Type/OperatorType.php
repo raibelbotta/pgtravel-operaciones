@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Entity\User;
 
 /**
  * Description of OperatorType
@@ -37,8 +38,10 @@ class OperatorType extends AbstractType
 
         $resolver->setDefaults(array(
             'query_builder' => $qb,
-            'class' => 'AppBundle\Entity\User',
-            'property' => 'fullName'
+            'class' => User::class,
+            'choice_label' => function(User $record) {
+                return $record->getFullName();
+            }
         ));
     }
 }

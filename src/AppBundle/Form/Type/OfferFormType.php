@@ -13,6 +13,7 @@ use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use AppBundle\Entity\Reservation;
 
 /**
  * OfferFormType
@@ -177,6 +178,6 @@ class OfferFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\Reservation');
+        $resolver->setDefault('data_class', Reservation::class);
     }
 }

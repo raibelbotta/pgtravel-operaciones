@@ -146,7 +146,6 @@ vich_uploader:
             namer:              vich_uploader.namer_uniqid
 
 assetic:
-    java:               %local_java_path%
     debug:              false
     use_controller:     %kernel.debug%
     filters:

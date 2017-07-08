@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e27dcad191e574191d0894892d9c73cc",
+    "content-hash": "287ed0a1531a7168e93627a92875ecca",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1232,26 +1232,26 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.29",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "f65c02eae3bff1aa57709ea4c8ca26947df95b9c"
+                "reference": "d55b0db512c8f9897ded8ca798e889e39695f00d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/f65c02eae3bff1aa57709ea4c8ca26947df95b9c",
-                "reference": "f65c02eae3bff1aa57709ea4c8ca26947df95b9c",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/d55b0db512c8f9897ded8ca798e889e39695f00d",
+                "reference": "d55b0db512c8f9897ded8ca798e889e39695f00d",
                 "shasum": ""
             },
             "require": {
-                "behat/transliterator": "~1.2",
+                "behat/transliterator": "~1.0",
                 "doctrine/common": "~2.4",
-                "php": ">=5.3.2"
+                "php": ">=5.4"
             },
             "require-dev": {
                 "doctrine/common": ">=2.5.0",
-                "doctrine/mongodb-odm": ">=1.0.2",
+                "doctrine/mongodb-odm": "~1.0",
                 "doctrine/orm": ">=2.5.0",
                 "phpunit/phpunit": "*",
                 "symfony/yaml": "~2.6|~3.0"
@@ -1263,7 +1263,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -1306,7 +1306,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2017-05-29T17:33:48+00:00"
+            "time": "2017-02-21T18:17:55+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
@@ -3970,16 +3970,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.22",
+            "version": "v2.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "2404550f13f71470206227c98c2d53f0f4cbbb3e"
+                "reference": "0ab3693b1154b1b166e98981ab3755636a5ae0e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/2404550f13f71470206227c98c2d53f0f4cbbb3e",
-                "reference": "2404550f13f71470206227c98c2d53f0f4cbbb3e",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/0ab3693b1154b1b166e98981ab3755636a5ae0e3",
+                "reference": "0ab3693b1154b1b166e98981ab3755636a5ae0e3",
                 "shasum": ""
             },
             "require": {
@@ -4103,7 +4103,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-06-07T20:12:45+00:00"
+            "time": "2017-07-05T08:53:15+00:00"
         },
         {
             "name": "twig/twig",
@@ -4460,7 +4460,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gedmo/doctrine-extensions": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

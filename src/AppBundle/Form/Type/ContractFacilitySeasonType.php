@@ -5,6 +5,7 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Entity\ContractFacilitySeason;
 
 /**
  * Description of ContractFacilitySeasonType
@@ -31,6 +32,6 @@ class ContractFacilitySeasonType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\ContractFacilitySeason');
+        $resolver->setDefault('data_class', ContractFacilitySeason::class);
     }
 }

@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
-App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
+App.HotelPrices = typeof App.HotelPrices !== 'undefined' ? App.HotelPrices : {};
 
-+(App.Prices.Form = function($) {
++(App.HotelPrices.Form = function($) {
     "use strict";
     var init = function() {
         $('body').on('change', 'input.updatable-ajax', function() {
@@ -26,7 +26,7 @@ App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
             $input.css({borderColor: 'red'}).attr({'ajax-id': id});
 
             var obj = {
-                xhr: $.ajax(Routing.generate('app_contracts_setprice'), {
+                xhr: $.ajax(Routing.generate('app_contracts_sethotelprice'), {
                     data: params,
                     dataType: 'json',
                     method: 'POST',

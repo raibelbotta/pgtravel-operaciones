@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Contract
@@ -104,21 +105,28 @@ class Contract
     private $privateHouseServices;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ContractCarRentalService", mappedBy="contract", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="ContractCarRentalCategory", mappedBy="contract", cascade={"persist", "remove"})
      */
-    private $carRentalServices;
+    private $carRentalCategories;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractCarRentalSeasson", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $carRentalSeassons;
+
+    /**
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ContractAttachment", mappedBy="contract", cascade={"persist", "remove"})
      */
     private $attachments;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ContractFacility", mappedBy="contract", cascade={"persist", "remove"})
      */
@@ -139,6 +147,18 @@ class Contract
      * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->topServices = new ArrayCollection();
+        $this->privateHouseServices = new ArrayCollection();
+        $this->carRentalCategories = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
+        $this->facilities = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -560,51 +580,76 @@ class Contract
     }
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->topServices = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->privateHouseServices = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->carRentalServices = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->facilities = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add carRentalService
+     * Add carRentalCategory
      *
-     * @param \AppBundle\Entity\ContractCarRentalService $carRentalService
+     * @param \AppBundle\Entity\ContractCarRentalCategory $carRentalCategory
      *
      * @return Contract
      */
-    public function addCarRentalService(\AppBundle\Entity\ContractCarRentalService $carRentalService)
+    public function addCarRentalCategory(\AppBundle\Entity\ContractCarRentalCategory $carRentalCategory)
     {
-        if (!$this->carRentalServices->contains($carRentalService)) {
-            $this->carRentalServices[] = $carRentalService;
-            $carRentalService->setContract($this);
+        if (!$this->carRentalCategories->contains($carRentalCategory)) {
+            $this->carRentalCategories[] = $carRentalCategory;
+            $carRentalCategory->setContract($this);
         }
 
         return $this;
     }
 
     /**
-     * Remove carRentalService
+     * Remove carRentalCategory
      *
-     * @param \AppBundle\Entity\ContractCarRentalService $carRentalService
+     * @param \AppBundle\Entity\ContractCarRentalCategory $carRentalCategory
      */
-    public function removeCarRentalService(\AppBundle\Entity\ContractCarRentalService $carRentalService)
+    public function removeCarRentalCategory(\AppBundle\Entity\ContractCarRentalCategory $carRentalCategory)
     {
-        $this->carRentalServices->removeElement($carRentalService);
+        $this->carRentalCategories->removeElement($carRentalCategory);
     }
 
     /**
-     * Get carRentalServices
+     * Get carRentalCategories
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCarRentalServices()
+    public function getCarRentalCategories()
     {
-        return $this->carRentalServices;
+        return $this->carRentalCategories;
+    }
+
+    /**
+     * Add carRentalSeasson
+     *
+     * @param \AppBundle\Entity\ContractCarRentalSeasson $carRentalSeasson
+     *
+     * @return Contract
+     */
+    public function addCarRentalSeasson(\AppBundle\Entity\ContractCarRentalSeasson $carRentalSeasson)
+    {
+        if (!$this->carRentalSeassons->contains($carRentalSeasson)) {
+            $this->carRentalSeassons[] = $carRentalSeasson;
+            $carRentalSeasson->setContract($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove carRentalSeasson
+     *
+     * @param \AppBundle\Entity\ContractCarRentalSeasson $carRentalSeasson
+     */
+    public function removeCarRentalSeasson(\AppBundle\Entity\ContractCarRentalSeasson $carRentalSeasson)
+    {
+        $this->carRentalSeassons->removeElement($carRentalSeasson);
+    }
+
+    /**
+     * Get carRentalSeassons
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCarRentalSeassons()
+    {
+        return $this->carRentalSeassons;
     }
 }

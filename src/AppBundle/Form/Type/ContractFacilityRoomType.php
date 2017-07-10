@@ -5,6 +5,7 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Entity\ContractFacilityRoom;
 
 /**
  * Description of ContractFacilityRoomType
@@ -20,6 +21,6 @@ class ContractFacilityRoomType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\ContractFacilityRoom');
+        $resolver->setDefault('data_class', ContractFacilityRoom::class);
     }
 }

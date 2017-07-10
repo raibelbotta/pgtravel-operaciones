@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use AppBundle\Entity\ContractFacility;
 
 /**
  * Description of ContractFacilityType
@@ -22,9 +22,7 @@ class ContractFacilityType extends AbstractType
                 ->add('category', HotelCategoryType::class, array(
                     'required' => false
                 ))
-                ->add('postalAddress', TextareaType::class, array(
-                    'required' => false
-                ))
+                ->add('postalAddress')
                 ->add('activePlans', HotelPlansType::class)
                 ->add('rooms', CollectionType::class, array(
                     'entry_type'    => ContractFacilityRoomType::class,
@@ -43,6 +41,6 @@ class ContractFacilityType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\ContractFacility');
+        $resolver->setDefault('data_class', ContractFacility::class);
     }
 }

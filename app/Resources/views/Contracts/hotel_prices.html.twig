@@ -42,7 +42,7 @@
                                         <td>{{ plan }}</td>
                                         {% for season in facility.seasons %}
                                             {% for cupo in cupos %}
-                                                <td><input type="text" class="form-control input-sm text-right updatable-ajax" data-params="contract:{{ record.id }}|room:{{ room.id }}|plan:{{ plan }}|season:{{ season.id }}|cupo:{{ cupo }}" value="{{ prices[room.id][plan][season.id][cupo] is defined ? prices[room.id][plan][season.id][cupo] : '' }}"></td>
+                                                <td><input type="text" class="form-control input-sm text-right updatable-ajax" data-params="contract:{{ record.id }}|room:{{ room.id }}|plan:{{ plan }}|season:{{ season.id }}|cupo:{{ cupo }}" value="{{ prices[room.id][plan][season.id][cupo]|default("") }}"></td>
                                             {% endfor %}
                                         {% endfor %}
                                     </tr>
@@ -59,7 +59,7 @@
 {% block page_javascripts %}
     <script>
         $(document).ready(function() {
-            App.Prices.Form.init();
+            App.HotelPrices.Form.init();
         });
     </script>
 {% endblock %}

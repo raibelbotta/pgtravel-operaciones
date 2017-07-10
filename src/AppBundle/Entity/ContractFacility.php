@@ -35,6 +35,7 @@ class ContractFacility
      * @var string
      *
      * @ORM\Column(name="postal_address", type="text", nullable=true)
+     * @Assert\Length(max=32000)
      */
     private $postalAddress;
 

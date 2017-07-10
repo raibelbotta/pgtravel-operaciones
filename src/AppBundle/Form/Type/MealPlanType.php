@@ -30,6 +30,9 @@ class MealPlanType extends AbstractType
     
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('choices', array_combine($this->plans, $this->plans));
+        $resolver->setDefaults(array(
+            'choices', array_combine($this->plans, $this->plans),
+            'values_as_choices' => true
+        ));
     }
 }

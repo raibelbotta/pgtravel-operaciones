@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Contract;
 use AppBundle\Form\Type\ContractFormType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Description of ContractsController
@@ -163,24 +164,29 @@ class ContractsController extends Controller
     {
         $form = $this->createForm(ContractFormType::class, $record);
 
-        $originalTopServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalTopServices = new ArrayCollection();
         foreach ($record->getTopServices() as $service) {
             $originalTopServices->add($service);
         }
 
-        $originalAttachments = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalAttachments = new ArrayCollection();
         foreach ($record->getAttachments() as $attachment) {
             $originalAttachments->add($attachment);
         }
 
-        $originalFacilities = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalFacilities = new ArrayCollection();
         $originalRooms = array();
         foreach ($record->getFacilities() as $facility) {
             $originalFacilities[] = $facility;
-            $originalRooms[$facility->getId()] = new \Doctrine\Common\Collections\ArrayCollection();
+            $originalRooms[$facility->getId()] = new ArrayCollection();
             foreach ($facility->getRooms() as $room) {
                 $originalRooms[$facility->getId()][] = $room;
             }
+        }
+
+        $originalCarCategories = new ArrayCollection();
+        foreach ($record->getCarRentalCategories() as $category) {
+            $originalCarCategories[] = $category;
         }
 
         $form->handleRequest($request);
@@ -213,6 +219,12 @@ class ContractsController extends Controller
                     }
                 }
             }
+            foreach ($originalCarCategories as $cat) {
+                if (false === $record->getCarRentalCategories()->contains($cat)) {
+                    $record->getTopServices()->removeElement($cat);
+                    $em->remove($cat);
+                }
+            }
 
             $em->flush();
 
@@ -224,31 +236,6 @@ class ContractsController extends Controller
 
         return $this->render('Contracts/edit.html.twig', array(
             'form' => $form->createView()
-        ));
-    }
-
-    /**
-     * @Route("/{id}/prices", requirements={"id": "\d+"})
-     * @ParamConverter("record", class="AppBundle\Entity\Contract")
-     * @Method({"get"})
-     * @param Contract $record
-     * @return Response
-     */
-    public function pricesAction(Contract $record)
-    {
-        $cupos = $this->container->getParameter('app.hotel.cupos');
-        $manager = $this->getDoctrine()->getManager();
-
-        $repo = $manager->getRepository('AppBundle:ContractHotelPrice');
-        $prices = array();
-        foreach ($repo->findBy(array('contract' => $record->getId())) as $price) {
-            $prices[$price->getRoom()->getId()][$price->getPlan()][$price->getSeason()->getId()][$price->getCupo()] = $price->getValue();
-        }
-
-        return $this->render('Contracts/prices.html.twig', array(
-            'record'    => $record,
-            'cupos'     => $cupos,
-            'prices'    => $prices
         ));
     }
 
@@ -272,12 +259,37 @@ class ContractsController extends Controller
     }
 
     /**
-     * @Route("/set-price", options={"expose": true})
+     * @Route("/{id}/hotel-prices", requirements={"id": "\d+"})
+     * @ParamConverter("record", class="AppBundle\Entity\Contract")
+     * @Method({"get"})
+     * @param Contract $record
+     * @return Response
+     */
+    public function hotelPricesAction(Contract $record)
+    {
+        $cupos = $this->container->getParameter('app.hotel.cupos');
+        $manager = $this->getDoctrine()->getManager();
+
+        $repo = $manager->getRepository('AppBundle:ContractHotelPrice');
+        $prices = array();
+        foreach ($repo->findBy(array('contract' => $record->getId())) as $price) {
+            $prices[$price->getRoom()->getId()][$price->getPlan()][$price->getSeason()->getId()][$price->getCupo()] = $price->getValue();
+        }
+
+        return $this->render('Contracts/hotel_prices.html.twig', array(
+            'record'    => $record,
+            'cupos'     => $cupos,
+            'prices'    => $prices
+        ));
+    }
+
+    /**
+     * @Route("/set-hotel-price", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function setPriceAction(Request $request)
+    public function setHotelPriceAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $price = $manager->getRepository('AppBundle:ContractHotelPrice')->findOneBy(array(
@@ -296,6 +308,67 @@ class ContractsController extends Controller
                     ->setPlan($request->get('plan'))
                     ->setRoom($manager->find('AppBundle:ContractFacilityRoom', $request->get('room')))
                     ->setSeason($manager->find('AppBundle:ContractFacilitySeason', $request->get('season')))
+                    ->setValue($request->get('value'))
+                    ;
+            $manager->persist($price);
+        } elseif ($price && !$request->get('value')) {
+            $manager->remove($price);
+        } elseif ($price) {
+            $price->setValue($request->get('value'));
+        }
+
+        $manager->flush();
+
+        return new JsonResponse(array(
+            'inputId'   => $request->get('inputId'),
+            'value'     => $request->get('value') ? sprintf('%0.2f', $price->getValue()) : ''
+        ));
+    }
+
+    /**
+     * @Route("/{id}/car-rental-prices", requirements={"id": "\d+"})
+     * @ParamConverter("record", class="AppBundle\Entity\Contract")
+     * @Method({"get", "post"})
+     * @param Contract $record
+     * @return Response
+     */
+    public function carRentalPricesAction(Contract $record)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $repo = $manager->getRepository('AppBundle:ContractCarRentalPrice');
+        $prices = array();
+        foreach ($repo->findBy(array('contract' => $record->getId())) as $price) {
+            $prices[$price->getDayRange()->getId()][$price->getCategory()->getId()] = $price->getValue();
+        }
+
+        return $this->render('Contracts/car_rental_prices.html.twig', array(
+            'record'    => $record,
+            'prices'    => $prices
+        ));
+    }
+
+    /**
+     * @Route("/set-car-rental-price", options={"expose": true})
+     * @Method({"post"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function setCarRentalPriceAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $price = $manager->getRepository('AppBundle:ContractCarRentalPrice')->findOneBy(array(
+            'contract' => $request->get('contract'),
+            'dayRange' => $request->get('dayRange'),
+            'category' => $request->get('category')
+        ));
+
+        if (!$price && $request->get('value')) {
+            $price = new \AppBundle\Entity\ContractCarRentalPrice();
+            $price
+                    ->setContract($manager->find('AppBundle:Contract', $request->get('contract')))
+                    ->setDayRange($manager->find('AppBundle:ContractCarRentalSeassonDayRange', $request->get('dayRange')))
+                    ->setCategory($manager->find('AppBundle:ContractCarRentalCategory', $request->get('category')))
                     ->setValue($request->get('value'))
                     ;
             $manager->persist($price);

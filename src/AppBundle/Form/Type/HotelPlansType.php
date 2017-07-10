@@ -32,6 +32,7 @@ class HotelPlansType extends AbstractType
     {
         $resolver->setDefaults(array(
             'choices' => array_combine($this->plans, $this->plans),
+            'values_as_choices' => true,
             'multiple' => true
         ));
     }

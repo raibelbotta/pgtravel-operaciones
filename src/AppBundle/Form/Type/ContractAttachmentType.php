@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use AppBundle\Entity\ContractAttachment;
 
 class ContractAttachmentType extends AbstractType
 {
@@ -27,6 +28,6 @@ class ContractAttachmentType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', 'AppBundle\Entity\ContractAttachment');
+        $resolver->setDefault('data_class', ContractAttachment::class);
     }
 }

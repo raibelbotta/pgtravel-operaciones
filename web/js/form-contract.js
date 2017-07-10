@@ -2,69 +2,8 @@ App = typeof App !== 'undefined' ? App : {};
 App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
 
 +(App.Contracts.Form = function($){
-    var init = function() {
-        +(function($) {
-            $('#contract_form_model').on('change', function() {
-                var model = $(this).val();
-                $('.visible-condition').each(function() {
-                    if ($(this).hasClass('visible-condition-' + model)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                        $(this).find('.collection:first').data('index', 0).empty();
-                    }
-                });
-                $('.hiddeable-condition').each(function() {
-                    if ($(this).hasClass('hiddeable-condition-' + model)) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-                $('.visible-condition-only').each(function() {
-                    if ($(this).hasClass('visible-condition-only-' + model)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
 
-            $('#contract_form_signedAt').parent().datetimepicker({
-                format: 'DD/MM/YYYY'
-            });
-            $('#contract_form_startAt').parent().datetimepicker({
-                format: 'DD/MM/YYYY'
-            });
-            $('#contract_form_endAt').parent().datetimepicker({
-                useCurrent: false,
-                format: 'DD/MM/YYYY'
-            });
-            $('#contract_form_startAt').parent().on('dp.change', function(event) {
-                 $('#contract_form_endAt').parent().data('DateTimePicker').minDate(event.date);
-            });
-            $('#contract_form_endAt').parent().on('dp.change', function(event) {
-                $('#contract_form_startAt').parent().data('DateTimePicker').maxDate(event.date);
-            });
-
-            $('.item-top-service').each(function() {
-                var $controls = $(this).find('.datetimepicker');
-                $($controls[0]).datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
-                });
-                $($controls[1]).datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm',
-                    useCurrent: false
-                });
-                $($controls[0]).on("dp.change", function(event) {
-                    $($controls[1]).data("DateTimePicker").minDate(event.date);
-                });
-                $($controls[1]).on("dp.change", function(event) {
-                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
-                });
-            });
-        }(jQuery));
-
+    var initValidator = function() {
         $('#contract').validate({
             'errorPlacement': function(error, element) {
                 if (!element.data('tooltipster-ns')) {
@@ -98,6 +37,72 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
                 $(element).tooltipster('hide');
             }
         });
+    }
+
+    var initControls = function() {
+        $('#contract_form_model').on('change', function() {
+            var model = $(this).val();
+            $('.visible-condition').each(function() {
+                if ($(this).hasClass('visible-condition-' + model)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                    $(this).find('.collection:first').data('index', 0).empty();
+                }
+            });
+            $('.hiddeable-condition').each(function() {
+                if ($(this).hasClass('hiddeable-condition-' + model)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+            $('.visible-condition-only').each(function() {
+                if ($(this).hasClass('visible-condition-only-' + model)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        $('#contract_form_signedAt').parent().datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#contract_form_startAt').parent().datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#contract_form_endAt').parent().datetimepicker({
+            useCurrent: false,
+            format: 'DD/MM/YYYY'
+        });
+        $('#contract_form_startAt').parent().on('dp.change', function(event) {
+             $('#contract_form_endAt').parent().data('DateTimePicker').minDate(event.date);
+        });
+        $('#contract_form_endAt').parent().on('dp.change', function(event) {
+            $('#contract_form_startAt').parent().data('DateTimePicker').maxDate(event.date);
+        });
+    }
+
+    var init = function() {
+        +(function($) {
+            $('.item-top-service').each(function() {
+                var $controls = $(this).find('.datetimepicker');
+                $($controls[0]).datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm'
+                });
+                $($controls[1]).datetimepicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                    useCurrent: false
+                });
+                $($controls[0]).on("dp.change", function(event) {
+                    $($controls[1]).data("DateTimePicker").minDate(event.date);
+                });
+                $($controls[1]).on("dp.change", function(event) {
+                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
+                });
+            });
+        }(jQuery));
 
         +(function() {
             var initServiceDates = function($item) {
@@ -132,13 +137,19 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
                 });
             }
 
-            var clickAddItem = function(event) {
-                var $container = $(this).closest(':has(.collection)').find('.collection:first'),
+            var clickAddItem = function() {
+                var $container = $(this).data('collection') ? $($(this).data('collection')) : $(this).closest(':has(.collection)').find('.collection:first'),
                     prototype = $container.data('prototype'),
                     index = $container.data('index');
 
                 if ($container.hasClass('collection-facilities')) {
-                    var $item = $(prototype.replace(/facilities___name__/g, 'facilities_' + index).replace(/facilities\]\[__name__/g, 'facilities][' + index));
+                    var $item = $(prototype
+                        .replace(/facilities___name__/g, 'facilities_' + index)
+                        .replace(/facilities\]\[__name__/g, 'facilities][' + index));
+                } else if ($container.hasClass('collection-car-rental-seassons')) {
+                    var $item = $(prototype
+                        .replace(/carRentalSeassons___name__/g, 'carRentalSeassons_' + index)
+                        .replace(/carRentalSeassons\]\[__name__/g, 'carRentalSeassons][' + index));
                 } else {
                     var $item = $(prototype.replace(/__name__/g, index));
                 }
@@ -199,7 +210,6 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
             $('body').on('click', '.btn-remove', clickRemoveItem);
             $('body').on('click', '.btn-clone-item', clickCloneItem);
 
-            $('.btn-remove').on('click', clickRemoveItem);
             $('body').on('click', '.btn-create-rest-seasons', function() {
                 var $btnAddItem = $(this).parent().find('button.btn-add-item'),
                     $collection = $(this).closest(':has(.collection)').find('.collection:first'),
@@ -263,7 +273,7 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
 
             updateContainerIndexes();
 
-            $('.item-top-service, .item-facility-season, .item-private-house-service, .item-car-rental-service').each(function() {
+            $('.item-top-service, .item-facility-season, .item-private-house-service, .item-car-rental-seasson-date').each(function() {
                 initServiceDates($(this));
             });
         }());
@@ -271,6 +281,8 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
 
     return {
         init: function() {
+            initValidator();
+            initControls();
             init();
         }
     }

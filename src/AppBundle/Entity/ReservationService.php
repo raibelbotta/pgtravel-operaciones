@@ -163,14 +163,6 @@ class ReservationService implements AlertableInterface
      * @ORM\JoinColumn(onDelete="set null")
      */
     private $destination;
-
-    /**
-     * @var RentCarType
-     *
-     * @ORM\ManyToOne(targetEntity="RentCarType")
-     * @ORM\JoinColumn(onDelete="set null")
-     */
-    private $rentCar;
     
     /**
      * @var TransportCarType
@@ -808,30 +800,6 @@ class ReservationService implements AlertableInterface
     public function getDestination()
     {
         return $this->destination;
-    }
-
-    /**
-     * Set rentCar
-     *
-     * @param \AppBundle\Entity\RentCarType $rentCar
-     *
-     * @return ReservationService
-     */
-    public function setRentCar(\AppBundle\Entity\RentCarType $rentCar = null)
-    {
-        $this->rentCar = $rentCar;
-
-        return $this;
-    }
-
-    /**
-     * Get rentCar
-     *
-     * @return \AppBundle\Entity\RentCarType
-     */
-    public function getRentCar()
-    {
-        return $this->rentCar;
     }
 
     /**

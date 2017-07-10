@@ -150,13 +150,8 @@
                         </div>
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Car type'|trans }}</label>
-                        <select name="cartype" class="form-control input-sm">
-                            <option value=""></option>
-                            {% for type in car_types.result %}
-                                <option value="{{ type.id }}">{{ type }}</option>
-                            {% endfor %}
-                        </select>
+                        <label>Category</label>
+                        <input type="text" name="category" class="form-control">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'Quantity'|trans }}</label>

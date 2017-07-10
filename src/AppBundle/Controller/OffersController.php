@@ -363,7 +363,6 @@ class OffersController extends Controller
             'cupos' => $this->container->getParameter('app.hotel.cupos'),
             'plans' => $this->container->getParameter('app.hotel.plans'),
             'models' => $models,
-            'car_types' => $manager->createQuery('SELECT t FROM AppBundle:RentCarType AS t ORDER BY t.name'),
             'provinces' => $manager->createQuery('SELECT p FROM AppBundle:Province AS p ORDER BY p.name')
         ));
     }
@@ -559,7 +558,7 @@ class OffersController extends Controller
         $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
 
         $manager = $this->getDoctrine()->getManager();
-        $qb = $manager->getRepository('AppBundle:ContractCarRentalService')
+        $qb = $manager->getRepository('AppBundle:ContractCarRentalPrice')
                 ->createQueryBuilder('s')
                 ->join('s.contract', 'c')
                 ;

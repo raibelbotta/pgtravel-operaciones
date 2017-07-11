@@ -429,13 +429,15 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         var utils = {
             initDatepickers: function($date0, $date1, callback) {
                 var options = {
-                    format: $date0.data('format') ? $date0.data('format') : 'DD/MM/YYYY',
                     showClear: true,
                     showTodayButton: true
                 };
 
-                $date0.datetimepicker(options);
+                $date0.datetimepicker($.extend({}, options, {
+                    format: $date0.data('format') ? $date0.data('format') : 'DD/MM/YYYY'
+                }));
                 $date1.datetimepicker($.extend({}, options, {
+                    format: $date1.data('format') ? $date1.data('format') : 'DD/MM/YYYY',
                     useCurrent: false
                 }));
                 $date0.on('dp.change', function(e) {
@@ -483,7 +485,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     },
                     method: 'POST'
                 },
-                aoColumns: [
+                columns: [
                     {name: 'hotel', title: Translator.trans('Hotel')},
                     {name: 'room', title: Translator.trans('Room')},
                     {name: 'seasson', title: Translator.trans('Season')},
@@ -663,18 +665,36 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
         var initCarRentalControls = function() {
             var $tab = $searchBox.find('#tab-car-rental'),
-                updateResults = function() {
-                    var $dv = $tab.find('.table-responsive'),
-                        data = {
-                            'from': $tab.find('input:text.datepicker:first').val(),
-                            'to': $tab.find('input:text.datepicker:last').val(),
-                            'quantity': $tab.find('select[name="quantity"]').val(),
-                            'cartype': $tab.find('select[name="cartype"]').val()
-                        };
-                    $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getcarrentalprices'), data, function() {
-                        $dv.find('table').DataTable();
-                    });
-                }
+                $table = $tab.find('table.table-results');
+
+            $table.dataTable({
+                serverSide: true,
+                ajax: {
+                    url: Routing.generate('app_offers_getcarrentalprices'),
+                    data: function(data) {
+                        return $.extend({}, data, {
+                            filter: {
+                                from: $tab.find('input:text.datepicker:first').val(),
+                                to: $tab.find('input:text.datepicker:last').val(),
+                                quantity: $tab.find('select[name="quantity"]').val(),
+                                categoy: $tab.find('input[name="category"]').val()
+                            }
+                        });
+                    },
+                    method: 'POST'
+                },
+                columns: [
+                    {name: 'supplier', title: Translator.trans('Supplier')},
+                    {name: 'category', title: Translator.trans('Category')},
+                    {name: 'cost', title: Translator.trans('Cost'), searchable: false},
+                    {name: 'price', title: Translator.trans('Price'), searchable: false},
+                    {searchable: false, sortable: false, width: '40px'}
+                ]
+            });
+
+            var updateResults = function() {
+                $table.dataTable().api().draw();
+            }
 
             utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
 

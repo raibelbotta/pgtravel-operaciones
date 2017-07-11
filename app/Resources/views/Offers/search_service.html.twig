@@ -133,7 +133,7 @@
                 <div class="row row-datepickers">
                     <div class="col-sm-4 form-group">
                         <label class="control-label">{{ 'From'|trans }}</label>
-                        <div class="input-group date">
+                        <div class="input-group date" data-format="DD/MM/YYYY HH:mm">
                             <input type="text" class="form-control input-sm datepicker">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -142,7 +142,7 @@
                     </div>
                     <div class="col-sm-4 form-group">
                         <label class="control-label">{{ 'To'|trans }}</label>
-                        <div class="input-group date">
+                        <div class="input-group date" data-format="DD/MM/YYYY HH:mm">
                             <input type="text" class="form-control input-sm datepicker">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -151,7 +151,7 @@
                     </div>
                     <div class="col-sm-2 form-group">
                         <label>Category</label>
-                        <input type="text" name="category" class="form-control">
+                        <input type="text" name="category" class="form-control input-sm">
                     </div>
                     <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'Quantity'|trans }}</label>
@@ -162,9 +162,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="table-responsive results"></div>
-                </div>
+                <table class="table table-results table-condensed table-striped table-bordered" width="100%"></table>
             </form>
         </div>
         <div class="tab-pane" role="tabpanel" id="tab-transport" style="padding: 16px;">

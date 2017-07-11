@@ -1,0 +1,23 @@
+{% block cost %}
+    <div class="text-right">
+        {{ "%0.2f"|format(record.value) }}
+    </div>
+{% endblock %}
+
+{% block price %}
+    <div class="text-right">
+        {{ "%0.2f"|format(days ? record.value * days : 0) }}
+    </div>
+{% endblock %}
+
+{% block actions %}
+    {%- set data = {
+name: record.dayRange.seasson.name,
+category: record.category.name,
+cost: '%0.2f'|format(record.value),
+totalPrice: '%0.2f'|format(record.value)
+        } -%}
+    <div class="text-center">
+        <button type="button" class="btn btn-success btn-xs" title="{{ 'Select service'|trans }}" data-service="{{ data|json_encode|e }}"><i class="fa fa-check"></i></button>
+    </div>
+{% endblock %}

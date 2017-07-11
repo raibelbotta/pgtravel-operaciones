@@ -550,52 +550,73 @@ class OffersController extends Controller
      * @Route("/get-car-rental-prices", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function getCarRentalPricesAction(Request $request)
     {
-        $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
-        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 00:00:00') : null;
-
         $manager = $this->getDoctrine()->getManager();
         $qb = $manager->getRepository('AppBundle:ContractCarRentalPrice')
-                ->createQueryBuilder('s')
-                ->join('s.contract', 'c')
+                ->createQueryBuilder('p')
+                ->join('p.contract', 'c')
+                ->join('p.dayRange', 'r')
+                ->join('r.seasson', 's')
+                ->join('s.dates', 'd')
+                
                 ;
-        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('car-rental')));
+        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', ':model'));
+        $qb->setParameter('model', 'car-rental');
 
-        if ($from) {
-            $andX->add($qb->expr()->orX(
-                    $qb->expr()->isNull('s.startAt'),
-                    $qb->expr()->andX(
-                            $qb->expr()->isNotNull('s.startAt'),
-                            $qb->expr()->lte('s.startAt', $qb->expr()->literal($from->format('Y-m-d')))
-                            )
+        $filter = $request->get('filter', array());
+        
+        if (isset($filter['from']) && $filter['from']) {
+            $from = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $filter['from']);
+            $andX->add($qb->expr()->andX(
+                    $qb->expr()->lte('d.startAt', ':from'),
+                    $qb->expr()->gte('d.endAt', ':from')
                     ));
+            $qb->setParameter('from', $from->format('Y-m-d 00:00:00'));
         }
-        if ($to) {
-            $andX->add($qb->expr()->orX(
-                    $qb->expr()->isNull('s.endAt'),
-                    $qb->expr()->andX(
-                            $qb->expr()->isNotNull('s.endAt'),
-                            $qb->expr()->gte('s.endAt', $qb->expr()->literal($to->format('Y-m-d')))
-                            )
+        if (isset($from) && isset($filter['to']) && $filter['to']) {
+            $to = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $filter['to']);
+            $days = $to->diffInDays($from);
+            $plusHour = \Carbon\Carbon::instance($from)->addDays($days)->diffInHours($to);
+            if ($plusHour > 0) {
+                $days++;
+            }
+            $andX->add($qb->expr()->andX(
+                    $qb->expr()->lte('r.beginDay', ':days'),
+                    $qb->expr()->gte('r.endDay', ':days')
                     ));
+            $qb->setParameter('days', $days);
         }
 
-        if ($request->get('cartype')) {
-            $qb->join('s.carType', 'ct');
-            $andX->add($qb->expr()->eq('ct.id', $qb->expr()->literal($request->get('cartype'))));
-        }
+        $qb->where($andX);
+        
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
 
-        if ($andX->count() > 0) {
-            $qb->where($andX);
-        }
+        $list = $pagination->getItems();
+        $total = $pagination->getTotalItemCount();
 
-        return $this->render('Offers/car_rental_prices_results.html.twig', array(
-            'query' => $qb->getQuery(),
-            'quantity' => $request->get('quantity', 0),
-            'days' => $from && $to ? $to->diff($from, true)->days : 0
+        $template = $this->container->get('twig')->loadTemplate('Offers/_rental_car_prices_row.html.twig');
+        $days = isset($days) ? $days : null;
+
+        $data = array_map(function(\AppBundle\Entity\ContractCarRentalPrice $price)  use ($template, $days) {
+            return array(
+                $price->getContract()->getSupplier()->getName(),
+                $price->getCategory()->getName(),
+                $template->renderBlock('cost', array('record' => $price)),
+                $template->renderBlock('price', array('record' => $price, 'days' => $days)),
+                $template->renderBlock('actions', array('record' => $price))
+            );
+        }, $list);
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
         ));
     }
 

@@ -561,13 +561,13 @@ class OffersController extends Controller
                 ->join('p.dayRange', 'r')
                 ->join('r.seasson', 's')
                 ->join('s.dates', 'd')
-                
+
                 ;
         $andX = $qb->expr()->andX($qb->expr()->eq('c.model', ':model'));
         $qb->setParameter('model', 'car-rental');
 
         $filter = $request->get('filter', array());
-        
+
         if (isset($filter['from']) && $filter['from']) {
             $from = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $filter['from']);
             $andX->add($qb->expr()->andX(
@@ -591,7 +591,7 @@ class OffersController extends Controller
         }
 
         $qb->where($andX);
-        
+
         $paginator = $this->get('knp_paginator');
         $page = $request->get('start', 0) / $request->get('length') + 1;
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
@@ -642,13 +642,12 @@ class OffersController extends Controller
                 ->join('s.contract', 'c')
                 ;
 
-        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('transport')));
+        $andX = $qb->expr()->andX($qb->expr()->eq('c.model', ':model'));
+        $qb->setParameter('model', 'transport');
 
-        if ($from) {
-
-        }
-        if ($to) {
-
+        if (isset($search['value']) && $search['value']) {
+            $andX->add($qb->expr()->like('s.name', ':q'));
+            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
         }
 
         if ($andX->count() > 0) {

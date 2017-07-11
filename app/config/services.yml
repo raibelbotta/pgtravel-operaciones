@@ -1,7 +1,5 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
 parameters:
-    app.hotel.cupos: [ 1A, 2A, 3A, 1A1CH, 2A1CH, 2CH ]
+    app.hotel.cupos: [ SGL, DBL, TRP, 1A1CH, 2A1CH, 2CH, 1A2CH, 2A2CH ]
     app.hotel.plans: [ CP, MAP, EP, AP, AI ]
     app.reservation.notification_lines: [ sms, email, 'phone-call' ]
 

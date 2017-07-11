@@ -32,7 +32,9 @@ class SupplierFormType extends AbstractType
                 ->add('postalAddress', TextareaType::class, array(
                     'required' => false
                 ))
-                ->add('province')
+                ->add('province', ProvinceType::class, array(
+                    'required' => false
+                ))
                 ->add('place', PlaceType::class, array(
                     'required' => false
                 ))

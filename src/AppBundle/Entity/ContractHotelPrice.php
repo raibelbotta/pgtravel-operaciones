@@ -66,7 +66,7 @@ class ContractHotelPrice
     /**
      * @var string
      *
-     * @ORM\Column(type="decimal", precision=5, scale=2)
+     * @ORM\Column(type="decimal", precision=6, scale=2)
      */
     private $value;
 

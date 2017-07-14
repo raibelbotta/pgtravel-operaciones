@@ -9,8 +9,21 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
+                    <form action="" id="filter">
+                        <div class="row">
+                            <div class="col-sm-3 col-sm-offset-9 col-xs-12 form-group">
+                                <label for="filter_type">{{ "Type"|trans }}</label>
+                                <select name="filter[type]" id="filter_type" class="form-control input-sm">
+                                    <option value=""></option>
+                                    {% for name, type in types %}
+                                        <option value="{{ name }}"{{ filter.type|default("") == name ? " selected" : "" }}>{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                     <div class="pull-right"><a href="{{ path('app_contracts_new') }}" class="btn btn-primary">{{ 'Add new'|trans }}</a></div>
-                    <table id="datatable-x" class="table table-striped table-bordered bulk_action">
+                    <table id="datatable-x" class="table table-striped table-bordered bulk_action" width="100%">
                         <thead>
                             <tr>
                                 <th width="26">&nbsp;</th>

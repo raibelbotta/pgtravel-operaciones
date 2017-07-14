@@ -29,7 +29,17 @@ class ContractsController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('Contracts/index.html.twig');
+        $types = array_combine(array_keys($this->container->getParameter('app.contract.models')), array_map(function($options) {
+            return $options['display'];
+        }, $this->container->getParameter('app.contract.models')));
+
+        $session = $this->container->get('session');
+        $filter = $session->get('contracts.filter', array());
+
+        return $this->render('Contracts/index.html.twig', array(
+            'types' => $types,
+            'filter' => $filter
+        ));
     }
 
     /**
@@ -50,11 +60,21 @@ class ContractsController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order');
+        $filter = $request->get('filter');
+
+        $session = $this->container->get('session');
+        $session->set('contracts.filter', $filter);
 
         $andX = $qb->expr()->andX();
 
         if (is_array($search) && isset($search['value']) && $search['value']) {
-            $andX->add($qb->expr()->like('c.name', $qb->expr()->literal('%' . $search['value'] . '%')));
+            $andX->add($qb->expr()->like('c.name', ':q'));
+            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
+        }
+
+        if (isset($filter['type']) && $filter['type']) {
+            $andX->add($qb->expr()->eq('c.model', ':ctype'));
+            $qb->setParameter('ctype', $filter['type']);
         }
 
         if ($andX->count() > 0) {
@@ -73,41 +93,24 @@ class ContractsController extends Controller
             }
         }
 
-        if ($request->get('length')) {
-            $paginator = $this->get('knp_paginator');
-            $page = $request->get('start', 0) / $request->get('length') + 1;
-            $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
 
-            $list = $pagination->getItems();
-            $total = $pagination->getTotalItemCount();
-        } else {
-            $list = $qb->getQuery()->getResult();
-            $total = count($list);
-        }
+        $list = $pagination->getItems();
+        $total = $pagination->getTotalItemCount();
 
         $translator = $this->container->get('translator');
 
-        $getModelName = function(Contract $record) {
-            $models = array(
-                'Hotel'             => 'hotel',
-                'Transportation'    => 'transport',
-                'Car rental'        => 'car-rental',
-                'Restaurant'        => 'restaurant',
-                'Optionals'         => 'optionals',
-                'Private house'     => 'private-house',
-                'Guide'             => 'guide',
-                'Other'             => 'other'
-            );
-
-            return array_search($record->getModel(), $models);
-        };
-
         $template = $this->container->get('twig')->loadTemplate('Contracts/_row.html.twig');
-        $data = array_map(function($record) use($getModelName, $template) {
+        $types = array_combine(array_keys($this->container->getParameter('app.contract.models')), array_map(function($options) {
+            return $options['display'];
+        }, $this->container->getParameter('app.contract.models')));
+        $data = array_map(function($record) use($types, $template) {
             return array(
                 $template->renderBlock('checkbox', array('record' => $record)),
                 $record->getName(),
-                $getModelName($record),
+                $template->renderBlock('type', array('record' => $record, 'types' => $types)),
                 (string) $record->getSupplier(),
                 $record->getSignedAt() ? $record->getSignedAt()->format('Y-m-d') : '',
                 $record->getStartAt() ? $record->getStartAt()->format('Y-m-d') : '',

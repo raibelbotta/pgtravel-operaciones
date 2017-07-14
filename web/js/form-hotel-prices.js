@@ -40,9 +40,29 @@ App.HotelPrices = typeof App.HotelPrices !== 'undefined' ? App.HotelPrices : {};
         });
     }
 
+    var initControls = function() {
+        $('body').on('click', 'a.copy-prices', function(event) {
+            event.preventDefault();
+
+            var block = $(this).closest('table');
+            var fromSeason = $(this).data('from');
+            var re = new RegExp('season:' + $(this).data('to') + '\\|');
+
+            block.find('input:text').filter(function() {
+                return $(this).data('params') && re.test($(this).data('params'));
+            }).each(function() {
+                var destination = $(this),
+                    fromId = destination.data('params').replace(/season:(\d+)\|/, 'season:' + fromSeason + '|');
+                destination.val(block.find('input[data-params="' + fromId + '"]').val()).trigger('change');
+            });
+
+        });
+    }
+
     return {
         init: function() {
             init();
+            initControls();
         }
     }
 }(jQuery));

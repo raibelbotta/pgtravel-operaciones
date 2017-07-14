@@ -15,13 +15,30 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content table-responsive">
-                    <table class="table table-striped table-condensed">
+                    <table class="table table-striped table-condensed" data-block="{{ facility.id }}">
                         <thead>
                             <tr>
                                 <th rowspan="2">{{ 'Room'|trans }}</th>
                                 <th rowspan="2">{{ 'Plan'|trans }}</th>
                                 {% for season in facility.seasons %}
-                                    <th class="text-center" colspan="{{ cupos|length }}">{% trans with {'%from%': season.fromDate|date('d/m/Y'), '%to%': season.toDate|date('d/m/Y')} %}%%from%% to %%to%%{% endtrans %}</th>
+                                    <th class="text-center" colspan="{{ cupos|length }}">
+                                        {% trans with {'%from%': season.fromDate|date('d/m/Y'), '%to%': season.toDate|date('d/m/Y')} %}%%from%% to %%to%%{% endtrans %}
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                {% for sX in facility.seasons if sX.id != season.id %}
+                                                    <li>
+                                                        <a href="#" class="copy-prices" data-from="{{ sX.id }}" data-to="{{ season.id }}">
+                                                            <span class="fa fa-clone"></span>
+                                                            {{ "Copy prices from %1%"|trans({"%1%": sX}) }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </th>
                                 {% endfor %}
                             </tr>
                             <tr>

@@ -2,6 +2,10 @@
     <input type="checkbox" class="flat">
 {% endblock %}
 
+{% block type %}
+    {{ types[record.model]|default("Unknown") }}
+{% endblock %}
+
 {% block actions %}
     <div class="btn-group">
         <a href="{{ path('app_contracts_edit', {'id': record.id}) }}" title="{{ 'Edit'|trans }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>

@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Entity\ContractCarRentalSeasson;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 /**
  * ContractCarRentalSeassonType
@@ -19,11 +20,17 @@ class ContractCarRentalSeassonType extends AbstractType
     {
         $builder
                 ->add('name')
+                ->add('datesLength', HiddenType::class, array(
+                    'mapped' => false
+                ))
                 ->add('dates', CollectionType::class, array(
                     'entry_type' => ContractCarRentalSeassonDateType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false
+                ))
+                ->add('dayRangesLength', HiddenType::class, array(
+                    'mapped' => false
                 ))
                 ->add('dayRanges', CollectionType::class, array(
                     'entry_type' => ContractCarRentalSeassonDayRangeType::class,

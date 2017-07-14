@@ -4,37 +4,83 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
 +(App.Contracts.Form = function($){
 
     var initValidator = function() {
+        var getVisibleTooltipsterableContainer = function(element) {
+            if (!$(element).is(':visible')) {
+                element = $(element).parent();
+            }
+
+            return $(element);
+        }
+
+        var tooltipElement = function(element, text) {
+            if (!element.data('tooltipster-ns')) {
+                element.tooltipster({
+                    'trigger': 'custom',
+                    'onlyOne': false,
+                    'position': 'bottom-left',
+                    'positionTracker': true
+                });
+            }
+            element.tooltipster('update', text);
+            element.tooltipster('show');
+        }
+
+        $.validator.addClassRules('item-counter', {
+            min: 1
+        });
+
         $('#contract').validate({
-            'errorPlacement': function(error, element) {
-                if (!element.data('tooltipster-ns')) {
-                    element.tooltipster({
-                        'trigger': 'custom',
-                        'onlyOne': false,
-                        'position': 'bottom-left',
-                        'positionTracker': true
-                    });
-                }
-                element.tooltipster('update', $(error).text());
-                element.tooltipster('show');
+            errorPlacement: function(error, element) {
+                element = getVisibleTooltipsterableContainer(element);
+                tooltipElement(element, $(error).text());
             },
+            ignore: ':hidden:not(.item-counter)',
             rules: {
                 'contract_form[startAt]': {
-                    'required': {
-                        'depends': function() {
+                    required: {
+                        depends: function() {
                             return '' !== $('#contract_form_endAt').val();
                         }
                     }
                 },
                 'contract_form[endAt]': {
-                    'required': {
-                        'depends': function() {
+                    required: {
+                        depends: function() {
                             return '' !== $('#contract_form_startAt').val();
+                        }
+                    }
+                },
+                'carRentalCategoriesLength': {
+                    min: {
+                        param: 1,
+                        depends: function() {
+                            return $('select#contract_form_model').val() == 'car-rental';
+                        }
+                    }
+                },
+                'carRentalSeassonsLength': {
+                    min: {
+                        param: 1,
+                        depends: function() {
+                            return $('select#contract_form_model').val() == 'car-rental';
                         }
                     }
                 }
             },
+            messages: {
+                'carRentalCategoriesLength': {
+                    min: 'Car rental contract needs categories'
+                },
+                'carRentalSeassonsLength': {
+                    min: 'Car rental contract needs seasson'
+                }
+            },
             success: function (label, element) {
+                element = getVisibleTooltipsterableContainer(element);
                 $(element).tooltipster('hide');
+            },
+            submitHandler: function() {
+                return false;
             }
         });
     }
@@ -124,7 +170,15 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
             var clickRemoveItem = function(event) {
                 event.preventDefault();
 
-                $(this).closest('.item').remove();
+                var $item = $(this).closest('.item'),
+                    $container = $item.closest('.collection');
+
+                $item.fadeOut(function() {
+                    $item.remove();
+                    if ($container.data('counter')) {
+                        $($container.data('counter')).val($container.find('>.item').length);
+                    }
+                });
             }
 
             var updateContainerIndexes = function(object) {
@@ -157,7 +211,12 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
                 $container.data('index', index + 1);
                 $container.append($item);
 
+                if ($container.data('counter')) {
+                    $($container.data('counter')).val($container.find('>.item').length);
+                }
+
                 if ($item.find('.collection').length > 0) {
+                    //Update sub containers
                     updateContainerIndexes($item);
                 }
 

@@ -109,11 +109,14 @@
     </div>
     <div class="x_panel visible-condition-only visible-condition-only-car-rental"{% if form.vars.data.model != 'car-rental' %} style="display: none;"{% endif %}>
         <div class="x_title">
-            <h2>{{ form_label(form.carRentalCategories)|striptags }}</h2>
+            <h2>
+                {{ form_label(form.carRentalCategories)|striptags }}
+                <input type="hidden" name="carRentalCategoriesLength" id="{{ form.carRentalCategories.vars.id }}-counter" value="{{ form.carRentalCategories.vars.data|length }}" class="item-counter">
+            </h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <div class="row collection collection-car-rental-categories" id="{{ form.carRentalCategories.vars.id }}" data-prototype="{{ form_row(form.carRentalCategories.vars.prototype)|e }}">
+            <div class="row collection collection-car-rental-categories" id="{{ form.carRentalCategories.vars.id }}" data-prototype="{{ form_row(form.carRentalCategories.vars.prototype)|e }}" data-counter="#{{ form.carRentalCategories.vars.id }}-counter">
                 {{ form_row(form.carRentalCategories) }}
             </div>
             <div class="clearfix"></div>
@@ -124,11 +127,14 @@
     </div>
     <div class="x_panel visible-condition-only visible-condition-only-car-rental"{% if form.vars.data.model != 'car-rental' %} style="display: none;"{% endif %}>
         <div class="x_title">
-            <h2>{{ form_label(form.carRentalSeassons)|striptags }}</h2>
+            <h2>
+                {{ form_label(form.carRentalSeassons)|striptags }}
+                <input type="hidden" name="carRentalSeassonsLength" value="{{ form.carRentalSeassons.vars.data|length }}" id="{{ form.carRentalSeassons.vars.id }}-counter" class="item-counter">
+            </h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <div class="collection collection-car-rental-seassons" id="{{ form.carRentalSeassons.vars.id }}" data-prototype="{{ form_row(form.carRentalSeassons.vars.prototype)|e }}">
+            <div class="collection collection-car-rental-seassons" id="{{ form.carRentalSeassons.vars.id }}" data-prototype="{{ form_row(form.carRentalSeassons.vars.prototype)|e }}" data-counter="#{{ form.carRentalSeassons.vars.id }}-counter">
                 {{ form_row(form.carRentalSeassons) }}
             </div>
             <div class="clearfix"></div>
@@ -415,7 +421,7 @@
         <div class="input-group">
             {{ form_widget(form.name, {attr: {class: 'form-control input-sm', placeholder: "Name"}}) }}
             <span class="input-group-btn">
-                <button class="btn btn-sm btn-danger btn-remove">
+                <button class="btn btn-sm btn-danger btn-remove" type="button">
                     <span class="fa fa-times"></span>
                 </button>
             </span>
@@ -443,17 +449,18 @@
         <div class="row">
             <div class="col-sm-2">
                 {{ form_label(form.dates) }}
+                {{ form_widget(form.datesLength, {attr: {class: "item-counter", value: form.dates.vars.data|length}}) }}
             </div>
             <div class="col-sm-10">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>{{ form_label(form.dates.vars.prototype.startAt)|striptags }}</th>
-                            <th>{{ form_label(form.dates.vars.prototype.endAt)|striptags }}</th>
+                            <th>{{ form_label(form.dates.vars.prototype.startAt)|striptags }} (*)</th>
+                            <th>{{ form_label(form.dates.vars.prototype.endAt)|striptags }} (*)</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody id="{{ form.dates.vars.id }}" data-prototype="{{ form_row(form.dates.vars.prototype)|e }}" class="collection collection-car-rental-seasson-dates">
+                    <tbody id="{{ form.dates.vars.id }}" data-prototype="{{ form_row(form.dates.vars.prototype)|e }}" class="collection collection-car-rental-seasson-dates" data-counter="#{{ form.datesLength.vars.id }}">
                         {{ form_row(form.dates) }}
                     </tbody>
                     <tfoot>
@@ -469,17 +476,18 @@
         <div class="row">
             <div class="col-sm-2">
                 {{ form_label(form.dayRanges) }}
+                {{ form_widget(form.dayRangesLength, {attr: {class: "item-counter", value: form.dayRanges.vars.data|length }}) }}
             </div>
             <div class="col-sm-10">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>{{ form_label(form.dayRanges.vars.prototype.beginDay)|striptags }}</th>
-                            <th>{{ form_label(form.dayRanges.vars.prototype.endDay)|striptags }}</th>
+                            <th>{{ form_label(form.dayRanges.vars.prototype.beginDay)|striptags }} (*)</th>
+                            <th>{{ form_label(form.dayRanges.vars.prototype.endDay)|striptags }} (*)</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody class="collection collection-car-rental-seasson-dayRanges" id="{{ form.dayRanges.vars.id }}" data-prototype="{{ form_row(form.dayRanges.vars.prototype)|e }}">
+                    <tbody class="collection collection-car-rental-seasson-dayRanges" id="{{ form.dayRanges.vars.id }}" data-prototype="{{ form_row(form.dayRanges.vars.prototype)|e }}" data-counter="#{{ form.dayRangesLength.vars.id }}">
                         {{ form_row(form.dayRanges) }}
                     </tbody>
                     <tfoot>

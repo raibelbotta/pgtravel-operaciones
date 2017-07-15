@@ -179,11 +179,18 @@ class ContractsController extends Controller
 
         $originalFacilities = new ArrayCollection();
         $originalRooms = array();
+        $originalSeasons = array();
         foreach ($record->getFacilities() as $facility) {
             $originalFacilities[] = $facility;
+
             $originalRooms[$facility->getId()] = new ArrayCollection();
             foreach ($facility->getRooms() as $room) {
                 $originalRooms[$facility->getId()][] = $room;
+            }
+
+            $originalSeasons[$facility->getId()] = new ArrayCollection();
+            foreach ($facility->getSeasons() as $season) {
+                $originalSeasons[$facility->getId()][] = $season;
             }
         }
 
@@ -220,8 +227,16 @@ class ContractsController extends Controller
                             $em->remove($room);
                         }
                     }
+
+                    foreach ($originalSeasons[$facility->getId()] as $season) {
+                        if (false === $facility->getSeasons()->contains($season)) {
+                            $facility->getSeasons()->removeElement($season);
+                            $em->remove($season);
+                        }
+                    }
                 }
             }
+
             foreach ($originalCarCategories as $cat) {
                 if (false === $record->getCarRentalCategories()->contains($cat)) {
                     $record->getTopServices()->removeElement($cat);

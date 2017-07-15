@@ -218,15 +218,15 @@
                 </div>
             </div>
             <div class="form-group col-xs-6 col-sm-4">
-                {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_label(form.endAt) }}
                 <div class="input-group date">
-                    {{ form_widget(form.endAt, {'attr': {'class': 'form-control input-sm datepicker'}}) }}
+                    {{ form_widget(form.endAt, {attr: {class: "form-control input-sm datepicker endatrequired"}}) }}
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
             <div class="form-group col-xs-6 col-sm-2 visible-nights">
-                {{ form_label(form.nights, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.nights, {'attr': {'class': 'form-control input-sm text-right'}}) }}
+                {{ form_label(form.nights) }}
+                {{ form_widget(form.nights, {attr: {class: "form-control input-sm text-right"}}) }}
             </div>
             <div class="form-group col-xs-6 col-sm-2 visible-pax">
                 {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}

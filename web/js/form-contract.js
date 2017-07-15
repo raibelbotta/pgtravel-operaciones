@@ -78,9 +78,6 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
             success: function (label, element) {
                 element = getVisibleTooltipsterableContainer(element);
                 $(element).tooltipster('hide');
-            },
-            submitHandler: function() {
-                return false;
             }
         });
     }

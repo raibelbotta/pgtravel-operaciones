@@ -66,7 +66,7 @@ class ReservationService implements AlertableInterface
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="facility_name", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
@@ -74,7 +74,7 @@ class ReservationService implements AlertableInterface
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="facility_address", nullable=true)
      * @Assert\Length(max=255)
      */
@@ -82,20 +82,20 @@ class ReservationService implements AlertableInterface
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="restaurant_menu", nullable=true)
      * @Assert\Length(max=255)
      */
     private $restaurantMenu;
-    
+
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="hosting_plan", nullable=true)
      * @Assert\Length(max=255)
      */
     private $hostingPlan;
-    
+
     /**
      * @var string
      *
@@ -144,7 +144,7 @@ class ReservationService implements AlertableInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $endAt;
 
@@ -163,7 +163,7 @@ class ReservationService implements AlertableInterface
      * @ORM\JoinColumn(onDelete="set null")
      */
     private $destination;
-    
+
     /**
      * @var TransportCarType
      *
@@ -251,7 +251,7 @@ class ReservationService implements AlertableInterface
     {
         return sprintf('%s%sv%s-%s', $this->getReservation()->getStartAt()->format('Y'), $this->getReservation()->getId(), $this->getReservation()->getVersion(), $this->getId());
     }
-    
+
     /**
      * Get id
      *
@@ -308,54 +308,6 @@ class ReservationService implements AlertableInterface
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set startAt
-     *
-     * @param \DateTime $startAt
-     *
-     * @return ReservationService
-     */
-    public function setStartAt($startAt)
-    {
-        $this->startAt = $startAt;
-
-        return $this;
-    }
-
-    /**
-     * Get startAt
-     *
-     * @return \DateTime
-     */
-    public function getStartAt()
-    {
-        return $this->startAt;
-    }
-
-    /**
-     * Set endAt
-     *
-     * @param \DateTime $endAt
-     *
-     * @return ReservationService
-     */
-    public function setEndAt($endAt)
-    {
-        $this->endAt = $endAt;
-
-        return $this;
-    }
-
-    /**
-     * Get endAt
-     *
-     * @return \DateTime
-     */
-    public function getEndAt()
-    {
-        return $this->endAt;
     }
 
     /**
@@ -944,5 +896,53 @@ class ReservationService implements AlertableInterface
     public function getPax()
     {
         return $this->pax;
+    }
+
+    /**
+     * Set startAt
+     *
+     * @param \DateTime $startAt
+     *
+     * @return ReservationService
+     */
+    public function setStartAt($startAt)
+    {
+        $this->startAt = $startAt;
+
+        return $this;
+    }
+
+    /**
+     * Get startAt
+     *
+     * @return \DateTime
+     */
+    public function getStartAt()
+    {
+        return $this->startAt;
+    }
+
+    /**
+     * Set endAt
+     *
+     * @param \DateTime $endAt
+     *
+     * @return ReservationService
+     */
+    public function setEndAt($endAt)
+    {
+        $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    /**
+     * Get endAt
+     *
+     * @return \DateTime
+     */
+    public function getEndAt()
+    {
+        return $this->endAt;
     }
 }

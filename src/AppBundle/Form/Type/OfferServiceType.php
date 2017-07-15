@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\ReservationService;
 
 /**
- * Description of OfferServiceType
+ * OfferServiceType
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */

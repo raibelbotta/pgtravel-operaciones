@@ -363,8 +363,19 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
     }
 
     var initValidation = function() {
+        $.validator.addClassRules('endatrequired', {
+            required: {
+                depends: function(element) {
+                    var $item = $(element).closest('.item'),
+                        type = $item.find('select[name$="[model]"]').val();
+
+                    return type != 'transport';
+                }
+            }
+        });
+
         $('#reservation').validate({
-            'errorPlacement': function(error, element) {
+            errorPlacement: function(error, element) {
                 if (element.is(':hidden')) {
                     element = element.closest(':visible');
                 }
@@ -379,13 +390,13 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 element.tooltipster('update', $(error).text());
                 element.tooltipster('show');
             },
-            'ignore': ':hidden:not(input[name="servicesCounter"])',
-            'messages': {
+            ignore: ':hidden:not(input[name="servicesCounter"])',
+            messages: {
                 'servicesCounter': {
                     'min': Translator.trans('Add a service at least')
                 }
             },
-            'rules': {
+            rules: {
                 'servicesCounter': {
                     'min': 1
                 },

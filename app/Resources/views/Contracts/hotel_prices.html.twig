@@ -20,7 +20,7 @@
                             <tr>
                                 <th rowspan="2">{{ 'Room'|trans }}</th>
                                 <th rowspan="2">{{ 'Plan'|trans }}</th>
-                                {% for season in facility.seasons %}
+                                {% for season in facility_seasons_ordered(facility) %}
                                     <th class="text-center" colspan="{{ cupos|length }}">
                                         {% trans with {'%from%': season.fromDate|date('d/m/Y'), '%to%': season.toDate|date('d/m/Y')} %}%%from%% to %%to%%{% endtrans %}
                                         <div class="btn-group">

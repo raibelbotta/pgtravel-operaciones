@@ -159,3 +159,10 @@ services:
         class: AppBundle\Listener\AddResponseCacheListener
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        public: false
+        tags:
+            - { name: twig.extension }

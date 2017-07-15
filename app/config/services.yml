@@ -6,7 +6,7 @@ parameters:
     app.administrative_services:
         - { name: Office, price: 5 }
         - { name: Internet and phone, price: 10 }
-        - { name: Transportation, price 10 }
+        - { name: Transportation, price: 10 }
         - { name: Room, price: 30 }
         - { name: Board, price: 30 }
         - { name: Currency exchange, price: 120 }

@@ -17,21 +17,21 @@ class MealPlanType extends AbstractType
      * @var array
      */
     private $plans;
-    
+
     public function __construct(array $plans)
     {
         $this->plans = $plans;
     }
-    
+
     public function getParent()
     {
         return ChoiceType::class;
     }
-    
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'choices', array_combine($this->plans, $this->plans),
+            'choices' => array_combine($this->plans, $this->plans),
             'values_as_choices' => true
         ));
     }

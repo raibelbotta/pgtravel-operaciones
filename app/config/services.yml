@@ -56,22 +56,22 @@ parameters:
 services:
     app.form.type.meal_plan_type:
         class: AppBundle\Form\Type\MealPlanType
-        arguments: [ %app.hotel.plans% ]
+        arguments: [ '%app.hotel.plans%' ]
         tags:
             - { name: form.type }
     app.form.type.profile_form_type:
         class: AppBundle\Form\Type\ProfileFormType
-        arguments: [ %fos_user.model.user.class% ]
+        arguments: [ '%fos_user.model.user.class%' ]
         tags:
             - { name: form.type }
     app.form.type.hotel_plan_type:
         class: AppBundle\Form\Type\HotelPlansType
-        arguments: [ %app.hotel.plans% ]
+        arguments: [ '%app.hotel.plans%' ]
         tags:
             - { name: form.type }
     app.form.type.notification_line_type:
         class: AppBundle\Form\Type\NotificationLineType
-        arguments: [ %app.reservation.notification_lines% ]
+        arguments: [ '%app.reservation.notification_lines%' ]
         tags:
             - { name: form.type }
     app.form.type.offer_form_type:

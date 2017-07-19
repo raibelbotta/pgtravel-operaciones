@@ -153,6 +153,6 @@ assetic:
     use_controller:     %kernel.debug%
     filters:
         cssrewrite:     ~
-        jsqueeze:   ~
+        jsqueeze:       ~
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'

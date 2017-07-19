@@ -16,12 +16,13 @@
     <link href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-    {% stylesheets filter="?scssphp" output="compiled/css/login.min.css"
-        "../web/plugins/tooltipster/css/tooltipster.css"
-        "../web/plugins/tooltipster/css/tooltipster-custom.css"
-        "../web/plugins/nprogress/nprogress.css"
-        "../web/plugins/animate.css/animate.css"
-        "../web/css/custom.css"
+    {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/login.min.css"
+        "plugins/tooltipster/css/tooltipster.css"
+        "plugins/tooltipster/css/tooltipster-custom.css"
+        "plugins/nprogress/nprogress.css"
+        "plugins/iCheck/skins/flat/green.css"
+        "plugins/animate.css/animate.css"
+        "css/custom.css"
         %}
         <link href="{{ asset_url }}" rel="stylesheet">
     {% endstylesheets %}
@@ -47,6 +48,13 @@
                         </div>
                         <div>
                             <input type="password" class="form-control" placeholder="Password" required name="_password" />
+                        </div>
+                        <div>
+                            <label>
+                                <input type="checkbox" name="_remember_me" class="iCheck">
+                                {{ "Remember me in this device (1 week)"|trans }}
+                            </label>
+                            <br><br>
                         </div>
                         <div>
                             <button type="submit" class="btn btn-default submit">{{ 'Log in'|trans }}</button>
@@ -117,16 +125,21 @@
 
 {% block javascripts %}
     {% javascripts filter="?jsqueeze" output="compiled/js/login.min.js"
-        "../web/plugins/jquery/dist/jquery.min.js"
-        "../web/plugins/bootstrap/dist/js/bootstrap.js"
-        "../web/plugins/tooltipster/js/jquery.tooltipster.js"
-        "../web/plugins/jquery-validation/dist/jquery.validate.js"
+        "plugins/jquery/dist/jquery.min.js"
+        "plugins/bootstrap/dist/js/bootstrap.js"
+        "plugins/tooltipster/js/jquery.tooltipster.js"
+        "plugins/jquery-validation/dist/jquery.validate.js"
+        "plugins/iCheck/icheck.js"
         %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script>
         $(document).ready(function() {
+            $('input:checkbox.iCheck').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                increaseArea: '20%'
+            });
             $('#formLogin').validate({
                 errorPlacement: function(error, element) {
                     if (!element.data('tooltipster-ns')) {

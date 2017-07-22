@@ -179,16 +179,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.6.1",
+            "version": "v1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "b6f544a20f4807e81f7044d31e679ccbb1866dc3"
+                "reference": "eb152c5100571c7a45470ff2a35095ab3f3b900b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/b6f544a20f4807e81f7044d31e679ccbb1866dc3",
-                "reference": "b6f544a20f4807e81f7044d31e679ccbb1866dc3",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/eb152c5100571c7a45470ff2a35095ab3f3b900b",
+                "reference": "eb152c5100571c7a45470ff2a35095ab3f3b900b",
                 "shasum": ""
             },
             "require": {
@@ -245,7 +245,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2016-10-29T11:16:17+00:00"
+            "time": "2017-07-22T12:49:21+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -316,16 +316,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "v2.7.2",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "930297026c8009a567ac051fd545bf6124150347"
+                "reference": "4acb8f89626baafede6ee5475bc5844096eba8a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/930297026c8009a567ac051fd545bf6124150347",
-                "reference": "930297026c8009a567ac051fd545bf6124150347",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/4acb8f89626baafede6ee5475bc5844096eba8a9",
+                "reference": "4acb8f89626baafede6ee5475bc5844096eba8a9",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2017-01-13T14:02:13+00:00"
+            "time": "2017-07-22T08:35:12+00:00"
         },
         {
             "name": "doctrine/data-fixtures",
@@ -1327,16 +1327,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.6.0",
+            "version": "8.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "0aba3105c1896412a8c6454a5c7843115c1dce7b"
+                "reference": "dd9cf2a10a8671d3934a7a315e927df46548bcc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/0aba3105c1896412a8c6454a5c7843115c1dce7b",
-                "reference": "0aba3105c1896412a8c6454a5c7843115c1dce7b",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/dd9cf2a10a8671d3934a7a315e927df46548bcc9",
+                "reference": "dd9cf2a10a8671d3934a7a315e927df46548bcc9",
                 "shasum": ""
             },
             "require": {
@@ -1391,7 +1391,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2017-07-04T16:24:53+00:00"
+            "time": "2017-07-18T13:07:45+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -3088,16 +3088,16 @@
         },
         {
             "name": "symfony/assetic-bundle",
-            "version": "v2.8.1",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/assetic-bundle.git",
-                "reference": "0241b135ff64c6031048c6425cd833a8300da46b"
+                "reference": "2e0a23a4874838e26de6f025e02fc63328921a4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/assetic-bundle/zipball/0241b135ff64c6031048c6425cd833a8300da46b",
-                "reference": "0241b135ff64c6031048c6425cd833a8300da46b",
+                "url": "https://api.github.com/repos/symfony/assetic-bundle/zipball/2e0a23a4874838e26de6f025e02fc63328921a4c",
+                "reference": "2e0a23a4874838e26de6f025e02fc63328921a4c",
                 "shasum": ""
             },
             "require": {
@@ -3154,7 +3154,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2016-11-22T11:42:57+00:00"
+            "time": "2017-07-14T07:26:46+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -3730,16 +3730,16 @@
         },
         {
             "name": "symfony/swiftmailer-bundle",
-            "version": "v2.6.2",
+            "version": "v2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/swiftmailer-bundle.git",
-                "reference": "deabc81120c2086571f7c4484ab785c5e1b84f75"
+                "reference": "11555c338f3c367b0a1bd2f024a53aa813f4ce00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/deabc81120c2086571f7c4484ab785c5e1b84f75",
-                "reference": "deabc81120c2086571f7c4484ab785c5e1b84f75",
+                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/11555c338f3c367b0a1bd2f024a53aa813f4ce00",
+                "reference": "11555c338f3c367b0a1bd2f024a53aa813f4ce00",
                 "shasum": ""
             },
             "require": {
@@ -3785,24 +3785,25 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-            "time": "2017-05-22T04:58:24+00:00"
+            "time": "2017-07-22T07:18:13+00:00"
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.24",
+            "version": "v2.8.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "0ab3693b1154b1b166e98981ab3755636a5ae0e3"
+                "reference": "c2452af5659d0492a43268c389bb211295c5e4c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/0ab3693b1154b1b166e98981ab3755636a5ae0e3",
-                "reference": "0ab3693b1154b1b166e98981ab3755636a5ae0e3",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/c2452af5659d0492a43268c389bb211295c5e4c9",
+                "reference": "c2452af5659d0492a43268c389bb211295c5e4c9",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.4",
+                "ext-xml": "*",
                 "php": ">=5.3.9",
                 "psr/log": "~1.0",
                 "symfony/polyfill-apcu": "~1.1",
@@ -3922,7 +3923,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-07-05T08:53:15+00:00"
+            "time": "2017-07-17T18:00:19+00:00"
         },
         {
             "name": "twig/twig",
@@ -3991,16 +3992,16 @@
         },
         {
             "name": "vich/uploader-bundle",
-            "version": "1.4.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dustin10/VichUploaderBundle.git",
-                "reference": "209510ace7c218783f5c0528dd0bfa1c89515f69"
+                "reference": "09c0f0f805f7dce07c6642548344158a1c7faed6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dustin10/VichUploaderBundle/zipball/209510ace7c218783f5c0528dd0bfa1c89515f69",
-                "reference": "209510ace7c218783f5c0528dd0bfa1c89515f69",
+                "url": "https://api.github.com/repos/dustin10/VichUploaderBundle/zipball/09c0f0f805f7dce07c6642548344158a1c7faed6",
+                "reference": "09c0f0f805f7dce07c6642548344158a1c7faed6",
                 "shasum": ""
             },
             "require": {
@@ -4039,6 +4040,7 @@
                 "doctrine/orm": "^2.2.3",
                 "doctrine/phpcr-odm": "~1.0",
                 "knplabs/knp-gaufrette-bundle": "~0.3",
+                "ocramius/proxy-manager": "To have the Gaufrette with Doctrine adapter",
                 "symfony/yaml": "^2.0.5",
                 "willdurand/propel-eventdispatcher-bundle": "~1.2"
             },
@@ -4069,7 +4071,7 @@
                 "file uploads",
                 "upload"
             ],
-            "time": "2017-07-04T14:09:56+00:00"
+            "time": "2017-07-11T09:11:07+00:00"
         },
         {
             "name": "willdurand/js-translation-bundle",
@@ -4177,16 +4179,16 @@
     "packages-dev": [
         {
             "name": "sensio/generator-bundle",
-            "version": "v3.1.4",
+            "version": "v3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "37f9f4e165b033fb76cc2320838321cc57140e65"
+                "reference": "128bc5dabc91ca40b7445f094968dd70ccd58305"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/37f9f4e165b033fb76cc2320838321cc57140e65",
-                "reference": "37f9f4e165b033fb76cc2320838321cc57140e65",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/128bc5dabc91ca40b7445f094968dd70ccd58305",
+                "reference": "128bc5dabc91ca40b7445f094968dd70ccd58305",
                 "shasum": ""
             },
             "require": {
@@ -4227,11 +4229,11 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2017-03-15T01:02:10+00:00"
+            "time": "2017-07-18T07:57:44+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.24",
+            "version": "v2.8.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",

@@ -9,44 +9,43 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <div class="pull-right"><a href="{{ path('app_offers_new') }}" class="btn btn-primary">{{ 'Add new'|trans }}</a></div>
-                    <div class="clearfix"></div>
-                    <form id="filter">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-3 form-group">
-                                <label for="filter_fromDate" class="control-label">{{ 'From'|trans }}</label>
-                                <div class="input-group date">
-                                    <input type="text" name="filter[fromDate]" id="filter_fromDate" class="form-control input-sm" value="{{ filter.fromDate is defined ? filter.fromDate : '' }}">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3 form-group">
-                                <label for="filter_toDate" class="control-label">{{ 'To'|trans }}</label>
-                                <div class="input-group date">
-                                    <input type="text" name="filter[toDate]" id="filter_toDate" class="form-control input-sm" value="{{ filter.toDate is defined ? filter.toDate : '' }}">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-3 form-group">
-                                <label for="filter_state" class="control-label">{{ 'State'|trans }}</label>
-                                <select name="filter[state]" id="filter_state" class="form-control input-sm">
-                                    <option value=""{{ filter.state is not defined or filter.state == '' ? ' selected' : '' }}></option>
-                                    <option value="offer"{{ filter.state is defined and filter.state == 'offer' ? ' selected' : '' }}>{{ 'Offer'|trans }}</option>
-                                    <option value="reservation"{{ filter.state is defined and filter.state == 'reservation' ? ' selected' : '' }}>{{ 'Reservation'|trans }}</option>
-                                </select>
-                            </div>
-                            <div class="col-xs-12 col-sm-3 form-group">
-                                <label for="filter_cancelled" class="control-label">{{ 'Cancelled'|trans }}</label>
-                                <select name="filter[cancelled]" id="filter_cancelled" class="form-control input-sm">
-                                    <option value=""{{ filter.cancelled is not defined or filter.cancelled == '' ? ' selected="selected"' : '' }}></option>
-                                    <option value="yes"{{ filter.cancelled is defined and filter.cancelled == 'yes' ? ' selected="selected"' : '' }}>{{ 'yes'|trans }}</option>
-                                    <option value="no"{{ filter.cancelled is defined and filter.cancelled == 'no' ? ' selected="selected"' : '' }}>{{ 'no'|trans }}</option>
-                                </select></div>
+                    <div class="pull-right" style="margin-bottom: 4px;">
+                        <div class="btn-group">
+                            <a href="{{ path('app_offers_new') }}" class="btn btn-primary">{{ 'Add new'|trans }}</a>
+                            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#rowFilter" aria-expanded="false" aria-controls="rowFilter"><span class="fa fa-filter"></span></button>
                         </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <form id="filter" role="form">
+                        <div class="row collapse" id="rowFilter">
+                            <div class="col-xs-6 col-sm-3 form-group">
+                                {{ form_label(form.startAt.left_date) }}
+                                <div class="input-group date">
+                                    {{ form_widget(form.startAt.left_date, {attr: {class: "form-control input-sm"}}) }}
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-3 form-group">
+                                {{ form_label(form.startAt.right_date) }}
+                                <div class="input-group date">
+                                    {{ form_widget(form.startAt.right_date, {attr: {class: "form-control input-sm"}}) }}
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 form-group">
+                                {{ form_label(form.state) }}
+                                {{ form_widget(form.state, {attr: {class: "form-control input-sm"}}) }}
+                            </div>
+                            <div class="col-xs-12 col-sm-3 form-group">
+                                {{ form_label(form.isCancelled) }}
+                                {{ form_widget(form.isCancelled, {attr: {class: "form-control input-sm"}}) }}
+                            </div>
+                        </div>
+                        {{ form_rest(form) }}
                     </form>
                     <table id="datatable-offers" class="table table-striped table-bordered" width="100%"></table>
                 </div>

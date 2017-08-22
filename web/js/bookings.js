@@ -2,9 +2,9 @@ App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 +(App.Bookings.Index = function($) {
-    var init = function() {
-        var $table = $('#datatable-offers');
+    var $table = $('#datatable-offers');
 
+    var init = function() {
         var clickCancel = function(event) {
             event.preventDefault();
 
@@ -135,8 +135,8 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         $table.on('click', 'a.btn-uncancel', clickUncancel);
 
         $table.dataTable({
-            'order': [[ 4, 'asc' ]],
-            'columnDefs': [
+            order: [[ 4, 'asc' ]],
+            columnDefs: [
                 {
                     'searchable': false,
                     'sortable': false,
@@ -176,51 +176,51 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     'title': Translator.trans('Date')
                 }
             ],
-            'processing': true,
-            'serverSide': true,
-            'ajax': {
-                "method": 'post',
-                "url": Routing.generate('app_offers_getdata'),
-                "data": function(baseData) {
-                    return $.extend(true, baseData, {
-                        "filter": {
-                            "state": $('form#filter select[name$="[state]"]').val(),
-                            "cancelled": $('form#filter select[name$="[cancelled]"]').val(),
-                            "fromDate": $('form#filter input:text[name$="[fromDate]"]').val(),
-                            "toDate": $('form#filter input:text[name$="[toDate]"]').val()
-                        }
+            processing: true,
+            serverSide: true,
+            ajax: {
+                method: 'post',
+                url: Routing.generate('app_offers_getdata'),
+                data: function(baseData) {
+                    var filter = [];
+                    $.each($('form#filter').serializeArray(), function(i, e) {
+                        filter[e['name']] = e['value'];
                     });
+
+                    return $.extend(true, baseData, filter);
                 }
             }
         });
+    }
 
-        +(function() {
-            $('form#filter input[name$="[fromDate]"]').parent().datetimepicker({
-                format: 'DD/MM/YYYY'
-            });
-            $('form#filter input[name$="[toDate]"]').parent().datetimepicker({
-                format: 'D/MM/YYYY',
-                useCurrent: false
-            });
-            $('form#filter input[name$="[fromDate]"]').parent().on('dp.change', function(e) {
-                $('form#filter input[name$="[toDate]"]').parent().data("DateTimePicker").minDate(e.date);
-                $table.DataTable().draw(false);
-            });
-            $('form#filter input[name$="[toDate]"]').parent().on("dp.change", function(e) {
-                $('form#filter input[name$="[fromDate]"]').parent().data("DateTimePicker").maxDate(e.date);
-                $table.DataTable().draw(false);
-            });
+    var initFilter = function() {
+        $('form#filter input[name="booking_list_filter_form[startAt][left_date]"]').parent().datetimepicker({
+            format: 'DD/MM/YYYY',
+            showClear: true
+        });
+        $('form#filter input[name="booking_list_filter_form[startAt][right_date]"]').parent().datetimepicker({
+            format: 'D/MM/YYYY',
+            useCurrent: false,
+            showClear: true
+        });
+        $('form#filter input[name="booking_list_filter_form[startAt][left_date]"]').parent().on('dp.change', function(e) {
+            $('form#filter input[name="booking_list_filter_form[startAt][right_date]"]').parent().data("DateTimePicker").minDate(e.date);
+            $table.DataTable().draw();
+        });
+        $('form#filter input[name="booking_list_filter_form[startAt][right_date]"]').parent().on("dp.change", function(e) {
+            $('form#filter input[name="booking_list_filter_form[startAt][left_date]"]').parent().data("DateTimePicker").maxDate(e.date);
+            $table.DataTable().draw();
+        });
 
-            $('form#filter select').on('change', function() {
-                $table.DataTable().draw(false);
-            });
-
-        }());
+        $('form#filter select').on('change', function() {
+            $table.DataTable().draw();
+        });
     }
 
     return {
         init: function() {
             init();
+            initFilter();
         }
     }
 }(jQuery));

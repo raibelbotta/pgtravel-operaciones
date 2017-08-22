@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Reservation;
 use AppBundle\Form\Type\OfferFormType;
 use AppBundle\Entity\ReservationAdministrativeCharge;
+use AppBundle\Form\Type\BookingListFilterFormType;
 
 /**
  * Description of OffersController
@@ -33,11 +34,15 @@ class OffersController extends Controller
     {
         $session = $this->container->get('session');
 
+        $form = $this->createForm(BookingListFilterFormType::class, $session->get('offers.filter', array(
+            'startAt' => array(
+                'left_date' => new \DateTime('now')
+            ),
+            'isCancelled' => 'no'
+        )));
+
         return $this->render('Offers/index.html.twig', array(
-            'filter' => $session->get('offers.filter', array(
-                'fromDate' => date_create('now')->format('d/m/Y'),
-                'cancelled' => 'no'
-            ))
+            'form' => $form->createView()
         ));
     }
 
@@ -75,29 +80,9 @@ class OffersController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order');
-        $filter = $request->get('filter', array());
-
-        $session = $this->container->get('session');
-        $session->set('offers.filter', $filter);
-
-        $andX = $qb->expr()->andX();
-
-        if (isset($filter['state']) && $filter['state']) {
-            $andX->add($qb->expr()->eq('r.state', $qb->expr()->literal('offer' === $filter['state'] ? Reservation::STATE_OFFER : Reservation::STATE_RESERVATION)));
-        }
-        if (isset($filter['fromDate']) && $filter['fromDate'] && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $filter['fromDate'])) {
-            $fromDate = \DateTime::createFromFormat('d/m/Y', $filter['fromDate']);
-            $andX->add($qb->expr()->gte('(SELECT MIN(rs3.startAt) FROM AppBundle:ReservationService rs3 JOIN rs3.reservation rk3 WHERE rk3.id = r.id)', $qb->expr()->literal($fromDate->format('Y-m-d'))));
-        }
-        if (isset($filter['toDate']) && $filter['toDate'] && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $filter['toDate'])) {
-            $toDate = \DateTime::createFromFormat('d/m/Y', $filter['toDate']);
-            $andX->add($qb->expr()->lte('(SELECT MAX(rs4.endAt) FROM AppBundle:ReservationService rs4 JOIN rs4.reservation rk4 WHERE rk4.id = r.id)', $qb->expr()->literal($toDate->format('Y-m-d 23:59:59'))));
-        }
-        if (isset($filter['cancelled']) && $filter['cancelled']) {
-            $andX->add($qb->expr()->eq('r.isCancelled', $qb->expr()->literal('yes' === $filter['cancelled'])));
-        }
 
         if (is_array($search) && isset($search['value']) && $search['value']) {
+            $andX = $qb->expr()->andX();
             $andX->add($qb->expr()->orX(
                     $qb->expr()->like('r.name', $qb->expr()->literal('%' . $search['value'] . '%')),
                     $qb->expr()->orX(
@@ -111,12 +96,15 @@ class OffersController extends Controller
                                     )
                             )
                         ));
-        }
 
-        if ($andX->count() > 0) {
             $qb->where($andX);
         }
 
+        $form = $this->createForm(BookingListFilterFormType::class);
+        $form->submit($request->request->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
+        $this->get('session')->set('offers.filter', $form->getData());
+        
         if ($orders) {
             $column = call_user_func(function($name) {
                 if ($name == 'name') {

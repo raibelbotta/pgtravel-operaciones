@@ -79,6 +79,14 @@ class Supplier
     private $email;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="web_address", nullable=true)
+     * @Assert\Url
+     */
+    private $webAddress;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="SupplierEmployee", mappedBy="supplier", cascade={"persist", "remove"})
@@ -416,5 +424,29 @@ class Supplier
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set webAddress
+     *
+     * @param string $webAddress
+     *
+     * @return Supplier
+     */
+    public function setWebAddress($webAddress)
+    {
+        $this->webAddress = $webAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get webAddress
+     *
+     * @return string
+     */
+    public function getWebAddress()
+    {
+        return $this->webAddress;
     }
 }

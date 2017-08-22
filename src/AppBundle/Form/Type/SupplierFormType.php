@@ -38,6 +38,7 @@ class SupplierFormType extends AbstractType
                 ->add('place', PlaceType::class, array(
                     'required' => false
                 ))
+                ->add('webAddress')
                 ->add('employees', CollectionType::class, array(
                     'entry_type' => SupplierEmployeeType::class,
                     'allow_add' => true,

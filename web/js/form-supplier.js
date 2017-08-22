@@ -18,7 +18,9 @@ App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
 
             $container.append($item);
 
-            App.Forms.initTelephoneControl($item.find('input[type=tel]'));
+            App.Forms.initTelephoneControl($item.find('input[type=tel]'), {
+                preferredCountries: ['cu']
+            });
             $item.find('.collection-emails').data('index', 0);
 
             $container.data('index', index + 1);
@@ -52,7 +54,9 @@ App.Suppliers = typeof App.Suppliers !== 'undefined' ? App.Suppliers : {};
     }
 
     var initControls = function() {
-        App.Forms.initTelephoneControl($('form#supplier input[type=tel]'));
+        App.Forms.initTelephoneControl($('form#supplier input[type=tel]'), {
+            preferredCountries: ['cu']
+        });
 
         $('form#supplier select[name$="[place]"]').select2({
             width: '100%',

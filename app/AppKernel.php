@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
+            new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
 
             //project bundles
             new AppBundle\AppBundle(),

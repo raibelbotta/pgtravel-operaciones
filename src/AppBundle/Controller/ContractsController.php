@@ -83,11 +83,7 @@ class ContractsController extends Controller
         $paginator = $this->get('knp_paginator');
         $page = $request->get('start', 0) / $request->get('length') + 1;
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
-
-        $list = $pagination->getItems();
         $total = $pagination->getTotalItemCount();
-
-        $translator = $this->container->get('translator');
 
         $template = $this->container->get('twig')->loadTemplate('Contracts/_row.html.twig');
         $types = array_combine(array_keys($this->container->getParameter('app.contract.models')), array_map(function($options) {
@@ -104,7 +100,7 @@ class ContractsController extends Controller
                 $record->getEndAt() ? $record->getEndAt()->format('Y-m-d') : '',
                 $template->renderBlock('actions', array('record' => $record))
             );
-        }, $list);
+        }, $pagination->getItems());
 
         return new JsonResponse(array(
             'data' => $data,

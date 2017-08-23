@@ -54,6 +54,11 @@ parameters:
     app.email_positions: [ Home, Work, Mobile, Other ]
 
 services:
+    app.form.type.contract_filter_form_type:
+        class: AppBundle\Form\Type\ContractFilterFormType
+        arguments: [ '%app.contract.models%' ]
+        tags:
+            - { name: form.type }
     app.form.type.meal_plan_type:
         class: AppBundle\Form\Type\MealPlanType
         arguments: [ '%app.hotel.plans%' ]

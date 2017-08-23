@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Contract;
 use AppBundle\Form\Type\ContractFormType;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Form\Type\ContractFilterFormType;
 
 /**
  * Description of ContractsController
@@ -29,16 +30,11 @@ class ContractsController extends Controller
      */
     public function indexAction()
     {
-        $types = array_combine(array_keys($this->container->getParameter('app.contract.models')), array_map(function($options) {
-            return $options['display'];
-        }, $this->container->getParameter('app.contract.models')));
-
         $session = $this->container->get('session');
-        $filter = $session->get('contracts.filter', array());
+        $form = $this->createForm(ContractFilterFormType::class, $session->get('contracts.filter', array()));
 
         return $this->render('Contracts/index.html.twig', array(
-            'types' => $types,
-            'filter' => $filter
+            'form' => $form->createView()
         ));
     }
 
@@ -60,26 +56,17 @@ class ContractsController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order');
-        $filter = $request->get('filter');
-
-        $session = $this->container->get('session');
-        $session->set('contracts.filter', $filter);
-
-        $andX = $qb->expr()->andX();
-
+        
         if (is_array($search) && isset($search['value']) && $search['value']) {
-            $andX->add($qb->expr()->like('c.name', ':q'));
+            $andX = $qb->expr()->andX($qb->expr()->like('c.name', ':q'));
             $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
-        }
-
-        if (isset($filter['type']) && $filter['type']) {
-            $andX->add($qb->expr()->eq('c.model', ':ctype'));
-            $qb->setParameter('ctype', $filter['type']);
-        }
-
-        if ($andX->count() > 0) {
             $qb->where($andX);
         }
+
+        $form = $this->createForm(ContractFilterFormType::class);
+        $form->submit($request->request->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
+        $this->container->get('session')->set('contracts.filter', $form->getData());
 
         if ($orders) {
             $column = call_user_func(function($name) {

@@ -30,11 +30,12 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
                 method: 'POST',
                 url: Routing.generate('app_contracts_getdata'),
                 data: function(data) {
-                    return $.extend(true, data, {
-                        filter: {
-                            type: $('select#filter_type').val()
-                        }
+                    var filter = [];
+                    $.each($('form#filter').serializeArray(), function(i, e) {
+                        filter[e['name']] = e['value'];
                     });
+
+                    return $.extend({}, data, filter);
                 }
             }
         });

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Reservation;
 use AppBundle\Entity\ReservationService;
 use AppBundle\Form\Type\ConfirmServiceFormType;
+use AppBundle\Form\Type\ServiceConfirmFilterFormType;
 
 /**
  * Description of NotificationsController
@@ -29,13 +30,12 @@ class NotificationsController extends Controller
     public function indexAction()
     {
         $session = $this->container->get('session');
-        if (null === ($filter = $session->get('notifications.filter'))) {
-            $filter = array('state' => 'no');
-            $session->set('notifications.filter', $filter);
-        }
+        $form = $this->createForm(ServiceConfirmFilterFormType::class, $session->get('notifications.filter', array(
+            'state' => 'no'
+        )));
 
         return $this->render('Notifications/index.html.twig', array(
-            'filter' => $filter
+            'form' => $form->createView()
         ));
     }
 
@@ -70,10 +70,6 @@ class NotificationsController extends Controller
                 $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false))
                 );
 
-        if (isset($filter['state']) && $filter['state']) {
-            $andX->add($qb->expr()->eq('rs.isNotified', $qb->expr()->literal($filter['state'] == 'yes')));
-        }
-
         if (is_array($search) && isset($search['value']) && $search['value']) {
             $andX->add($qb->expr()->orX(
                     $qb->expr()->like('r.name', $qb->expr()->literal(sprintf('%%%s%%', $search['value']))),
@@ -105,6 +101,11 @@ class NotificationsController extends Controller
 
         $qb->where($andX);
 
+        $form = $this->createForm(ServiceConfirmFilterFormType::class);
+        $form->submit($request->request->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
+        $this->container->get('session')->set('notifications.filter', $form->getData());
+        
         if ($orders) {
             $column = call_user_func(function($name) {
                 if ('name' === $name) {

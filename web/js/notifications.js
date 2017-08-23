@@ -2,9 +2,9 @@ App = typeof App !== 'undefined' ? App : {};
 App.Notifications = typeof App.Notifications !== 'undefined' ? App.Notifications : {};
 
 +(App.Notifications.Index = function($) {
-    var init = function() {
-        var $table = $('#datatable-x');
+    var $table = $('#datatable-x');
 
+    var init = function() {
         $table.on('click', '.btn-change-state', function(event) {
             event.preventDefault();
 
@@ -50,23 +50,27 @@ App.Notifications = typeof App.Notifications !== 'undefined' ? App.Notifications
                 method: 'post',
                 url: Routing.generate('app_notifications_getdata'),
                 data: function(params) {
-                    return $.extend({}, params, {
-                        filter: {
-                            state: $('form#filter select[name$="[state]"]').val()
-                        }
+                    var filter = [];
+                    $.each($('form#filter').serializeArray(), function(i, e) {
+                        filter[e['name']] = e['value'];
                     });
+
+                    return $.extend({}, params, filter);
                 }
             }
         });
+    }
 
-        $('form#filter select[name$="[state]"]').on('change', function() {
-            $table.dataTable().api().draw(true);
+    var initFilter = function() {
+        $('form#filter select').on('change', function() {
+            $table.dataTable().api().draw();
         });
     }
 
     return {
         init: function() {
             init();
+            initFilter();
         }
     }
 }(jQuery));

@@ -9,15 +9,15 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
+                    <div class="pull-right" style="margin-bottom: 4px;">
+                        <button type="button" data-toggle="collapse" aria-expanded="false" aria-controls="filter-row" data-target="#filter-row" class="btn btn-default"><span class="fa fa-filter"></span></button>
+                    </div>
+                    <div class="clearfix"></div>
                     <form id="filter">
-                        <div class="row">
+                        <div class="row collapse" id="filter-row">
                             <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
-                                <label for="filter_state" class="control-label">{{ 'State'|trans }}</label>
-                                <select id="filter_state" name="filter[state]" class="form-control input-sm filter-state">
-                                    <option value=""{% if filter.state is not defined or filter.state == '' %} selected="selected"{% endif %}></option>
-                                    <option value="yes"{% if filter.state is defined and filter.state == 'yes' %} selected="selected"{% endif %}>{{ 'Confirmed'|trans }}</option>
-                                    <option value="no"{% if filter.state is defined and filter.state == 'no' %} selected="selected"{% endif %}>{{ 'Pending'|trans }}</option>
-                                </select>
+                                {{ form_label(form.isNotified) }}
+                                {{ form_widget(form.isNotified, {attr: {class: "form-control input-sm"}}) }}
                             </div>
                         </div>
                     </form>

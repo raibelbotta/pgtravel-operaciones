@@ -4,6 +4,7 @@ namespace AppBundle\Lib\Excel;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use AppBundle\Entity\Reservation;
+use AppBundle\Entity\ReservationService;
 
 /**
  * Description of Cash
@@ -58,7 +59,7 @@ class Cash extends ExportableBook
         $translator = $this->options['translator'];
         $locale = $this->options['locale'];
 
-        $sheet->fromArray(array_map(function(\AppBundle\Entity\ReservationService $service) use ($translator, $locale) {
+        $sheet->fromArray(array_map(function(ReservationService $service) use ($translator, $locale) {
             return array(
                 null,
                 $service->getName(),
@@ -67,8 +68,7 @@ class Cash extends ExportableBook
                     '%from%' => $service->getStartAt()->format('d/m/Y'),
                     '%to%' => $service->getEndAt()->format('d/m/Y')
                 ), null, $locale),
-                null,
-                'Hosting address'
+                sprintf('%0.2f', $service->getCost())
             );
         }, $this->record->getServices()->toArray()), null, 'A1');
     }

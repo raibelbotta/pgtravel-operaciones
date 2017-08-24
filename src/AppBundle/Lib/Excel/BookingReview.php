@@ -1,47 +1,56 @@
 <?php
 
-namespace AppBundle\Lib\Reports;
+namespace AppBundle\Lib\Excel;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use AppBundle\Entity\Reservation;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use AppBundle\Entity\ReservationService;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * Description of BookingPreview
- *
+ * Description of Cash
+ * 
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class BookingReview extends Report
-{
+class BookingReview extends ExportableBook
+{    
+    /**
+     * @var \PHPExcel
+     */
+    private $book;
+    
     /**
      * @var Reservation
      */
     private $record;
-    
+
+    /**
+     * @var EntityManager
+     */
+    private $manager;
+
     /**
      * @var array
      */
     private $serviceModels;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    
     public function __construct(array $options = array())
     {
         parent::__construct($options);
         
+        $this->book = $this->phpexcel->createPHPExcelObject();
         $this->record = $this->options['record'];
+        $this->manager = $this->options['manager'];
+        
         $this->serviceModels = array();
         foreach ($this->options['models'] as $element) {
             $this->serviceModels[$element['name']] = $element;
         }
         $this->translator = $this->options['translator'];
         
-        unset($this->options['record'], $this->options['models'], $this->options['translator']);
+        unset($this->options['record'], $this->options['manager'], $this->options['models']);
     }
     
     protected function configureOptions(OptionsResolver $resolver)
@@ -49,43 +58,35 @@ class BookingReview extends Report
         parent::configureOptions($resolver);
         
         $resolver
-                ->setRequired(array('record', 'manager', 'models', 'locale', 'translator'))
-                ->setAllowedTypes('record', 'AppBundle\\Entity\\Reservation')
-                ->setAllowedTypes('manager', EntityManager::class)
-                ->setAllowedTypes('models', 'array')
+                ->setRequired(array('record', 'translator', 'locale', 'manager', 'models'))
+                ->setAllowedTypes('record', Reservation::class)
                 ->setAllowedTypes('translator', TranslatorInterface::class)
                 ->setAllowedTypes('locale', 'string')
+                ->setAllowedTypes('manager', EntityManager::class)
+                ->setAllowedTypes('models', 'array')
                 ->setDefault('locale', 'en')
                 ;
     }
     
-    public function getContent()
+    public function getBookContent()
     {
-        $this->pdf->AddPage();
+        $this->render();
         
-        $this->renderHeader();
-        $this->renderBody();
+        $writer = $this->phpexcel->createWriter($this->book, 'Excel5');
         
-        return $this->getPdfContent();
+        return $this->phpexcel->createStreamedResponse($writer);
     }
     
-    private function renderHeader()
+    private function render()
     {
-        $this->pdf->Write(0, 'BOOKING REVIEW', '', false, 'C', true);
-        $this->pdf->Write(0, sprintf('Name: %s', $this->record->getName()), '', false, 'C', true);
-        
-        $this->pdf->Ln(8);
-    }
-    
-    private function renderBody()
-    {
-        $this->pdf->SetFontSize(10);
+        $sheet = $this->book->getActiveSheet();
         $accessor = PropertyAccess::createPropertyAccessor();
+        $record = $this->record;
 
-        foreach ($this->getSortedServices() as $service) {
+        $sheet->fromArray(array_map(function(ReservationService $service) use ($record, $accessor) {
             if (null !== $service->getDescription()) {
                 $text = $service->getDescription();
-            } elseif (Reservation::STATE_OFFER === $this->record->getState()) {
+            } elseif (Reservation::STATE_OFFER === $record->getState()) {
                 if ($accessor->getValue($this->serviceModels[$service->getModel()], '[has_nights]')) {
                     $text = sprintf('%s nights in %s', $service->getNights() , $service->getName());
                 } else {
@@ -94,18 +95,20 @@ class BookingReview extends Report
             } else {
                 $text = sprintf('%s to %s. %s', $service->getStartAt()->format('d/m/Y H:i'), $service->getEndAt()->format('d/m/Y H:i'), $service->getName());
             }
-            
-            $this->pdf->Write(0, $text, '', false, 'L', true);
-            $this->pdf->Ln(2);
-        }
+
+            return array($text);
+        }, $this->getSortedServices()), null, 'A1');
     }
-    
+
+    /**
+     * @return array
+     */
     private function getSortedServices()
     {
-        $query = $this->options['manager']->createQuery('SELECT rs FROM AppBundle:ReservationService rs JOIN rs.reservation r WHERE r.id = :reservation ORDER BY rs.startAt')
+        $query = $this->manager->createQuery('SELECT rs FROM AppBundle:ReservationService rs JOIN rs.reservation r WHERE r.id = :reservation ORDER BY rs.startAt')
                 ->setParameter('reservation', $this->record->getId())
                 ;
-        
+
         return $query->getResult();
     }
 }

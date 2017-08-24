@@ -11,9 +11,15 @@
                 <li><a href="{{ path('app_offers_downloaditinerarydocument', {'id': record.id, 'filename': record.offerSummaryOriginalFilename}) }}" target="_blank">{{ record.offerSummaryOriginalFilename }}</a></li>
             {% endif %}
             <li>
-                <a href="{{ path('app_offers_printpreview', {'id': record.id}) }}" target="_blank">
+                <a href="{{ path('app_offers_printbookingreview', {id: record.id, format: "pdf"}) }}" target="_blank">
                     <span class="fa fa-file-pdf-o"></span>
-                    {{ 'Booking review'|trans }}
+                    {{ 'Booking review (pdf)'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_offers_printbookingreview', {id: record.id, format: "xls"}) }}" target="_blank">
+                    <span class="fa fa-file-excel-o"></span>
+                    {{ 'Booking review (xls)'|trans }}
                 </a>
             </li>
             <li>

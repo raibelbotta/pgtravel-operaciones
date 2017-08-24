@@ -809,28 +809,51 @@ class OffersController extends Controller
     }
 
     /**
-     * @Route("/{id}/print-preview")
+     * @Route("/{id}/print-booking-review/{format}", requirements={"id": "\d+", "format": "pdf|xls"})
      * @ParamConverter("record", class="AppBundle\Entity\Reservation")
      * @Method({"get"})
      * @return Response
      */
-    public function printPreviewAction(Reservation $record)
+    public function printBookingReviewAction(Reservation $record, $format)
     {
-        $report = new \AppBundle\Lib\Reports\BookingReview(array(
-            'record' => $record,
-            'manager' => $this->getDoctrine()->getManager(),
-            'models' => $this->container->getParameter('app.contract.models'),
-            'locale' => $this->container->get('request')->getLocale(),
-            'translator' => $this->container->get('translator')
-        ));
+        if ('pdf' === $format) {
+            $report = new \AppBundle\Lib\Reports\BookingReview(array(
+                'record' => $record,
+                'manager' => $this->getDoctrine()->getManager(),
+                'models' => $this->container->getParameter('app.contract.models'),
+                'locale' => $this->container->get('request')->getLocale(),
+                'translator' => $this->container->get('translator')
+            ));
 
-        return new StreamedResponse(function() use($report) {
-            $content = $report->getContent();
-            file_put_contents('php://output', $content);
-        }, 200, array(
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => sprintf('inline; filename="%s booking review.pdf"', $record->getName())
-        ));
+            $response = new StreamedResponse(function() use($report) {
+                $content = $report->getContent();
+                file_put_contents('php://output', $content);
+            }, 200, array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => sprintf('inline; filename="%s booking review.pdf"', $record->getName())
+            ));
+        } elseif ('xls' === $format) {
+            $book = new \AppBundle\Lib\Excel\BookingReview(array(
+                'record' => $record,
+                'phpexcel' => $this->container->get('phpexcel'),
+                'manager' => $this->getDoctrine()->getManager(),
+                'models' => $this->container->getParameter('app.contract.models'),
+                'locale' => $this->container->get('request')->getLocale(),
+                'translator' => $this->container->get('translator')
+            ));
+
+            $response = $book->getBookContent();
+            $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                sprintf('Cash %s v%s.xls', $record->getName(), $record->getVersion())
+            );
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+            $response->headers->set('Content-Disposition', $dispositionHeader);
+        }
+
+        return $response;
     }
 
     /**

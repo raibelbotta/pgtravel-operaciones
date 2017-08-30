@@ -404,6 +404,11 @@ class OffersController extends Controller
             $andX->add($qb->expr()->eq('p.plan', $qb->expr()->literal($filter['plan'])));
         }
 
+        if ($search['value']) {
+            $andX->add($qb->expr()->like('f.name', ':q'));
+            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
+        }
+
         if ($andX->count() > 0) {
             $qb->where($andX);
         }

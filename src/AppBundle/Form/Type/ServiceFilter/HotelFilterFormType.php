@@ -47,34 +47,7 @@ class HotelFilterFormType extends AbstractType
                         'html5' => false,
                         'widget' => 'single_text'
                     ),
-                    'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
-                        if (empty($values['value']['left_date'][0]) && empty($values['value']['right_date'][0])) {
-                            return null;
-                        }
-                    
-                        $expression = $filterQuery->getExpr()->andX();
-                        $params = array();
-
-                        if (!empty($values['value']['left_date'][0])) {
-                            $expression->add($filterQuery->getExpr()->andX(
-                                    $filterQuery->getExpr()->lte('c.startAt', ':p_hf_from_left'),
-                                    $filterQuery->getExpr()->lte('s.fromDate', ':p_hf_from_left'),
-                                    $filterQuery->getExpr()->gte('s.toDate', ':p_hf_from_left')
-                            ));
-                            $params[':p_hf_from_left'] = $values['value']['left_date'][0]->format('Y-m-d 00:00:00');
-                        }
-
-                        if (!empty($values['value']['right_date'][0])) {
-                            $expression->add($filterQuery->getExpr()->andX(
-                                    $filterQuery->getExpr()->gte('c.endAt', ':p_hf_from_right'),
-                                    $filterQuery->getExpr()->gte('s.toDate', ':p_hf_from_right'),
-                                    $filterQuery->getExpr()->lte('s.fromDate', ':p_hf_from_right')
-                            ));
-                            $params[':p_hf_from_right'] = $values['value']['right_date'][0]->format('Y-m-d 23:59:59');
-                        }
-
-                        return $filterQuery->createCondition($expression, $params);
-                    }
+                    'apply_filter' => array($this, 'applyDatesFilter')
                 ))
                 ->add('nights', IntegerType::class, array(
                     'required' => false,
@@ -104,5 +77,35 @@ class HotelFilterFormType extends AbstractType
             'csrf_protection' => false,
             'validation_groups' => array('filtering')
         ));
+    }
+
+    public function applyDatesFilter(QueryInterface $filterQuery, $field, $values)
+    {
+        if (empty($values['value']['left_date'][0]) && empty($values['value']['right_date'][0])) {
+            return null;
+        }
+
+        $expression = $filterQuery->getExpr()->andX();
+        $params = array();
+
+        if (!empty($values['value']['left_date'][0])) {
+            $expression->add($filterQuery->getExpr()->andX(
+                    $filterQuery->getExpr()->lte('c.startAt', ':p_hf_from_left'),
+                    $filterQuery->getExpr()->lte('s.fromDate', ':p_hf_from_left'),
+                    $filterQuery->getExpr()->gte('s.toDate', ':p_hf_from_left')
+            ));
+            $params[':p_hf_from_left'] = $values['value']['left_date'][0]->format('Y-m-d 00:00:00');
+        }
+
+        if (!empty($values['value']['right_date'][0])) {
+            $expression->add($filterQuery->getExpr()->andX(
+                    $filterQuery->getExpr()->gte('c.endAt', ':p_hf_from_right'),
+                    $filterQuery->getExpr()->gte('s.toDate', ':p_hf_from_right'),
+                    $filterQuery->getExpr()->lte('s.fromDate', ':p_hf_from_right')
+            ));
+            $params[':p_hf_from_right'] = $values['value']['right_date'][0]->format('Y-m-d 23:59:59');
+        }
+
+        return $filterQuery->createCondition($expression, $params);
     }
 }

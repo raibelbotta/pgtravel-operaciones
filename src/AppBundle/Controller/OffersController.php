@@ -16,6 +16,7 @@ use AppBundle\Entity\Reservation;
 use AppBundle\Form\Type\OfferFormType;
 use AppBundle\Entity\ReservationAdministrativeCharge;
 use AppBundle\Form\Type\BookingListFilterFormType;
+use AppBundle\Form\Type\ServiceFilter as ServiceFilters;
 
 /**
  * Description of OffersController
@@ -347,11 +348,16 @@ class OffersController extends Controller
         $models = $this->container->getParameter('app.contract.models');
         $manager = $this->getDoctrine()->getManager();
 
+        $form = $this->createForm(ServiceFilters\HotelFilterFormType::class);
+        
         return $this->render('Offers/search_service.html.twig', array(
             'cupos' => $this->container->getParameter('app.hotel.cupos'),
             'plans' => $this->container->getParameter('app.hotel.plans'),
             'models' => $models,
-            'provinces' => $manager->createQuery('SELECT p FROM AppBundle:Province AS p ORDER BY p.name')
+            'provinces' => $manager->createQuery('SELECT p FROM AppBundle:Province AS p ORDER BY p.name'),
+            'filters' => array(
+                'hotel' => $form->createView()
+            )
         ));
     }
 
@@ -368,9 +374,6 @@ class OffersController extends Controller
         $order = $request->get('order', array());
         $search = $request->get('search', array());
 
-        $from = isset($filter['from']) && $filter['from'] ? \DateTime::createFromFormat('d/m/Y H:i:s', $filter['from'] . ' 00:00:00') : null;
-        $to = isset($filter['to']) && $filter['to'] ? \DateTime::createFromFormat('d/m/Y H:i:s', $filter['to'] . ' 00:00:00') : null;
-
         $manager = $this->getDoctrine()->getManager();
         $qb = $manager->getRepository('AppBundle:ContractHotelPrice')
                 ->createQueryBuilder('p')
@@ -379,30 +382,12 @@ class OffersController extends Controller
                 ->join('s.facility', 'f')
                 ->join('p.room', 'r')
                 ;
+
+        $form = $this->createForm(ServiceFilters\HotelFilterFormType::class);
+        $form->submit($request->request->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
+
         $andX = $qb->expr()->andX();
-
-        if ($from) {
-            $andX->add($qb->expr()->andX(
-                    $qb->expr()->lte('c.startAt', $qb->expr()->literal($from->format('Y-m-d'))),
-                    $qb->expr()->lte('s.fromDate', $qb->expr()->literal($from->format('Y-m-d'))),
-                    $qb->expr()->gte('s.toDate', $qb->expr()->literal($from->format('Y-m-d')))
-                    ));
-        }
-        if ($to) {
-            $andX->add($qb->expr()->andX(
-                    $qb->expr()->gte('c.endAt', $qb->expr()->literal($to->format('Y-m-d'))),
-                    $qb->expr()->gte('s.toDate', $qb->expr()->literal($to->format('Y-m-d'))),
-                    $qb->expr()->lte('s.fromDate', $qb->expr()->literal($to->format('Y-m-d')))
-                    ));
-        }
-
-        if (isset($filter['pax']) && $filter['pax']) {
-            $andX->add($qb->expr()->eq('p.cupo', $qb->expr()->literal($filter['pax'])));
-        }
-
-        if (isset($filter['plan']) && $filter['plan']) {
-            $andX->add($qb->expr()->eq('p.plan', $qb->expr()->literal($filter['plan'])));
-        }
 
         if ($search['value']) {
             $andX->add($qb->expr()->like('f.name', ':q'));
@@ -410,7 +395,7 @@ class OffersController extends Controller
         }
 
         if ($andX->count() > 0) {
-            $qb->where($andX);
+            $qb->andWhere($andX);
         }
 
         if ($order) {
@@ -436,15 +421,14 @@ class OffersController extends Controller
         $paginator = $this->get('knp_paginator');
         $page = $request->get('start', 0) / $request->get('length') + 1;
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
-
-        $list = $pagination->getItems();
         $total = $pagination->getTotalItemCount();
 
-        $nights = $from && $to ? $to->diff($from, true)->days : 0;
+        $submittedData = $form->getData();
+        $nights = $submittedData['dates']['left_date'] && $submittedData['dates']['right_date'] ? $submittedData['dates']['right_date']->diff($submittedData['dates']['left_date'], true)->days : 0;
         $twig = $this->container->get('twig');
 
-        $data = array_map(function(\AppBundle\Entity\ContractHotelPrice $price)  use ($twig, $filter, $nights) {
-            $qty = isset($filter['quantity']) && $filter['quantity'] ? $filter['quantity'] : 0;
+        $data = array_map(function(\AppBundle\Entity\ContractHotelPrice $price)  use ($twig, $submittedData, $nights) {
+            $qty = $submittedData['quantity'] ? $submittedData['quantity'] : 0;
             return array(
                 (string) $price->getSeason()->getFacility(),
                 (string) $price->getRoom(),
@@ -459,7 +443,7 @@ class OffersController extends Controller
                     'nights' => $nights
                 ))
             );
-        }, $list);
+        }, $pagination->getItems());
 
         return new JsonResponse(array(
             'data' => $data,

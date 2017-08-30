@@ -139,6 +139,11 @@ services:
         arguments: [ '%app.email_positions%' ]
         tags:
             - { name: form.type }
+    app.form.type.service_filter.hotel_filter_form_type:
+        class: AppBundle\Form\Type\ServiceFilter\HotelFilterFormType
+        arguments: [ '%app.hotel.cupos%', '%app.hotel.plans%' ]
+        tags:
+            - { name: form.type }
 
     app.validator.constraints.email_position:
         class: ValidEmailPositionValidator

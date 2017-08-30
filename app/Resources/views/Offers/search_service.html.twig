@@ -10,52 +10,39 @@
                     <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'From'|trans }}</label>
                         <div class="input-group date">
-                            <input type="text" class="form-control input-sm datepicker">
+                            {{ form_widget(filters.hotel.dates.left_date, {attr: {class: "form-control input-sm datepicker"}}) }}
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="glyphicon glyphicon-calendar"></i>
                             </span>
                         </div>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label class="control-label">{{ 'To'|trans }}</label>
                         <div class="input-group date">
-                            <input type="text" class="form-control input-sm datepicker">
+                            {{ form_widget(filters.hotel.dates.right_date, {attr: {class: "form-control input-sm datepicker"}}) }}
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="glyphicon glyphicon-calendar"></i>
                             </span>
                         </div>
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Nights'|trans }}</label>
-                        <input type="number" name="nights" class="form-control input-sm text-right">
+                        {{ form_label(filters.hotel.nights) }}
+                        {{ form_widget(filters.hotel.nights, {attr: {class: "form-control input-sm text-right"}}) }}
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Pax'|trans }}</label>
-                        <select name="filter[pax]" class="form-control input-sm pax">
-                            <option value=""></option>
-                            {% for cupo in cupos %}
-                                <option value="{{ cupo }}">{{ cupo }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form_label(filters.hotel.cupo) }}
+                        {{ form_widget(filters.hotel.cupo, {attr: {class: "form-control input-sm pax"}}) }}
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Plan'|trans }}</label>
-                        <select name="filter[plan]" class="form-control input-sm pax">
-                            <option value=""></option>
-                            {% for plan in plans %}
-                                <option value="{{ plan }}">{{ plan }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form_label(filters.hotel.plan) }}
+                        {{ form_widget(filters.hotel.plan, {attr: {class: "form-control input-sm pax"}}) }}
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Number of roms'|trans }}</label>
-                        <select name="filter[quantity]" class="form-control input-sm pax">
-                            {% for i in 1..10 %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form_label(filters.hotel.quantity, null, {required: false}) }}
+                        {{ form_widget(filters.hotel.quantity, {attr: {class: "form-control input-sm pax"}}) }}
                     </div>
                 </div>
+                {{ form_rest(filters.hotel) }}
             </form>
             <div class="row">
                 <div class="col-xs-12">

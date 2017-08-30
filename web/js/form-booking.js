@@ -484,15 +484,15 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 ajax: {
                     url: Routing.generate('app_offers_gethotelprices'),
                     data: function(baseData) {
-                        return $.extend({}, baseData, {
+                        var filter = [];
+                        $.each($('form#filter-hotel').serializeArray(), function(i, e) {
+                            filter[e['name']] = e['value'];
+                        });
+                        return $.extend(true, baseData, {
                             'filter': {
-                                'from': $tab.find('input:text.datepicker:first').val(),
-                                'to': $tab.find('input:text.datepicker:last').val(),
-                                'pax': $tab.find('select[name$="[pax]"]').val(),
-                                'plan': $tab.find('select[name$="[plan]"]').val(),
                                 'quantity': $tab.find('select[name$="[quantity]"]').val()
                             }
-                        });
+                        }, filter);
                     },
                     method: 'POST'
                 },
@@ -542,10 +542,10 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     to = $tab.find('form input.datepicker:last').val() ? moment($tab.find('form input.datepicker:last').val(), 'DD/MM/YYYY') : null;
 
                 if (!from || !to) {
-                    $tab.find('form input[name=nights]').val('');
+                    $tab.find('form input[name="hotel_filter_form[nights]"]').val('');
                 } else {
                     var nights = to.startOf('day').diff(from.startOf('day'), 'days');
-                    $tab.find('form input[name=nights]').val(nights);
+                    $tab.find('form input[name="hotel_filter_form[nights]"]').val(nights);
                 }
             });
             $tab.find('form .date:last').on('dp.change', function(e) {
@@ -553,13 +553,13 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     to = e.date ? e.date.clone() : null;
 
                 if (!from || !to) {
-                    $tab.find('form input[name=nights]').val('');
+                    $tab.find('form input[name="hotel_filter_form[nights]"]').val('');
                 } else {
                     var nights = to.startOf('day').diff(from.startOf('day'), 'days');
-                    $tab.find('form input[name=nights]').val(nights);
+                    $tab.find('form input[name="hotel_filter_form[nights]"]').val(nights);
                 }
             });
-            $tab.find('input[name=nights]').on('change', function() {
+            $tab.find('input[name="hotel_filter_form[nights]"]').on('change', function() {
                 var from = $tab.find('form input.datepicker:first').val() ? moment($tab.find('form input.datepicker:first').val(), 'DD/MM/YYYY') : null,
                     nights = $(this).val();
 

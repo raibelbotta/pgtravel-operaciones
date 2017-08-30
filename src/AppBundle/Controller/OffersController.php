@@ -425,19 +425,19 @@ class OffersController extends Controller
 
         $submittedData = $form->getData();
         $nights = $submittedData['dates']['left_date'] && $submittedData['dates']['right_date'] ? $submittedData['dates']['right_date']->diff($submittedData['dates']['left_date'], true)->days : 0;
-        $twig = $this->container->get('twig');
+        $template = $this->container->get('twig')->loadTemplate('Offers/_hotel_prices_row.html.twig');
 
-        $data = array_map(function(\AppBundle\Entity\ContractHotelPrice $price)  use ($twig, $submittedData, $nights) {
+        $data = array_map(function(\AppBundle\Entity\ContractHotelPrice $price)  use ($template, $submittedData, $nights) {
             $qty = $submittedData['quantity'] ? $submittedData['quantity'] : 0;
             return array(
-                (string) $price->getSeason()->getFacility(),
+                $template->renderBlock('facility', array('price' => $price)),
                 (string) $price->getRoom(),
                 (string) $price->getSeason(),
                 $price->getPlan(),
                 $price->getCupo(),
-                sprintf('<div class="text-right">%0.2f</div>', $price->getValue()),
-                sprintf('<div class="text-right">%0.2f</div>', $price->getValue() * $qty * $nights),
-                $twig->render('Offers/_hotel_prices.html.twig', array(
+                $template->renderBlock('value', array('price' => $price)),
+                $template->renderBlock('total', array('value' => $price->getValue() * $qty * $nights)),
+                $template->renderBlock('actions', array(
                     'price' => $price,
                     'quantity' => $qty,
                     'nights' => $nights

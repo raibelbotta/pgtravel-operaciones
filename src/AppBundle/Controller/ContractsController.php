@@ -386,4 +386,64 @@ class ContractsController extends Controller
             'value'     => $request->get('value') ? sprintf('%0.2f', $price->getValue()) : ''
         ));
     }
+
+    /**
+     * @Route("/{id}/private-house-prices", requirements={"id": "\d+"})
+     * @ParamConverter("record", class="AppBundle\Entity\Contract")
+     * @Method({"get"})
+     * @param Contract $record
+     * @return Response
+     */
+    public function privateHousePricesAction(Contract $record)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $query = $manager->createQuery('SELECT p FROM AppBundle:ContractPrivateHousePrice AS p JOIN p.facility AS f JOIN f.contract AS c WHERE c.id = :contract')
+                ->setParameter('contract', $record->getId());
+        $prices = array();
+        foreach ($query->getResult() as $price) {
+            $prices[$price->getFacility()->getId()][$price->getSeasson()->getId()] = $price->getValue();
+        }
+
+        return $this->render('Contracts/private_house_prices.html.twig', array(
+            'contract'  => $record,
+            'prices'    => $prices
+        ));
+    }
+
+    /**
+     * @Route("/set-private-house-price", options={"expose": true})
+     * @Method({"post"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function setPrivateHousePriceAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $price = $manager->getRepository('AppBundle:ContractPrivateHousePrice')->findOneBy(array(
+            'seasson' => $request->get('season'),
+            'facility' => $request->get('facility')
+        ));
+
+        if (!$price && !empty($request->get('value'))) {
+            $price = new \AppBundle\Entity\ContractPrivateHousePrice();
+            $price
+                    ->setSeasson($manager->find('AppBundle:ContractPrivateHouseSeason', $request->get('season')))
+                    ->setCategory($manager->find('AppBundle:ContractPrivateHouseFacility', $request->get('facility')))
+                    ->setValue($request->get('value'))
+                    ;
+            $manager->persist($price);
+        } elseif ($price && empty($request->get('value'))) {
+            $manager->remove($price);
+        } elseif ($price) {
+            $price->setValue($request->get('value'));
+        }
+
+        $manager->flush();
+
+        return new JsonResponse(array(
+            'inputId'   => $request->get('inputId'),
+            'value'     => $request->get('value') ? sprintf('%0.2f', $price->getValue()) : ''
+        ));
+    }
 }

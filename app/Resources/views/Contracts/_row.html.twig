@@ -10,9 +10,11 @@
     <div class="btn-group">
         <a href="{{ path('app_contracts_edit', {'id': record.id}) }}" title="{{ 'Edit'|trans }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
         {% if record.model == 'hotel' %}
-            <a href="{{ path('app_contracts_hotelprices', {id: record.id}) }}" class="btn btn-default btn-xs" title="{{ 'Prices'|trans }}"><i class="fa fa-money"></i></a></li>
+            <a href="{{ path('app_contracts_hotelprices', {id: record.id}) }}" class="btn btn-default btn-xs" title="{{ 'Prices'|trans }}"><i class="fa fa-money"></i></a>
         {% elseif record.model == 'car-rental' %}
-            <a href="{{ path('app_contracts_carrentalprices', {id: record.id}) }}" class="btn btn-default btn-xs" title="{{ 'Prices'|trans }}"><i class="fa fa-money"></i></a></li>
+            <a href="{{ path('app_contracts_carrentalprices', {id: record.id}) }}" class="btn btn-default btn-xs" title="{{ 'Prices'|trans }}"><i class="fa fa-money"></i></a>
+        {% elseif record.model == 'private-house' and record.privateHouseFacilities|length > 0 and record.privateHouseSeassons|length > 0 %}
+            <a href="{{ path('app_contracts_privatehouseprices', {id: record.id}) }}" class="btn btn-default btn-xs" title="{{ 'Prices'|trans }}"><i class="fa fa-money"></i></a>
         {% endif %}
         <a href="{{ path('app_contracts_delete', {'id': record.id}) }}" title="{{ 'Delete'|trans }}" class="btn btn-danger btn-xs btn-delete"><i class="fa fa-remove"></i></a>
     </div>

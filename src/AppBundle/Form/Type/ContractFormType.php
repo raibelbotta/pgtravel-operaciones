@@ -52,12 +52,19 @@ class ContractFormType extends AbstractType
                     'by_reference' => false,
                     'label' => 'General services'
                 ))
-                ->add('privateHouseServices', CollectionType::class, array(
-                    'entry_type' => ContractPrivateHouseServiceType::class,
+                ->add('privateHouseSeassons', CollectionType::class, array(
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
-                    'label' => 'Private house services'
+                    'entry_type' => ContractPrivateHouseSeassonType::class,
+                    'label' => 'Seassons'
+                ))
+                ->add('privateHouseFacilities', CollectionType::class, array(
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'entry_type' => ContractPrivateHouseFacilityType::class,
+                    'label' => 'Rooms'
                 ))
                 ->add('carRentalCategories', CollectionType::class, array(
                     'entry_type' => ContractCarRentalCategoryType::class,

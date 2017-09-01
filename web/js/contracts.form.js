@@ -125,28 +125,26 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
         $('#contract_form_endAt').parent().on('dp.change', function(event) {
             $('#contract_form_startAt').parent().data('DateTimePicker').maxDate(event.date);
         });
+
+        $('.item-top-service').each(function() {
+            var $controls = $(this).find('.datetimepicker');
+            $($controls[0]).datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+            $($controls[1]).datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+                useCurrent: false
+            });
+            $($controls[0]).on("dp.change", function(event) {
+                $($controls[1]).data("DateTimePicker").minDate(event.date);
+            });
+            $($controls[1]).on("dp.change", function(event) {
+                $($controls[0]).data("DateTimePicker").maxDate(event.date);
+            });
+        });
     }
 
     var init = function() {
-        +(function($) {
-            $('.item-top-service').each(function() {
-                var $controls = $(this).find('.datetimepicker');
-                $($controls[0]).datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm'
-                });
-                $($controls[1]).datetimepicker({
-                    format: 'DD/MM/YYYY HH:mm',
-                    useCurrent: false
-                });
-                $($controls[0]).on("dp.change", function(event) {
-                    $($controls[1]).data("DateTimePicker").minDate(event.date);
-                });
-                $($controls[1]).on("dp.change", function(event) {
-                    $($controls[0]).data("DateTimePicker").maxDate(event.date);
-                });
-            });
-        }(jQuery));
-
         +(function() {
             var initServiceDates = function($item) {
                 $item.find('.date:has(.datepicker):first').datetimepicker({

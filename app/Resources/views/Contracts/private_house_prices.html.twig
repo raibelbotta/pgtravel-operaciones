@@ -1,0 +1,46 @@
+{% extends 'frontend.html.twig' %}
+
+{% block content %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ contract.name }} <small>{{ 'prices'|trans }}</small></h3>
+        </div>
+    </div>
+
+    <div class="x_panel">
+        <div class="x_title">
+            <h4>ABC</h4>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content table-responsive">
+            <table class="table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>{{ "Room"|trans }}</th>
+                        {% for season in contract.privateHouseSeassons %}
+                            <th>{{ season }} ({{ season.startAt|date("d/m/Y") }} - {{ season.endAt|date("d/m/Y") }})</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for facility in contract.privateHouseFacilities %}
+                        <tr>
+                            <td>{{ facility }}</td>
+                            {% for season in contract.privateHouseSeassons %}
+                                <td><input type="text" class="form-control text-right input-sm updatable-ajax" value="{{ prices[facility.id][season.id]|default("") }}" data-params="season:{{ season.id }}|facility:{{ facility.id }}"></td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            App.PrivateHousePrices.init();
+        });
+    </script>
+{% endblock %}

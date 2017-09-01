@@ -98,11 +98,25 @@ class Contract
     private $topServices;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ContractPrivateHouseService", mappedBy="contract", cascade={"persist", "remove"})
      */
     private $privateHouseServices;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractPrivateHouseFacility", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $privateHouseFacilities;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ContractPrivateHouseSeason", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $privateHouseSeassons;
 
     /**
      * @var ArrayCollection
@@ -651,5 +665,79 @@ class Contract
     public function getCarRentalSeassons()
     {
         return $this->carRentalSeassons;
+    }
+
+    /**
+     * Add privateHouseSeasson
+     *
+     * @param \AppBundle\Entity\ContractPrivateHouseSeason $privateHouseSeasson
+     *
+     * @return Contract
+     */
+    public function addPrivateHouseSeasson(\AppBundle\Entity\ContractPrivateHouseSeason $privateHouseSeasson)
+    {
+        if (!$this->privateHouseSeassons->contains($privateHouseSeasson)) {
+            $this->privateHouseSeassons[] = $privateHouseSeasson;
+            $privateHouseSeasson->setContract($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove privateHouseSeasson
+     *
+     * @param \AppBundle\Entity\ContractPrivateHouseSeason $privateHouseSeasson
+     */
+    public function removePrivateHouseSeasson(\AppBundle\Entity\ContractPrivateHouseSeason $privateHouseSeasson)
+    {
+        $this->privateHouseSeassons->removeElement($privateHouseSeasson);
+    }
+
+    /**
+     * Get privateHouseSeassons
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrivateHouseSeassons()
+    {
+        return $this->privateHouseSeassons;
+    }
+
+    /**
+     * Add privateHouseFacility
+     *
+     * @param \AppBundle\Entity\ContractPrivateHouseFacility $privateHouseFacility
+     *
+     * @return Contract
+     */
+    public function addPrivateHouseFacility(\AppBundle\Entity\ContractPrivateHouseFacility $privateHouseFacility)
+    {
+        if (!$this->privateHouseFacilities->contains($privateHouseFacility)) {
+            $this->privateHouseFacilities[] = $privateHouseFacility;
+            $privateHouseFacility->setContract($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove privateHouseFacility
+     *
+     * @param \AppBundle\Entity\ContractPrivateHouseFacility $privateHouseFacility
+     */
+    public function removePrivateHouseFacility(\AppBundle\Entity\ContractPrivateHouseFacility $privateHouseFacility)
+    {
+        $this->privateHouseFacilities->removeElement($privateHouseFacility);
+    }
+
+    /**
+     * Get privateHouseFacilities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrivateHouseFacilities()
+    {
+        return $this->privateHouseFacilities;
     }
 }

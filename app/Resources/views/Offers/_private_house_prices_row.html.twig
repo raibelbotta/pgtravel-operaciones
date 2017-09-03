@@ -1,0 +1,25 @@
+{% block price %}
+    {{ '%0.2f'|format(record.value) }}
+{% endblock %}
+
+{% block total_price %}
+    {{ '%0.2f'|format(record.value * nights * quantity) }}
+{% endblock %}
+
+{% block actions %}
+    {% set facility = record.facility %}
+    {%- set data = {
+        supplier: {
+            id: facility.contract.supplier.id,
+            name: facility.contract.supplier.name
+        },
+        service: '%nights% nights(s) in %q% x %room%(s) at %house%'|trans({'%nights%': nights, '%q%': quantity, '%room%': facility.name, '%house%': facility.contract.supplier.name}),
+        supplierNotes: 'Meal plan: %plan%'|trans({'%plan%': facility.mealPlan}),
+        nights: nights,
+        cost: '%0.2f'|format(record.value),
+        totalPrice: '%0.2f'|format(record.value * nights * quantity)
+                } -%}
+    <div class="text-center">
+        <button type="button" class="btn btn-success btn-xs btn-select-service" title="{{ 'Select service'|trans }}" data-service="{{ data|json_encode|e }}"><i class="fa fa-check"></i></button>
+    </div>
+{% endblock %}

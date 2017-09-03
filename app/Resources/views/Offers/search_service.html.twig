@@ -54,64 +54,51 @@
             <form action="" role="form" id="filter-private-house">
                 <div class="row row-datepickers">
                     <div class="col-sm-5 form-group">
-                        <label class="control-label">{{ 'From'|trans }}</label>
+                        {{ form_label(filters.private_house.dates.left_date) }}
                         <div class="input-group date">
-                            <input type="text" class="form-control input-sm datepicker">
+                            {{ form_widget(filters.private_house.dates.left_date, {attr: {class: "form-control input-sm datepicker"}}) }}
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="glyphicon glyphicon-calendar"></i>
                             </span>
                         </div>
                     </div>
                     <div class="col-sm-5 form-group">
-                        <label class="control-label">{{ 'To'|trans }}</label>
+                        {{ form_label(filters.private_house.dates.right_date) }}
                         <div class="input-group date">
-                            <input type="text" class="form-control input-sm datepicker">
+                            {{ form_widget(filters.private_house.dates.right_date, {attr: {class: "form-control input-sm datepicker"}}) }}
                             <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
+                                <i class="glyphicon glyphicon-calendar"></i>
                             </span>
                         </div>
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label class="control-label">{{ 'Nights'|trans }}</label>
-                        <input type="number" name="nights" class="form-control input-sm text-right">
+                        {{ form_label(filters.private_house.nights) }}
+                        {{ form_widget(filters.private_house.nights, {attr: {class: "form-control input-sm text-right"}}) }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-3 form-group">
-                        <label class="control-label">{{ 'Address'|trans }}</label>
-                        <input type="text" name="addresss" class="form-control input-sm">
+                        {{ form_label(filters.private_house.address) }}
+                        {{ form_widget(filters.private_house.address, {attr: {class: "form-control input-sm"}}) }}
                     </div>
                     <div class="col-sm-3 form-group">
-                        <label>{{ "Province"|trans }}</label>
-                        <select name="province" class="form-control input-sm">
-                            <option value=""></option>
-                            {% for province in provinces.result %}
-                                <option value="{{ province.id }}">{{ province }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form_label(filters.private_house.province) }}
+                        {{ form_widget(filters.private_house.province, {attr: {class: "form-control input-sm"}}) }}
                     </div>
                     <div class="col-sm-3 form-group">
-                        <label class="control-label">{{ 'Plan'|trans }}</label>
-                        <select name="plan" class="form-control input-sm">
-                            <option value=""></option>
-                            {% for plan in plans %}
-                                <option value="{{ plan }}">{{ plan }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form_label(filters.private_house.plan) }}
+                        {{ form_widget(filters.private_house.plan, {attr: {class: "form-control input-sm"}}) }}
                     </div>
                     <div class="col-sm-3 form-group">
-                        <label class="control-label">{{ 'Number of rooms'|trans }}</label>
-                        <select class="form-control input-sm" name="quantity">
-                            {% for i in 1..10 %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
+                        {{ form_label(filters.private_house.quantity, null, {required: false}) }}
+                        {{ form_widget(filters.private_house.quantity, {attr: {class: "form-control input-sm"}}) }}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="table-responsive results"></div>
-                </div>
+                {{ form_rest(filters.private_house) }}
             </form>
+            <div class="table-responsive">
+                <table class="table table-results table-condensed table-striped table-bordered" width="100%"></table>
+            </div>
         </div>
         <div class="tab-pane" role="tabpanel" id="tab-car-rental" style="padding: 16px;">
             <form action="" role="form" id="filter-car-rental">

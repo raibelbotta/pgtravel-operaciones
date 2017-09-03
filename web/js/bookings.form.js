@@ -488,11 +488,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                         $.each($('form#filter-hotel').serializeArray(), function(i, e) {
                             filter[e['name']] = e['value'];
                         });
-                        return $.extend(true, baseData, {
-                            'filter': {
-                                'quantity': $tab.find('select[name$="[quantity]"]').val()
-                            }
-                        }, filter);
+                        return $.extend(true, baseData, filter);
                     },
                     method: 'POST'
                 },
@@ -584,35 +580,44 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         }
 
         var initPrivateHouseControls = function() {
-            $tab = $searchBox.find('#tab-private-house');
+            var $tab = $searchBox.find('#tab-private-house'),
+                $table = $tab.find('table.table-results');
 
+            $table.dataTable({
+                serverSide: true,
+                ajax: {
+                    url: Routing.generate('app_offers_getprivatehouseprices'),
+                    data: function(baseData) {
+                        var filter = [];
+                        $.each($('form#filter-private-house').serializeArray(), function(i, e) {
+                            filter[e['name']] = e['value'];
+                        });
+                        return $.extend(true, baseData, filter);
+                    },
+                    method: 'POST'
+                },
+                columns: [
+                    {name: 'supplier', title: Translator.trans('Supplier')},
+                    {name: 'room', title: Translator.trans('Room')},
+                    {name: 'plan', title: Translator.trans('Plan')},
+                    {name: 'price', title: Translator.trans('Price')},
+                    {name: 'total', title: Translator.trans('Total'), sortable: false},
+                    {sortable: false, searchable: false, width: '40px'}
+                ]
+            });
             var updateResults = function() {
-                var $dv = $tab.find('.table-responsive'),
-                    data = {
-                        'from': $tab.find('input:text.datepicker:first').val(),
-                        'to': $tab.find('input:text.datepicker:last').val(),
-                        'quantity': $tab.find('select[name="quantity"]').val(),
-                        'address': $tab.find('input[name="address"]').val(),
-                        'plan': $tab.find('select[name="plan"]').val(),
-                        'province': $tab.find('select[name=province]').val()
-                    };
-                $dv.empty().append(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getprivatehouseprices'), data, function() {
-                    $dv.find('table').DataTable();
-                });
+                $table.dataTable().api().draw();
             }
 
-            $tab.find('select[name=province]').on('change', function() {
-                updateResults();
-            });
             $tab.find('form .date:first').on('dp.change', function(e) {
                 var from = e.date ? e.date.clone() : null,
                     to = $tab.find('form input.datepicker:last').val() ? moment($tab.find('form input.datepicker:last').val(), 'DD/MM/YYYY') : null;
 
                 if (!from || !to) {
-                    $tab.find('form input[name=nights]').val('');
+                    $tab.find('form input[name$="[nights]"]').val('');
                 } else {
                     var nights = to.startOf('day').diff(from.startOf('day'), 'days');
-                    $tab.find('form input[name=nights]').val(nights);
+                    $tab.find('form input[name$="[nights]"]').val(nights);
                 }
             });
             $tab.find('form .date:last').on('dp.change', function(e) {
@@ -620,13 +625,13 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     to = e.date ? e.date.clone() : null;
 
                 if (!from || !to) {
-                    $tab.find('form input[name=nights]').val('');
+                    $tab.find('form input[name$="[nights]"]').val('');
                 } else {
                     var nights = to.startOf('day').diff(from.startOf('day'), 'days');
-                    $tab.find('form input[name=nights]').val(nights);
+                    $tab.find('form input[name$="[nights]"]').val(nights);
                 }
             });
-            $tab.find('input[name=nights]').on('change', function() {
+            $tab.find('input[name$="[nights]"]').on('change', function() {
                 var from = $tab.find('form input.datepicker:first').val() ? moment($tab.find('form input.datepicker:first').val(), 'DD/MM/YYYY') : null,
                     nights = $(this).val();
 
@@ -641,7 +646,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
             utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
 
-            $tab.find('form#filter-private-house').find('input:not(.datepicker, [name=nights]), select').on('change', function() {
+            $tab.find('form#filter-private-house').find('input:not(.datepicker, [name$="[nights]"]), select').on('change', function() {
                 updateResults();
             });
 

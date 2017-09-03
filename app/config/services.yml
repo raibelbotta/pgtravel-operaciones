@@ -1,6 +1,7 @@
 parameters:
     app.hotel.cupos: [ SGL, DBL, TRP, 1A1CH, 2A1CH, 2CH, 1A2CH, 2A2CH ]
     app.hotel.plans: [ CP, MAP, EP, AP, AI ]
+    app.private_house.plans: %app.hotel.plans%
     app.reservation.notification_lines: [ sms, email, 'phone-call' ]
 
     app.administrative_services:
@@ -142,6 +143,11 @@ services:
     app.form.type.service_filter.hotel_filter_form_type:
         class: AppBundle\Form\Type\ServiceFilter\HotelFilterFormType
         arguments: [ '%app.hotel.cupos%', '%app.hotel.plans%' ]
+        tags:
+            - { name: form.type }
+    app.form.type.service_filter.private_house_filter_form_type:
+        class: AppBundle\Form\Type\ServiceFilter\PrivateHouseFilterFormType
+        arguments: [ '@doctrine.orm.entity_manager', '%app.private_house.plans%' ]
         tags:
             - { name: form.type }
 

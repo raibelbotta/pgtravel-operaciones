@@ -348,15 +348,13 @@ class OffersController extends Controller
         $models = $this->container->getParameter('app.contract.models');
         $manager = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm(ServiceFilters\HotelFilterFormType::class);
-        
         return $this->render('Offers/search_service.html.twig', array(
             'cupos' => $this->container->getParameter('app.hotel.cupos'),
-            'plans' => $this->container->getParameter('app.hotel.plans'),
             'models' => $models,
             'provinces' => $manager->createQuery('SELECT p FROM AppBundle:Province AS p ORDER BY p.name'),
             'filters' => array(
-                'hotel' => $form->createView()
+                'hotel' => $this->createForm(ServiceFilters\HotelFilterFormType::class)->createView(),
+                'private_house' => $this->createForm(ServiceFilters\PrivateHouseFilterFormType::class)->createView()
             )
         ));
     }
@@ -370,7 +368,6 @@ class OffersController extends Controller
     public function getHotelPricesAction(Request $request)
     {
         $columns = $request->get('columns');
-        $filter = $request->get('filter', array());
         $order = $request->get('order', array());
         $search = $request->get('search', array());
 
@@ -461,60 +458,75 @@ class OffersController extends Controller
      */
     public function getPrivateHousePricesAction(Request $request)
     {
-        $from = $request->get('from') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('from') . ' 00:00:00') : null;
-        $to = $request->get('to') ? \DateTime::createFromFormat('d/m/Y H:i:s', $request->get('to') . ' 23:59:59') : null;
-
+        $columns = $request->get('columns');
+        $order = $request->get('order', array());
+        $search = $request->get('search', array());
+        
         $manager = $this->getDoctrine()->getManager();
-        $qb = $manager->getRepository('AppBundle:ContractPrivateHouseService')
-                ->createQueryBuilder('s')
-                ->join('s.contract', 'c')
+        $qb = $manager->getRepository('AppBundle:ContractPrivateHousePrice')
+                ->createQueryBuilder('p')
+                ->join('p.facility', 'f')
+                ->join('f.contract', 'c')
+                ->join('c.supplier', 's')
                 ;
         $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('private-house')));
-
-        if ($from) {
-            $andX->add($qb->expr()->orX(
-                    $qb->expr()->isNull('s.startAt'),
-                    $qb->expr()->andX(
-                            $qb->expr()->isNotNull('s.startAt'),
-                            $qb->expr()->lte('s.startAt', $qb->expr()->literal($from->format('Y-m-d')))
-                            )
-                    ));
-        }
-        if ($to) {
-            $andX->add($qb->expr()->orX(
-                    $qb->expr()->isNull('s.endAt'),
-                    $qb->expr()->andX(
-                            $qb->expr()->isNotNull('s.endAt'),
-                            $qb->expr()->gte('s.endAt', $qb->expr()->literal($to->format('Y-m-d')))
-                            )
-                    ));
-        }
-        if ($request->get('plan')) {
-            $andX->add($qb->expr()->eq('s.mealPlan', $qb->expr()->literal($request->get('plan'))));
-        }
-        if ($request->get('address')) {
-            $qb->join('c.supplier', 'spp');
-            $qb->leftJoin('spp.place', 'pl');
-            $andX->add($qb->expr()->orX(
-                    $qb->expr()->andX(
-                            $qb->expr()->isNotNull('spp.postalAddress'),
-                            $qb->expr()->like('spp.postalAddress', $qb->expr()->literal(sprintf('%%%s%%', $request->get('address'))))
-                            ),
-                    $qb->expr()->andX(
-                            $qb->expr()->isNotNull('spp.place'),
-                            $qb->expr()->like('pl.name', $qb->expr()->literal(sprintf('%%%s%%', $request->get('address'))))
-                            )
-                    ));
-        }
-        if ($request->get('province')) {
-            $qb
-                    ->join('s.province', 'p')
-                    ->setParameter('province', $request->get('province'));
-                    ;
-            $andX->add($qb->expr()->eq('p.id', ':province'));
-        }
-
         $qb->where($andX);
+
+        $form = $this->createForm(ServiceFilters\PrivateHouseFilterFormType::class);
+        $form->submit($request->request->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
+
+        if ($order) {
+            $column = call_user_func(function($name) {
+                if ('supplier' === $name) {
+                    return 's.name';
+                } elseif ('room' === $name) {
+                    return 'f.name';
+                } elseif ('plan' === $name) {
+                    return 'f.mealPlan';
+                } elseif ('price' === $name) {
+                    return 'p.value';
+                }
+                return null;
+            }, $columns[$order[0]['column']]['name']);
+            if (null !== $column) {
+                $qb->orderBy($column, strtoupper($order[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
+        $total = $pagination->getTotalItemCount();
+
+        $template = $this->container->get('twig')
+                ->loadTemplate('Offers/_private_house_prices_row.html.twig');
+        $submittedData = $form->getData();
+        $data = array_map(function(\AppBundle\Entity\ContractPrivateHousePrice $record) use($template, $submittedData) {
+            return array(
+                $record->getFacility()->getContract()->getSupplier()->getName(),
+                $record->getFacility()->getName(),
+                $record->getFacility()->getMealPlan(),
+                $template->renderBlock('price', array('record' => $record)),
+                $template->renderBlock('total_price', array(
+                    'record' => $record,
+                    'quantity' => $submittedData['quantity'],
+                    'nights' => $submittedData['nights']
+                )),
+                $template->renderBlock('actions', array(
+                    'record' => $record,
+                    'quantity' => $submittedData['quantity'],
+                    'nights' => $submittedData['nights']
+                ))
+            );
+        }, $pagination->getItems());
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
+        ));
 
         return $this->render('Offers/private_house_prices_results.html.twig', array(
             'query' => $qb->getQuery(),

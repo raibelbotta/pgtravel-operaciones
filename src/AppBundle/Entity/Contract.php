@@ -100,13 +100,6 @@ class Contract
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ContractPrivateHouseService", mappedBy="contract", cascade={"persist", "remove"})
-     */
-    private $privateHouseServices;
-
-    /**
-     * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="ContractPrivateHouseFacility", mappedBy="contract", cascade={"persist", "remove"})
      */
     private $privateHouseFacilities;
@@ -168,10 +161,11 @@ class Contract
     public function __construct()
     {
         $this->topServices = new ArrayCollection();
-        $this->privateHouseServices = new ArrayCollection();
         $this->carRentalCategories = new ArrayCollection();
         $this->attachments = new ArrayCollection();
         $this->facilities = new ArrayCollection();
+        $this->privateHouseFacilities = new ArrayCollection();
+        $this->privateHouseSeassons = new ArrayCollection();
     }
 
     /**
@@ -554,43 +548,6 @@ class Contract
     public function getExtraConditions()
     {
         return $this->extraConditions;
-    }
-
-    /**
-     * Add privateHouseService
-     *
-     * @param \AppBundle\Entity\ContractPrivateHouseService $privateHouseService
-     *
-     * @return Contract
-     */
-    public function addPrivateHouseService(\AppBundle\Entity\ContractPrivateHouseService $privateHouseService)
-    {
-        if (!$this->privateHouseServices->contains($privateHouseService)) {
-            $this->privateHouseServices[] = $privateHouseService;
-            $privateHouseService->setContract($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove privateHouseService
-     *
-     * @param \AppBundle\Entity\ContractPrivateHouseService $privateHouseService
-     */
-    public function removePrivateHouseService(\AppBundle\Entity\ContractPrivateHouseService $privateHouseService)
-    {
-        $this->privateHouseServices->removeElement($privateHouseService);
-    }
-
-    /**
-     * Get privateHouseServices
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPrivateHouseServices()
-    {
-        return $this->privateHouseServices;
     }
 
     /**

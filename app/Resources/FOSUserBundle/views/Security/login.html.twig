@@ -41,7 +41,7 @@
                     <form action="{{ path('fos_user_security_check') }}" method="post" role="form" id="formLogin">
                         <h1>{{ 'Sign in'|trans }}</h1>
                         {% if error %}
-                            <div class="alert alert-warning">{{ error|trans({}, 'FOSUserBundle') }}</div>
+                            <div class="alert alert-warning">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
                         <div>
                             <input type="email" class="form-control" placeholder="Username" required name="_username" />

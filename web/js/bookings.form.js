@@ -3,6 +3,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 +(App.Bookings.Form = function($) {
     "use strcit";
+
     var init = function() {
             $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
             var value = $(this).val();
@@ -46,10 +47,8 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             var $item = $(this).closest('.item');
 
             $('#searchServiceModal').remove();
-            var $m = $('<div id="searchServiceModal" class="modal fade in"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">' + Translator.trans('Search service') + '</h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-default">' + Translator.trans('Close') + '</button></div></div></div></div>').appendTo($('body'));
-            $m.data('item', $item).modal({
-                backdrop: 'static'
-            });
+            var $m = $('<div id="searchServiceModal" class="modal fade in" data-backdrop="static"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">' + Translator.trans('Search service') + '</h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-default">' + Translator.trans('Close') + '</button></div></div></div></div>').appendTo($('body'));
+            $m.data('item', $item).modal();
             $m.find('.modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
         });
 
@@ -475,7 +474,6 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 
         var initHotelControls = function() {
-            //Este está hecho con un datatable dinámico (serverSide: true)
             var $tab = $searchBox.find('#tab-hotel'),
                 $table = $tab.find('table.table-results');
 
@@ -486,8 +484,19 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     data: function(baseData) {
                         var filter = [];
                         $.each($('form#filter-hotel').serializeArray(), function(i, e) {
-                            filter[e['name']] = e['value'];
+                            if (/\[\]$/.test(e['name'])) {
+                                var sName = e['name'].replace(/\[\]$/, '');
+
+                                if (!filter[sName]) {
+                                    filter[sName] = [];
+                                }
+
+                                filter[sName].push(e['value']);
+                            } else {
+                                filter[e['name']] = e['value'];
+                            }
                         });
+
                         return $.extend(true, baseData, filter);
                     },
                     method: 'POST'

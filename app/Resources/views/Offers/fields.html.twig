@@ -12,17 +12,7 @@
         <div class="x_content">
             <div class="row">
                 <div class="form-group col-sm-3 col-xs-6">
-                    {{ form_label(form.clientType, null, {'label_attr': {'class': 'control-label'}}) }}
-                    <div>
-                        <label>
-                            {{ form_widget(form.clientType[0], {'attr': {'class': 'flat'}}) }}
-                            {{ 'Registered'|trans }}
-                        </label>
-                        <label>
-                            {{ form_widget(form.clientType[1], {'attr': {'class': 'flat'}}) }}
-                            {{ 'Direct'|trans }}
-                        </label>
-                    </div>
+                    {{ form_row(form.clientType) }}
                 </div>
                 <div class="form-group col-sm-3 col-xs-6">
                     {{ form_label(form.operator, null, {'label_attr': {'class': 'control-label'}}) }}
@@ -148,15 +138,6 @@
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
-
-{% block _offer_form_client_type_widget %}
-    <div>
-        {% for child in form %}
-            {{ form_widget(child) }}
-            {{ child.vars.label|trans }}
-        {% endfor %}
     </div>
 {% endblock %}
 

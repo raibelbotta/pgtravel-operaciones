@@ -5,7 +5,11 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
     "use strcit";
 
     var init = function() {
-            $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
+        $('input:radio[name="offer_form[clientType]"]').iCheck({
+            radioClass: 'iradio_flat-green'
+        });
+
+        $('input:radio[name="offer_form[clientType]"]').on('ifClicked', function() {
             var value = $(this).val();
             if (value === 'direct') {
                 $('.block-clienttype.block-clienttype-direct').show();

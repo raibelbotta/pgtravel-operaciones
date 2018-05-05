@@ -88,45 +88,27 @@
     <div class="item">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
-                {{ form_label(form.fullName, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.fullName, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.fullName) }}
             </div>
             <div class="form-group col-xs-6 col-sm-3">
-                {{ form_label(form.jobPosition, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.jobPosition, {'attr': {"class": 'form-control'}}) }}
+                {{ form_row(form.jobPosition) }}
             </div>
             <div class="form-group col-xs-6 col-sm-3">
-                {{ form_label(form.gender, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.gender) }}
             </div>
         </div>
         <div class="row">
             <div class="form-group col-xs-6 col-sm-6">
-                {{ form_label(form.mobilePhone, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.mobilePhone, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.mobilePhone) }}
             </div>
             <div class="form-group col-xs-6 col-sm-6">
-                {{ form_label(form.fixedPhone, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.fixedPhone, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.fixedPhone) }}
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                {{ form_label(form.emails) }}
-                <button type="button" class="btn btn-xs btn-default btn-add-email"><span class="fa fa-plus-circle"></span></button>
-            </div>
-            <div class="col-xs-12">
-                <div class="row collection-emails" data-prototype="{{ form_row(form.emails.vars.prototype)|e }}">
-                    {% for child in form.emails %}
-                        {{ form_row(child) }}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+        {{ form_row(form.emails) }}
         <div class="row">
             <div class="form-group col-xs-12 col-sm-12">
-                {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.postalAddress) }}
             </div>
             <div class="col-xs-12 col-sm-12">
                 <button type="button" class="btn btn-block btn-danger btn-xs btn-remove-item"><i class="fa fa-trash"></i></button>
@@ -156,4 +138,20 @@
         </div>
     </div>
     {{ form_rest(form) }}
+{% endblock %}
+
+{% block _supplier_form_employees_entry_emails_row %}
+    <div class="row">
+        <div class="col-xs-12">
+            {{ form_label(form) }}
+            <button type="button" class="btn btn-xs btn-default btn-add-email"><span class="fa fa-plus-circle"></span></button>
+        </div>
+        <div class="col-xs-12">
+            <div class="row collection-emails" data-prototype="{{ form_row(form.vars.prototype)|e }}">
+                {% for child in form %}
+                    {{ form_row(child) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -11,20 +11,14 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <div class="form-group col-xs-12 col-sm-4">
-                {{ form_label(form.model, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.model, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.model) }}
+            <div class="col-xs-12 col-sm-4">
+                {{ form_row(form.model) }}
             </div>
-            <div class="form-group col-xs-12 col-sm-4">
-                {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.name) }}
+            <div class="col-xs-12 col-sm-4">
+                {{ form_row(form.name) }}
             </div>
-            <div class="form-group col-xs-12 col-sm-4">
-                {{ form_label(form.supplier, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.supplier, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.supplier) }}
+            <div class="col-xs-12 col-sm-4">
+                {{ form_row(form.supplier) }}
             </div>
         </div>
     </div>
@@ -35,29 +29,35 @@
         </div>
         <div class="x_content">
             <div>
-                <div class="form-group col-sm-4 col-xs-12">
-                    {{ form_label(form.signedAt, null, {'label_attr': {'class': 'control-label'}}) }}
-                    <div class="input-group date">
-                        {{ form_widget(form.signedAt, {'attr': {'class': 'form-control'}}) }}
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                <div class="col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        {{ form_label(form.signedAt, null, {'label_attr': {'class': 'control-label'}}) }}
+                        <div class="input-group date">
+                            {{ form_widget(form.signedAt, {'attr': {'class': 'form-control'}}) }}
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                        {{ form_errors(form.signedAt) }}
                     </div>
-                    {{ form_errors(form.signedAt) }}
                 </div>
-                <div class="form-group col-sm-4 col-xs-12">
-                    {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
-                    <div class="input-group date">
-                        {{ form_widget(form.startAt, {'attr': {'class': 'form-control'}}) }}
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                <div class="col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
+                        <div class="input-group date">
+                            {{ form_widget(form.startAt, {'attr': {'class': 'form-control'}}) }}
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                        {{ form_errors(form.startAt) }}
                     </div>
-                    {{ form_errors(form.startAt) }}
                 </div>
-                <div class="form-group col-sm-4 col-xs-12">
-                    {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
-                    <div class="input-group">
-                        {{ form_widget(form.endAt, {'attr': {'class': 'form-control'}}) }}
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                <div class="col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
+                        <div class="input-group">
+                            {{ form_widget(form.endAt, {'attr': {'class': 'form-control'}}) }}
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                        {{ form_errors(form.endAt) }}
                     </div>
-                    {{ form_errors(form.endAt) }}
                 </div>
             </div>
         </div>
@@ -179,20 +179,14 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <div class="form-group col-xs-12 col-sm-6">
-                {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.description) }}
+            <div class="col-xs-12 col-sm-6">
+                {{ form_row(form.description) }}
             </div>
-            <div class="form-group col-xs-12 col-sm-6">
-                {{ form_label(form.notes, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.notes) }}
+            <div class="col-xs-12 col-sm-6">
+                {{ form_row(form.notes) }}
             </div>
-            <div class="form-group col-xs-12">
-                {{ form_label(form.extraConditions, null, {'label_attr': {'class': 'control-label'}}) }}
-                {{ form_widget(form.extraConditions) }}
-                {{ form_errors(form.extraConditions) }}
+            <div class="col-xs-12">
+                {{ form_row(form.extraConditions) }}
             </div>
         </div>
     </div>
@@ -201,13 +195,11 @@
 
 {% block contract_attachment_row %}
     <div class="item item-attachment">
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.file, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.file) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.file) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.description) }}
         </div>
         <div class="col-xs-12">
             <button type="button" class="btn btn-danger btn-block btn-xs btn-remove" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></button>
@@ -220,41 +212,37 @@
 
 {% block contract_top_service_row %}
     <div class="row item item-top-service">
-        <div class="form-group col-xs-12 col-sm-10">
-            {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.name) }}
+        <div class="col-xs-12 col-sm-10">
+            {{ form_row(form.name) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-2">
-            {{ form_label(form.price, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.price, {'attr': {'class': 'form-control text-right'}}) }}
-            {{ form_errors(form.price) }}
+        <div class="col-xs-12 col-sm-2">
+            {{ form_row(form.price, {'attr': {'class': 'text-right'}}) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
-            <div class="input-group date">
-                {{ form_widget(form.startAt, {'attr': {'class': 'form-control datepicker'}}) }}
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                {{ form_label(form.startAt, null, {'label_attr': {'class': 'control-label'}}) }}
+                <div class="input-group date">
+                    {{ form_widget(form.startAt, {'attr': {'class': 'form-control datepicker'}}) }}
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                {{ form_errors(form.startAt) }}
             </div>
-            {{ form_errors(form.startAt) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
-            <div class="input-group date">
-                {{ form_widget(form.endAt, {'attr': {'class': 'form-control datepicker'}}) }}
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                {{ form_label(form.endAt, null, {'label_attr': {'class': 'control-label'}}) }}
+                <div class="input-group date">
+                    {{ form_widget(form.endAt, {'attr': {'class': 'form-control datepicker'}}) }}
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                {{ form_errors(form.endAt) }}
             </div>
-            {{ form_errors(form.endAt) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.description, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.description) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.description) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.notes, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.notes, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.notes) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.notes) }}
         </div>
         <div class="col-xs-12">
             <button type="button" class="btn btn-danger btn-block btn-xs btn-remove" title="{{ 'Remove'|trans }}"><i class="fa fa-trash"></i></button>
@@ -268,25 +256,17 @@
 
 {% block contract_facility_row %}
     <div class="row item item-hotel-facility">
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.name, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.name) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.name) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.category, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.category) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.category) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.postalAddress, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.postalAddress) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.postalAddress) }}
         </div>
-        <div class="form-group col-xs-12 col-sm-6">
-            {{ form_label(form.activePlans, null, {'label_attr': {'class': 'control-label'}}) }}
-            {{ form_widget(form.activePlans, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.postalAddress) }}
+        <div class="col-xs-12 col-sm-6">
+            {{ form_row(form.activePlans) }}
         </div>
         <div class="col-xs-12">
             <div class="x_panel item">
@@ -336,12 +316,14 @@
 {% endblock %}
 
 {% block contract_facility_room_row %}
-    <div class="form-group col-xs-12 col-sm-4 item">
-        <div class="input-group">
-            {{ form_widget(form.name, {'attr': {'class': 'form-control input-sm', 'placeholder': 'Room name'|trans}}) }}
-            <span class="input-group-btn">
+    <div class="col-xs-12 col-sm-4 item">
+        <div class="form-group">
+            <div class="input-group">
+                {{ form_widget(form.name, {'attr': {'class': 'form-control input-sm', 'placeholder': 'Room name'|trans}}) }}
+                <span class="input-group-btn">
                 <button type="button" class="btn btn-sm btn-danger btn-remove" title="{{ 'Remove room'|trans }}"><i class="fa fa-trash"></i></button>
             </span>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -349,19 +331,23 @@
 {% block contract_facility_season_row %}
     <div class="col-sm-6 col-xs-12 item item-facility-season">
         <div class="row">
-            <div class="form-group col-sm-6 col-xs-12">
-                <div class="input-group date">
-                    {{ form_widget(form.fromDate, {'attr': {'class': 'form-control datepicker', 'placeholder': 'From'|trans}}) }}
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class="col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <div class="input-group date">
+                        {{ form_widget(form.fromDate, {'attr': {'class': 'form-control datepicker', 'placeholder': 'From'|trans}}) }}
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                    {{ form_errors(form.fromDate) }}
                 </div>
-                {{ form_errors(form.fromDate) }}
             </div>
-            <div class="form-group col-sm-6 col-xs-12">
-                <div class="input-group date">
-                    {{ form_widget(form.toDate, {'attr': {'class': 'form-control datepicker', 'placeholder': 'To'}}) }}
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class="col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <div class="input-group date">
+                        {{ form_widget(form.toDate, {'attr': {'class': 'form-control datepicker', 'placeholder': 'To'}}) }}
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                    {{ form_errors(form.toDate) }}
                 </div>
-                {{ form_errors(form.toDate) }}
             </div>
         </div>
         <div class="row">
@@ -376,22 +362,25 @@
 
 {% block contract_private_house_seasson_row %}
     <div class="row item item-private-house-seasson">
-        <div class="col-md-6 col-xs-12 form-group">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name, {attr: {class: "form-control input-sm"}})}}
+        <div class="col-md-6 col-xs-12">
+            {{ form_row(form.name, {attr: {class: "input-sm"}})}}
         </div>
-        <div class="col-md-3 col-xs-6 form-group">
-            {{ form_label(form.startAt) }}
-            <div class="input-group date">
-                {{ form_widget(form.startAt, {attr: {class: "form-control input-sm datepicker"}}) }}
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        <div class="col-md-3 col-xs-6">
+            <div class="form-group">
+                {{ form_label(form.startAt) }}
+                <div class="input-group date">
+                    {{ form_widget(form.startAt, {attr: {class: "input-sm datepicker"}}) }}
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-3 col-xs-6 form-group">
-            {{ form_label(form.endAt) }}
-            <div class="input-group date">
-                {{ form_widget(form.endAt, {attr: {class: "form-control input-sm datepicker"}}) }}
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        <div class="col-md-3 col-xs-6">
+            <div class="form-group">
+                {{ form_label(form.endAt) }}
+                <div class="input-group date">
+                    {{ form_widget(form.endAt, {attr: {class: "input-sm datepicker"}}) }}
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
             </div>
         </div>
         <div class="col-sm-12 col-xs-12">
@@ -406,19 +395,16 @@
 {% block contract_private_house_facility_row %}
     <div class="item item-private-house-facility">
         <div class="row">
-            <div class="col-sm-10 col-xs-12 form-group">
-                {{ form_label(form.name) }}
-                {{ form_widget(form.name, {attr: {class: "form-control input-sm"}}) }}
+            <div class="col-sm-10 col-xs-12">
+                {{ form_row(form.name, {attr: {class: "input-sm"}}) }}
             </div>
-            <div class="col-sm-2 col-xs-12 form-group">
-                {{ form_label(form.mealPlan) }}
-                {{ form_widget(form.mealPlan, {attr: {class: "form-control input-sm"}}) }}
+            <div class="col-sm-2 col-xs-12">
+                {{ form_row(form.mealPlan, {attr: {class: "input-sm"}}) }}
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-xs-12 form-group">
-                {{ form_label(form.notes) }}
-                {{ form_widget(form.notes, {attr: {class: "form-control"}}) }}
+            <div class="col-sm-12 col-xs-12">
+                {{ form_row(form.notes) }}
             </div>
         </div>
         <button type="button" class="btn btn-block btn-danger btn-xs btn-remove"><span class="fa fa-trash"></span></button>
@@ -429,10 +415,11 @@
 {% endblock %}
 
 {% block contract_car_rental_category_row %}
-    <div class="col-sm-4 col-xs-12 form-group item item-car-rental-category">
-        <div class="input-group">
-            {{ form_widget(form.name, {attr: {class: 'form-control input-sm', placeholder: "Name"}}) }}
-            <span class="input-group-btn">
+    <div class="col-sm-4 col-xs-12 item item-car-rental-category">
+        <div class="form-group">
+            <div class="input-group">
+                {{ form_widget(form.name, {attr: {class: 'input-sm', placeholder: "Name"}}) }}
+                <span class="input-group-btn">
                 <button class="btn btn-sm btn-danger btn-remove" type="button">
                     <span class="fa fa-times"></span>
                 </button>
@@ -442,6 +429,7 @@
                     {{ form_errors(form.name)|striptags }}
                 </div>
             {% endif %}
+            </div>
         </div>
     </div>
     {{ form_rest(form) }}

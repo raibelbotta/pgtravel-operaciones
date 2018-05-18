@@ -105,11 +105,6 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
-    app.form.type.contract_model_type:
-        class: AppBundle\Form\Type\ContractModelType
-        arguments: [ '%app.contract.models%' ]
-        tags:
-            - { name: form.type }
     app.form.type.offer_service_model_type:
         class: AppBundle\Form\Type\OfferServiceModelType
         arguments: [ '%app.contract.models%' ]

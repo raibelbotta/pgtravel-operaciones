@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
 +(App.Main = function($) {
     var initTooltipster = function() {
-        $('[title]:not(.sidebar-footer *)').tooltipster({theme: 'tooltipster-shadow'});
+        $('[title]:not(.sidebar-footer *, .cke *)').tooltipster({theme: 'tooltipster-shadow'});
         $('body').on('draw.dt', 'table', function() {
             $(this).find('[title]').tooltipster({theme: 'tooltipster-shadow'});
         });

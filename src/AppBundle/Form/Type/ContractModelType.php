@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\Constants\ContractModel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -13,19 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class ContractModelType extends AbstractType
 {
-    /**
-     * @var array
-     */
-    private $types;
-
-    public function __construct(array $types)
-    {
-        $this->types = array();
-        foreach ($types as $type) {
-            $this->types[$type['display']] = $type['name'];
-        }
-    }
-
     public function getParent()
     {
         return ChoiceType::class;
@@ -34,7 +22,7 @@ class ContractModelType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'choices' => $this->types,
+            'choices' => array_flip(ContractModel::getModelNames()),
             'choices_as_values' => true
         ));
     }

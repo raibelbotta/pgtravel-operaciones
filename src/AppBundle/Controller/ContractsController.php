@@ -56,7 +56,7 @@ class ContractsController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order');
-        
+
         if (is_array($search) && isset($search['value']) && $search['value']) {
             $andX = $qb->expr()->andX($qb->expr()->like('c.name', ':q'));
             $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
@@ -429,7 +429,7 @@ class ContractsController extends Controller
             $price = new \AppBundle\Entity\ContractPrivateHousePrice();
             $price
                     ->setSeasson($manager->find('AppBundle:ContractPrivateHouseSeason', $request->get('season')))
-                    ->setCategory($manager->find('AppBundle:ContractPrivateHouseFacility', $request->get('facility')))
+                    ->setFacility($manager->find('AppBundle:ContractPrivateHouseFacility', $request->get('facility')))
                     ->setValue($request->get('value'))
                     ;
             $manager->persist($price);

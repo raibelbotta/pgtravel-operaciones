@@ -327,7 +327,7 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
 
             updateContainerIndexes();
 
-            $('.item-top-service, .item-facility-season, .item-private-house-service, .item-car-rental-seasson-date').each(function() {
+            $('.item-top-service, .item-facility-season, .item-private-house-service, .item-car-rental-seasson-date, .item-private-house-seasson').each(function() {
                 initServiceDates($(this));
             });
         }());

@@ -13,7 +13,7 @@
 
 {% block stylesheets %}
     <!-- Bootstrap -->
-    <link href="{{ asset('plugins/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/login.min.css"
@@ -125,8 +125,8 @@
 
 {% block javascripts %}
     {% javascripts filter="?jsqueeze" output="compiled/js/login.min.js"
-        "plugins/jquery/dist/jquery.min.js"
-        "plugins/bootstrap/dist/js/bootstrap.js"
+        "plugins/jquery/jquery-3.3.1.min.js"
+        "plugins/bootstrap/js/bootstrap.js"
         "plugins/tooltipster/js/jquery.tooltipster.js"
         "plugins/jquery-validation/dist/jquery.validate.js"
         "plugins/iCheck/icheck.js"

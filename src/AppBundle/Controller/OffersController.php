@@ -105,7 +105,7 @@ class OffersController extends Controller
         $form->submit($request->request->get($form->getName()));
         $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
         $this->get('session')->set('offers.filter', $form->getData());
-        
+
         if ($orders) {
             $column = call_user_func(function($name) {
                 if ($name == 'name') {
@@ -461,7 +461,7 @@ class OffersController extends Controller
         $columns = $request->get('columns');
         $order = $request->get('order', array());
         $search = $request->get('search', array());
-        
+
         $manager = $this->getDoctrine()->getManager();
         $qb = $manager->getRepository('AppBundle:ContractPrivateHousePrice')
                 ->createQueryBuilder('p')
@@ -846,7 +846,7 @@ class OffersController extends Controller
             $response = $book->getBookContent();
             $dispositionHeader = $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                sprintf('Cash %s v%s.xls', $record->getName(), $record->getVersion())
+                sprintf('Cash %s v%s.xls', $this->sanitizeName($record->getName()), $record->getVersion())
             );
             $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
             $response->headers->set('Pragma', 'public');
@@ -855,6 +855,17 @@ class OffersController extends Controller
         }
 
         return $response;
+    }
+
+    private function sanitizeName($originalName)
+    {
+        $resultName = preg_replace('/[^A-Za-z0-9\s]/', '', $originalName);
+
+        if (empty($resultName)) {
+            $resultName = uniqid();
+        }
+
+        return $resultName;
     }
 
     /**

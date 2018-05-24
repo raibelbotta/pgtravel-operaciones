@@ -121,7 +121,7 @@ class ReportsController extends Controller
             $response = $book->getBookContent();
             $dispositionHeader = $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                sprintf('Costing %s v%s.xls', $record->getName(), $record->getVersion())
+                sprintf('Costing %s v%s.xls', $this->sanitizeName($record->getName()), $record->getVersion())
             );
             $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
             $response->headers->set('Pragma', 'public');
@@ -130,5 +130,16 @@ class ReportsController extends Controller
 
             return $response;
         }
+    }
+
+    private function sanitizeName($originalName)
+    {
+        $resultName = preg_replace('/[^A-Za-z0-9\s]/', '', $originalName);
+
+        if (empty($resultName)) {
+            $resultName = uniqid();
+        }
+
+        return $resultName;
     }
 }

@@ -1,0 +1,5 @@
+{% form_theme form 'CXPagar/form.html.twig' %}
+
+{{ form_start(form, {'action': path('app_cxpagar_changestate', {'id': form.vars.data.id}), 'attr': {'role': 'form'}}) }}
+    {{ form_row(form) }}
+{{ form_end(form) }}

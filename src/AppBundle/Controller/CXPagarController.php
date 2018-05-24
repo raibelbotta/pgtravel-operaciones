@@ -167,7 +167,7 @@ class CXPagarController extends Controller
             return new JsonResponse(array('result' => 'success'));
         }
 
-        return $this->render('CXPagar/form.html.twig', array(
+        return $this->render('CXPagar/change_state.html.twig', array(
             'form' => $form->createView()
         ));
     }

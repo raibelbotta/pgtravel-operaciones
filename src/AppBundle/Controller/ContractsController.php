@@ -150,10 +150,12 @@ class ContractsController extends Controller
     {
         $form = $this->createForm(ContractFormType::class, $record);
 
-        $originalTopServices = new ArrayCollection();
-        foreach ($record->getTopServices() as $service) {
-            $originalTopServices->add($service);
-        }
+        $originalCollections = array();
+        $this->createCollections($record, $originalCollections, array(
+            'topServices',
+            'privateHouseSeassons',
+            'privateHouseFacilities'
+        ));
 
         $originalAttachments = new ArrayCollection();
         foreach ($record->getAttachments() as $attachment) {
@@ -186,16 +188,16 @@ class ContractsController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
+            $this->updateCollections($record, $originalCollections, array(
+                'topServices',
+                'privateHouseSeassons',
+                'privateHouseFacilities'
+            ));
+
             foreach ($originalAttachments as $attachment) {
                 if (false === $record->getAttachments()->contains($attachment)) {
                     $record->getAttachments()->removeElement($attachment);
                     $em->remove($attachment);
-                }
-            }
-            foreach ($originalTopServices as $service) {
-                if (false === $record->getTopServices()->contains($service)) {
-                    $record->getTopServices()->removeElement($service);
-                    $em->remove($service);
                 }
             }
 
@@ -238,6 +240,38 @@ class ContractsController extends Controller
         return $this->render('Contracts/edit.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    private function createCollections($record, array &$container, $names)
+    {
+        foreach ($names as $name) {
+            if (!isset($container[$name])) {
+                $container[$name] = new ArrayCollection();
+            }
+
+            $getter = sprintf('get%s', ucfirst($name));
+
+            foreach (call_user_func(array($record, $getter)) as $element) {
+                $container[$name]->add($element);
+            }
+        }
+    }
+
+    private function updateCollections($record, array &$container, $names)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        foreach ($names as $name) {
+            /** @var ArrayCollection $collection */
+            $collection = $container[$name];
+            $getter = sprintf('get%s', ucfirst($name));
+
+            foreach ($collection as $item) {
+                if (false === call_user_func(array($record, $getter))->contains($item)) {
+                    $manager->remove($item);
+                }
+            }
+        }
     }
 
     /**

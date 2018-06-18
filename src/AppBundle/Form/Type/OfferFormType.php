@@ -86,9 +86,6 @@ class OfferFormType extends AbstractType
                     'required' => false,
                     'label' => 'Travel itinerary document'
                 ))
-                ->add('clientCharge', null, array(
-                    'required' => true
-                ))
                 ->add('operator', OperatorType::class, array(
                     'label'=> 'Representant',
                     'required' => false
@@ -96,12 +93,24 @@ class OfferFormType extends AbstractType
                 ->add('percentApplied', PercentAppliedType::class, array(
                     'required' => true
                 ))
+                ->add('totalSuppliers', null, array(
+                    'label' => 'Total suppliers',
+                    'mapped' => false
+                ))
                 ->add('totalExpenses', null, array(
+                    'label' => 'Total expenses',
                     'mapped' => false
                 ))
-                ->add('totalCharges', null, array(
-                    'mapped' => false
+                ->add('grandTotal')
+                ->add('revenuePaxLines', CollectionType::class, array(
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'entry_type' => ReservationPaxRevenueLineFormType::class,
+                    'label' => 'Revenue'
                 ))
+                ->add('totalRevenue')
+                ->add('profit')
                 ;
 
         $manager = $this->manager;

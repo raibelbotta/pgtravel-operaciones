@@ -99,7 +99,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     total += getFloat($(this).val());
                 });
 
-                $('#offer_form_totalExpenses').val(total.toFixed(2)).trigger('change');
+                $('#offer_form_totalSuppliers').val(total.toFixed(2)).trigger('change');
             }
 
             $('#offer_form_services').on('change', 'input[name$="[nights]"], input[name$="[pax]"], input[name$="[cost]"]', function() {
@@ -126,7 +126,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             });
 
             var updateTotalCharges = function() {
-                var $total = $('#offer_form_totalCharges'),
+                var $total = $('#offer_form_totalExpenses'),
                     $items = $('.item-administrative-charge input[name$="[total]"]'),
                     total = new Number(0);
 
@@ -143,11 +143,11 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             });
 
             //Las line charges
-            $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
-                var $controls = $('#offer_form_totalExpenses, #offer_form_totalCharges, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
+            $('#offer_form_totalSuppliers, #offer_form_totalExpenses, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
+                var $controls = $('#offer_form_totalSuppliers, #offer_form_totalExpenses, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
 
-                var sum = getFloat($('#offer_form_totalExpenses').val()),
-                    sum2 = getFloat($('#offer_form_totalCharges').val()),
+                var sum = getFloat($('#offer_form_totalSuppliers').val()),
+                    sum2 = getFloat($('#offer_form_totalExpenses').val()),
                     $plus = $('#offer_form_percentApplied_percent'), charge;
 
                 if ($plus.val() === 'plus') {
@@ -159,17 +159,44 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $('#offer_form_clientCharge').val(charge.toFixed(2));
             });
 
-            $('#offer_form_totalExpenses').trigger('change');
+            $('#offer_form_totalSuppliers').trigger('change');
 
             $('#offer_form_percentApplied_percent').on('change', function() {
                 if ($(this).val() !== 'plus') {
-                    $('#offer_form_percentApplied_plus').val(0);
+                    $('#offer_form_percentApplied_plus').val(0).attr('readonly', 'readonly');
+                } else {
+                    $('#offer_form_percentApplied_plus').removeAttr('readonly');
                 }
             });
 
             updateTotalExpenses();
             updateTotalCharges();
         }());
+    }
+
+    var initRevenueLinesCollection = function() {
+        var collection = $('#offer_form_revenuePaxLines'),
+            btnAddItem = $('#btnAddItemoffer_form_revenuePaxLines');
+
+        collection.data('index', collection.find('.item').length);
+
+        btnAddItem.on('click', function() {
+            collection.find('tr:not(.item)').remove();
+            var prototype = collection.data('prototype');
+            var index = window.parseInt(collection.data('index'));
+            var item = $(prototype.replace(/__name__/g, index));
+            collection.append(item).data('index', index + 1);
+        });
+
+        collection.on('click', '.btn-delete-item', function() {
+            var trs = collection.find('tr.item');
+            if (trs.length === 1) {
+                collection.append($('<tr><td>No elements</td></tr>'));
+            }
+            $(this).closest('.item').fadeOut(function() {
+                $(this).remove();
+            });
+        });
     }
 
     var initCollections = function() {
@@ -291,6 +318,11 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
         $('body').on('click', '.btn-add-item', function(event) {
             var $btn = $(this);
+
+            if (typeof $btn.data('collection') === 'undefined') {
+                return;
+            }
+
             if ($btn.is('a')) {
                 event.preventDefault();
             }
@@ -363,6 +395,8 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 }
             });
         });
+
+        initRevenueLinesCollection();
     }
 
     var initValidation = function() {
@@ -376,6 +410,16 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 }
             }
         });
+        $.validator.addMethod('totalizedrevenuelines', function(value, element, params) {
+            var value = window.parseFloat(value);
+            var total = 0;
+
+            $('#offer_form_revenuePaxLines input[name$="[total]"]').each(function() {
+                total += window.parseFloat($(this).val());
+            });
+
+            return total === value;
+        }, 'Error totalizing revenue lines');
 
         $('#reservation').validate({
             errorPlacement: function(error, element) {

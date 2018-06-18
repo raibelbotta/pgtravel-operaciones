@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,7 +34,7 @@ class Reservation implements AlertableInterface
 
     /**
      * @var int
-     * 
+     *
      * @ORM\Column(name="version", type="integer", options={"default": 1})
      */
     private $version;
@@ -99,7 +100,7 @@ class Reservation implements AlertableInterface
      * @ORM\JoinColumn(nullable=true, onDelete="set null")
      */
     private $notificationContact;
-    
+
     /**
      * @var string
      *
@@ -122,7 +123,7 @@ class Reservation implements AlertableInterface
      * @Assert\Length(max=50)
      */
     private $departureFly;
-    
+
     /**
      * @var string
      *
@@ -182,6 +183,34 @@ class Reservation implements AlertableInterface
     private $clientCharge;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="grand_total", type="decimal", precision=10, scale=2)
+     */
+    private $grandTotal;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ReservationPaxRevenueLine", mappedBy="reservation", cascade={"persist", "remove"})
+     */
+    private $revenuePaxLines;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_revenue", type="decimal", precision=10, scale=2)
+     */
+    private $totalRevenue;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="decimal", precision=10, scale=2)
+     */
+    private $profit;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="is_cancelled", type="boolean", options={"default": false})
@@ -216,12 +245,12 @@ class Reservation implements AlertableInterface
      * @ORM\JoinColumn(onDelete="set null")
      */
     private $operator;
-    
+
     /**
      * No encontré nombre en inglés para la propiedad que dice que esta reserva
      * ya apareció en las alertas
      * @var boolean
-     * 
+     *
      * @ORM\Column(name="cone", type="boolean", options={"default": false})
      */
     private $cone;
@@ -247,7 +276,7 @@ class Reservation implements AlertableInterface
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
         $this->administrativeCharges = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payAttachments = new \Doctrine\Common\Collections\ArrayCollection();
-        
+
         $this->cone = false;
         $this->state = 'offer';
         $this->isCancelled = false;
@@ -1023,5 +1052,114 @@ class Reservation implements AlertableInterface
     public function getCone()
     {
         return $this->cone;
+    }
+
+    /**
+     * Set grandTotal
+     *
+     * @param string $grandTotal
+     *
+     * @return Reservation
+     */
+    public function setGrandTotal($grandTotal)
+    {
+        $this->grandTotal = $grandTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get grandTotal
+     *
+     * @return string
+     */
+    public function getGrandTotal()
+    {
+        return $this->grandTotal;
+    }
+
+    /**
+     * Set totalRevenue
+     *
+     * @param string $totalRevenue
+     *
+     * @return Reservation
+     */
+    public function setTotalRevenue($totalRevenue)
+    {
+        $this->totalRevenue = $totalRevenue;
+
+        return $this;
+    }
+
+    /**
+     * Get totalRevenue
+     *
+     * @return string
+     */
+    public function getTotalRevenue()
+    {
+        return $this->totalRevenue;
+    }
+
+    /**
+     * Set profit
+     *
+     * @param string $profit
+     *
+     * @return Reservation
+     */
+    public function setProfit($profit)
+    {
+        $this->profit = $profit;
+
+        return $this;
+    }
+
+    /**
+     * Get profit
+     *
+     * @return string
+     */
+    public function getProfit()
+    {
+        return $this->profit;
+    }
+
+    /**
+     * Add revenuePaxLine
+     *
+     * @param \AppBundle\Entity\ReservationPaxRevenueLine $revenuePaxLine
+     *
+     * @return Reservation
+     */
+    public function addRevenuePaxLine(\AppBundle\Entity\ReservationPaxRevenueLine $revenuePaxLine)
+    {
+        if (!$this->revenuePaxLines->contains($revenuePaxLine)) {
+            $this->revenuePaxLines[] = $revenuePaxLine;
+            $revenuePaxLine->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove revenuePaxLine
+     *
+     * @param \AppBundle\Entity\ReservationPaxRevenueLine $revenuePaxLine
+     */
+    public function removeRevenuePaxLine(\AppBundle\Entity\ReservationPaxRevenueLine $revenuePaxLine)
+    {
+        $this->revenuePaxLines->removeElement($revenuePaxLine);
+    }
+
+    /**
+     * Get revenuePaxLines
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRevenuePaxLines()
+    {
+        return $this->revenuePaxLines;
     }
 }

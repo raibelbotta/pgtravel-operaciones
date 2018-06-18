@@ -113,31 +113,156 @@
         </div>
         <div class="x_content">
             <div class="row">
-                <div class="form-group col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
-                    {{ form_label(form.totalExpenses, null, {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.totalExpenses, {'attr': {'class': 'form-control input-sm text-right', 'readonly': 'readonly'}}) }}
+                <div class="col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                    {{ form_row(form.totalSuppliers, {'attr': {'class': 'input-sm text-right', 'readonly': 'readonly'}}) }}
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
-                    {{ form_label(form.totalCharges, null, {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.totalCharges, {'attr': {'class': 'form-control input-sm text-right', 'readonly': 'readonly'}}) }}
+                <div class="col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                    {{ form_row(form.totalExpenses, {'attr': {'class': 'input-sm text-right', 'readonly': 'readonly'}}) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4 col-sm-offset-8 col-xs-12 form-group">
-                    {{ form_label(form.percentApplied, null, {'label_attr': {'class': 'control-label'}}) }}
-                    <div class="row">
-                        <div class="col-xs-6">{{ form_widget(form.percentApplied.percent, {'attr': {'class': 'form-control input-sm'}}) }}</div>
-                        <div class="col-xs-6">{{ form_widget(form.percentApplied.plus, {'attr': {'class': 'form-control input-sm text-right'}}) }}</div>
-                    </div>
+                <div class="col-sm-4 col-sm-offset-8 col-xs-12">
+                    {{ form_row(form.percentApplied) }}
                 </div>
-                <div class="col-sm-4 col-sm-offset-8 col-xs-12 form-group">
-                    {{ form_label(form.clientCharge, null, {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.clientCharge, {'attr': {'class': 'form-control text-right'}}) }}
+                <div class="col-sm-4 col-sm-offset-8 col-xs-12">
+                    {{ form_row(form.grandTotal, {'attr': {class: 'text-right'}}) }}
+                </div>
+            </div>
+            {{ form_row(form.revenuePaxLines) }}
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
+                    {{ form_row(form.totalRevenue, {attr: {class: 'text-right', totalizedrevenuelines: 'totalizedrevenuelines'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
+                    {{ form_row(form.profit, {attr: {class: 'text-right'}}) }}
                 </div>
             </div>
         </div>
+    </div>
+{% endblock %}
+
+{% block _offer_form_totalSuppliers_widget %}
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block _offer_form_totalExpenses_widget %}
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block _offer_form_totalRevenue_widget %}
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block _offer_form_profit_widget %}
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block _offer_form_percentApplied_row %}
+    {{ form_label(form, null, {label_attr: {for: form.percent.vars.id}}) }}
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                {{ form_widget(form.percent, {'attr': {'class': 'input-sm'}}) }}
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                {% if form.percent.vars.data != 'plus' %}
+                    {{ form_widget(form.plus, {'attr': {'class': 'input-sm text-right', readonly: 'readonly'}}) }}
+                {% else %}
+                    {{ form_widget(form.plus, {'attr': {'class': 'input-sm text-right'}}) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block _offer_form_revenuePaxLines_row %}
+    <div class="row">
+        <div class="col-sm-9 col-sm-offset-3 col-xs-12">
+            <strong>{{ form_label(form)|striptags }}</strong>
+            <table class="table table-condensed">
+                <tbody id="{{ form.vars.id }}" data-prototype="{{ form_row(form.vars.prototype)|e }}">
+                    {% if form.vars.data|length == 0 %}
+                        <tr>
+                            <td>{{ "No elements"|trans }}</td>
+                        </tr>
+                    {% else %}
+                        {% for child in form %}
+                            {{ form_row(child) }}
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+            <div class="pull-right">
+                <button class="btn btn-xs btn-default btn-add-item"
+                        type="button"
+                        title="{{ "Add"|trans }}"
+                        id="btnAddItem{{ form.vars.id }}">
+                    <i class="fa fa-plus-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block reservation_pax_revenue_line_form_row %}
+    <tr class="item">
+        <td>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form_row(form.name, {label: false, attr: {class: 'input-sm'}}) }}
+                </div>
+                <div class="col-md-1 col-sm-3 col-xs-6">
+                    {{ form_row(form.nights, {label: false, attr: {class: 'input-sm text-right'}}) }}
+                </div>
+                <div class="col-md-1 col-sm-3 col-xs-6">
+                    {{ form_row(form.pax, {label: false, attr: {class: 'input-sm text-right'}}) }}
+                </div>
+                <div class="col-sm-6 visible-sm">&nbsp;</div>
+                <div class="col-md-2 col-sm-3 col-xs-6">
+                    {{ form_row(form.price, {label: false, attr: {class: 'input-sm text-right'}}) }}
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-6">
+                    {{ form_row(form.total, {label: false, attr: {class: 'input-sm text-right'}}) }}
+                </div>
+            </div>
+            <button type="button" class="btn btn-danger btn-xs btn-block btn-delete-item">
+                <i class="fa fa-trash"></i>
+            </button>
+            {{ form_rest(form) }}
+        </td>
+    </tr>
+{% endblock %}
+
+{% block _offer_form_revenuePaxLines_entry_price_widget %}
+    {% set attr = attr|merge({class: attr.class|default('') ~ ' text-right'}) %}
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block _offer_form_revenuePaxLines_entry_total_widget %}
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        {{ block('form_widget_simple') }}
     </div>
 {% endblock %}
 

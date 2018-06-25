@@ -470,6 +470,12 @@ class OffersController extends Controller
                 ->join('c.supplier', 's')
                 ;
         $andX = $qb->expr()->andX($qb->expr()->eq('c.model', $qb->expr()->literal('private-house')));
+        if ($search['value']) {
+            $andX->add($qb->expr()->orX(
+                $qb->expr()->like('c.name', $qb->expr()->literal(sprintf('%%%s%%', $search['value']))),
+                $qb->expr()->like('s.name', $qb->expr()->literal(sprintf('%%%s%%', $search['value'])))
+                ));
+        }
         $qb->where($andX);
 
         $form = $this->createForm(ServiceFilters\PrivateHouseFilterFormType::class);
@@ -504,7 +510,7 @@ class OffersController extends Controller
         $submittedData = $form->getData();
         $data = array_map(function(\AppBundle\Entity\ContractPrivateHousePrice $record) use($template, $submittedData) {
             return array(
-                $record->getFacility()->getContract()->getSupplier()->getName(),
+                sprintf('%s - %s', $record->getFacility()->getContract()->getSupplier()->getName(), $record->getFacility()->getContract()->getName()),
                 $record->getFacility()->getName(),
                 $record->getFacility()->getMealPlan(),
                 $template->renderBlock('price', array('record' => $record)),

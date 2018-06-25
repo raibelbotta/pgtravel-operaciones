@@ -95,7 +95,7 @@ class BookingReview extends Report
                 if ($service->getEndAt()) {
                     $text = sprintf('%s to %s. %s', $service->getStartAt()->format('d/m/Y H:i'), $service->getEndAt()->format('d/m/Y H:i'), $service->getName());
                 } else {
-                    $text = sprintf('%s %s', $service->getStartAt()->format('d/m/Y H:i'), $service->getEndAt()->format('d/m/Y H:i'), $service->getName());
+                    $text = sprintf('%s %s', $service->getStartAt()->format('d/m/Y H:i'), $service->getName());
                 }
             }
 

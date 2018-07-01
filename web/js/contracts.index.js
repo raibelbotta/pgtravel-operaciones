@@ -7,10 +7,10 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
     var initTable = function() {
         $datatable.dataTable({
             order: [[ 1, 'asc' ]],
+            searching: false,
             columns: [
                 {
                     sortable: false,
-                    searchable: false
                 },
                 {name: 'name'},
                 {name: 'model'},
@@ -20,7 +20,6 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
                 {name: 'endAt'},
                 {
                     sortable: false,
-                    searchable: false,
                     width: '80px'
                 }
             ],
@@ -76,6 +75,9 @@ App.Contracts = typeof App.Contracts !== 'undefined' ? App.Contracts : {};
 
     var initFilter = function() {
         $('#filter select').on('change', function() {
+            $datatable.DataTable().draw(true);
+        });
+        $('#filter input:text').on('keyup', function() {
             $datatable.DataTable().draw(true);
         });
     }

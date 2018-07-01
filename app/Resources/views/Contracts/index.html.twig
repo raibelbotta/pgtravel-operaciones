@@ -18,11 +18,17 @@
                     <div class="clearfix"></div>
                     <form action="" id="filter">
                         <div class="row collapse" id="filter-row">
-                            <div class="col-sm-3 col-sm-offset-9 col-xs-12 form-group">
-                                {{ form_label(form.model) }}
-                                {{ form_widget(form.model, {attr: {class: "form-control input-sm"}}) }}
+                            <div class="col-sm-4 col-xs-12">
+                                {{ form_row(form.name, {attr: {class: 'input-sm'}}) }}
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                {{ form_row(form.model, {attr: {class: "input-sm"}}) }}
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                {{ form_row(form.supplier, {attr: {class: 'input-sm'}}) }}
                             </div>
                         </div>
+                        {{ form_rest(form) }}
                     </form>
                     <table id="datatable-x" class="table table-striped table-bordered bulk_action" width="100%">
                         <thead>

@@ -50,18 +50,10 @@ class ContractsController extends Controller
 
         $qb = $em->getRepository('AppBundle:Contract')
                 ->createQueryBuilder('c')
-                ->join('c.supplier', 's')
                 ;
 
-        $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order');
-
-        if (is_array($search) && isset($search['value']) && $search['value']) {
-            $andX = $qb->expr()->andX($qb->expr()->like('c.name', ':q'));
-            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
-            $qb->where($andX);
-        }
 
         $form = $this->createForm(ContractFilterFormType::class);
         $form->submit($request->request->get($form->getName()));

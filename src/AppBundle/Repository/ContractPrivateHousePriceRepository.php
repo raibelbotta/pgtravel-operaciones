@@ -1,6 +1,9 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\ContractPrivateHouseFacility;
+use AppBundle\Entity\ContractPrivateHouseSeason;
+use Doctrine\ORM\EntityNotFoundException;
 
 /**
  * ContractPrivateHousePriceRepository
@@ -10,4 +13,64 @@ namespace AppBundle\Repository;
  */
 class ContractPrivateHousePriceRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findOneBySeasonAndFacility(
+        \AppBundle\Entity\ContractPrivateHouseSeason $season,
+        \AppBundle\Entity\ContractPrivateHouseFacility $facility
+    )
+    {
+        return $this->findOneBy(array(
+            'seasson' => $season->getId(),
+            'facility' => $facility->getId()
+        ));
+    }
+
+    /**
+     * @param \AppBundle\Entity\ContractPrivateHouseSeason $season
+     * @param \AppBundle\Entity\ContractPrivateHouseFacility $facility
+     * @param null|float $value
+     * @return null|\AppBundle\Entity\ContractPrivateHousePrice
+     */
+    public function savePriceBySeasonAndFacility(
+        \AppBundle\Entity\ContractPrivateHouseSeason $season,
+        \AppBundle\Entity\ContractPrivateHouseFacility $facility,
+        $value = null
+    )
+    {
+        $manager = $this->getEntityManager();
+        $record = $this->findOneBySeasonAndFacility($season, $facility);
+
+        if (!$record && !empty($value)) {
+            $record = new \AppBundle\Entity\ContractPrivateHousePrice();
+            $record
+                ->setSeasson($season)
+                ->setFacility($facility)
+                ->setValue($value)
+            ;
+            $manager->persist($record);
+        } elseif ($record && empty($value)) {
+            $manager->remove($record);
+        } elseif ($record) {
+            $record->setValue($value);
+        }
+
+        return $record;
+    }
+
+    public function saveNotesBySeasonAndFacility(
+        ContractPrivateHouseSeason $season,
+        ContractPrivateHouseFacility $facility,
+        $noteContent
+    )
+    {
+        $record = $this->findOneBySeasonAndFacility($season, $facility);
+
+        if (!$record) {
+            throw new EntityNotFoundException();
+        }
+
+        $record = new \AppBundle\Entity\ContractPrivateHousePrice();
+        $record->setNote($noteContent);
+
+        return $record;
+    }
 }

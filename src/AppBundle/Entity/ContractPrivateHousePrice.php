@@ -29,7 +29,7 @@ class ContractPrivateHousePrice
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $facility;
-    
+
     /**
      * @var ContractPrivateHouseSeason
      *
@@ -44,6 +44,13 @@ class ContractPrivateHousePrice
      * @ORM\Column(name="value", type="decimal", precision=6, scale=2)
      */
     private $value;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $note;
 
     /**
      * @var \DateTime
@@ -194,5 +201,29 @@ class ContractPrivateHousePrice
     public function getSeasson()
     {
         return $this->seasson;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return ContractPrivateHousePrice
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
     }
 }

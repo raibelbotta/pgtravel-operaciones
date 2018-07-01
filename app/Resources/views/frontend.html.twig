@@ -213,7 +213,7 @@
     <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
     <script src="{{ url('bazinga_jstranslation_js') }}"></script>
 
-    <script>
+    <script type="text/javascript">
         phone_util_script_url = '{{ asset('plugins/intl-tel-input/js/utils.js') }}';
     </script>
 
@@ -249,7 +249,7 @@
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
             App.Main.init();
             {% if app.session.flashBag.has('notice') %}

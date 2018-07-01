@@ -506,11 +506,11 @@ class OffersController extends Controller
         $total = $pagination->getTotalItemCount();
 
         $template = $this->container->get('twig')
-                ->loadTemplate('Offers/_private_house_prices_row.html.twig');
+                ->load('Offers/_private_house_prices_row.html.twig');
         $submittedData = $form->getData();
         $data = array_map(function(\AppBundle\Entity\ContractPrivateHousePrice $record) use($template, $submittedData) {
             return array(
-                sprintf('%s - %s', $record->getFacility()->getContract()->getSupplier()->getName(), $record->getFacility()->getContract()->getName()),
+                $template->renderBlock('name', array('record' => $record)),
                 $record->getFacility()->getName(),
                 $record->getFacility()->getMealPlan(),
                 $template->renderBlock('price', array('record' => $record)),

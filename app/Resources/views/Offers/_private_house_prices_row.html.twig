@@ -1,3 +1,10 @@
+{% block name %}
+    {{ record.facility.contract.supplier.name }} - {{ record.facility.contract.name }}
+    {% if record.note is not empty %}
+        <span class="fa fa-info-circle" title="{{ record.note }}"></span>
+    {% endif %}
+{% endblock %}
+
 {% block price %}
     {{ '%0.2f'|format(record.value) }}
 {% endblock %}

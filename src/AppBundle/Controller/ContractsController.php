@@ -447,37 +447,66 @@ class ContractsController extends Controller
 
     /**
      * @Route("/set-private-house-price", options={"expose": true})
-     * @Method({"post"})
+     * @Method({"POST"})
      * @param Request $request
      * @return JsonResponse
      */
     public function setPrivateHousePriceAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        $price = $manager->getRepository('AppBundle:ContractPrivateHousePrice')->findOneBy(array(
-            'seasson' => $request->get('season'),
-            'facility' => $request->get('facility')
-        ));
 
-        if (!$price && !empty($request->get('value'))) {
-            $price = new \AppBundle\Entity\ContractPrivateHousePrice();
-            $price
-                    ->setSeasson($manager->find('AppBundle:ContractPrivateHouseSeason', $request->get('season')))
-                    ->setFacility($manager->find('AppBundle:ContractPrivateHouseFacility', $request->get('facility')))
-                    ->setValue($request->get('value'))
-                    ;
-            $manager->persist($price);
-        } elseif ($price && empty($request->get('value'))) {
-            $manager->remove($price);
-        } elseif ($price) {
-            $price->setValue($request->get('value'));
-        }
+        $record = $manager->getRepository('AppBundle:ContractPrivateHousePrice')->savePrice(
+            $manager->find('AppBundle:ContractPrivateHouseSeason', $request->get('season')),
+            $manager->find('AppBundle:ContractPrivateHouseFacility', $request->get('facility')),
+            $request->get('value')
+        );
 
         $manager->flush();
 
         return new JsonResponse(array(
             'inputId'   => $request->get('inputId'),
-            'value'     => $request->get('value') ? sprintf('%0.2f', $price->getValue()) : ''
+            'value'     => $record ? sprintf('%0.2f', $record->getValue()) : ''
+        ));
+    }
+
+    /**
+     * @Route(
+     *     "set-private-house-note/{seasonId}/{facilityId}",
+     *     requirements={
+     *          "seasonId": "\d+", "facilityId": "\d+"
+     *     }
+     * )
+     * @Method({"GET", "POST"})
+     */
+    public function setPrivateHouseNotesAction($seasonId, $facilityId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $season = $manager->find('AppBundle:ContractPrivateHouseSeason', $seasonId);
+        $facility = $manager->find('AppBundle:ContractPrivateHouseFacility', $facilityId);
+        $record = $manager->getRepository('AppBundle:ContractPrivateHousePrice')
+            ->findOneBySeasonAndFacility($season, $facility);
+
+        $form = $this->createFormBuilder($record)
+            ->add('note')
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->getRepository('AppBundle:ContractPrivateHousePrice')
+                ->saveNotesBySeasonAndFacility(
+                    $season,
+                    $facility,
+                    $form->get('note')->getData()
+                );
+
+            $manager->flush();
+
+            return new Response('<script type="text/javascript">$(\'.modal\').modal(\'hide\')</script>');
+        }
+
+        return $this->render('Contracts/set_contract_private_house_price_note.html.twig', array(
+            'form' => $form->createView()
         ));
     }
 }

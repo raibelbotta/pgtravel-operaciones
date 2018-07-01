@@ -405,6 +405,7 @@
         <div class="row">
             <div class="col-sm-12 col-xs-12">
                 {{ form_row(form.notes) }}
+                {#{{ form.notes.vars.block_prefixes|join(' | ') }}#}
             </div>
         </div>
         <button type="button" class="btn btn-block btn-danger btn-xs btn-remove"><span class="fa fa-trash"></span></button>
@@ -412,6 +413,16 @@
         <br class="hidden-xs">
         {{ form_rest(form) }}
     </div>
+{% endblock %}
+
+{% block _contract_form_privateHouseFacilities_entry_notes_label %}
+    {{ block('form_label') }}
+    <a href="javascript:{};" onclick="var textarea = $('#{{ form.vars.id }}'); if (!textarea.is(':visible')) {textarea.slideDown('fast').removeAttr('tabindex');} else {textarea.slideUp('fast').attr('tabindex', '-1');}; $(this).find('span.fa').toggleClass('fa-arrow-down fa-arrow-up'); return false;"><span class="fa fa-arrow-down"></span></a>
+{% endblock %}
+
+{% block _contract_form_privateHouseFacilities_entry_notes_widget %}
+    {% set attr = attr|default({})|merge({style: attr.class|default('') ~ 'display: none;', tabindex: '-1'}) %}
+    {{ block('textarea_widget') }}
 {% endblock %}
 
 {% block contract_car_rental_category_row %}

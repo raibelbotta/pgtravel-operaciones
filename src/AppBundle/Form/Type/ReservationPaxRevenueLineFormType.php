@@ -21,7 +21,9 @@ class ReservationPaxRevenueLineFormType extends AbstractType
             ->add('name', ChoiceType::class, array(
                 'choices' => array(
                     'SGL' => 'SGL',
-                    'DBL' => 'DBL'
+                    'DBL' => 'DBL',
+                    'TRP' => 'TRP',
+                    'QUAD' => 'QUAD'
                 ),
                 'choices_as_values' => true
             ))

@@ -4,41 +4,57 @@ App = typeof App !== 'undefined' ? App : {};
     "use strict";
 
     var initControls = function() {
-        $('body').on('change', 'input.updatable-ajax', function() {
-            var $input = $(this);
+        $('a.link-edit-notes').on('click', function(event) {
+            event.preventDefault();
 
-            if ($input.data('saving')) {
-                $input.data('saving').xhr.abort();
+            var input = $('input:text[data-params="' + $(this).data('params') + '"]'),
+                modal = $(this).closest('tr').find('.modal'),
+                url = $(this).attr('href');
+
+            modal.find('.modal-body').empty();
+            modal.find('.modal-footer button.btn-primary').hide();
+
+            if (($.trim(input.val()) === '') || !$.isNumeric(input.val())) {
+                swal({
+                    title: 'Notes without price',
+                    text: 'You must set a price for this record before write notes',
+                    type: 'warning'
+                });
+
+                return;
             }
 
-            var id = $.now(),
-                paramsStr = $input.data('params'),
-                lines = paramsStr.split('|'),
-                params = {
-                    inputId: id,
-                    value: $input.val()
-                };
-            $.each(lines, function(i, line) {
-                var pair = line.split(':');
-                params[pair[0]] = pair[1];
-            });
-
-            $input.css({borderColor: 'red'}).attr({'ajax-id': id});
-
-            var obj = {
-                xhr: $.ajax(Routing.generate('app_contracts_setprivatehouseprice'), {
-                    data: params,
-                    dataType: 'json',
-                    method: 'POST',
-                    success: function(json) {
-                        $('input:text.updatable-ajax[ajax-id=' + json.inputId + ']').val(json.value).css({borderColor: ''}).removeAttr('ajax-id').removeData('saving');
-                    }
-                })
-            };
-
-            $input.data('saving', obj);
+            modal.data('url', url);
+            modal.modal();
         });
-    }
+
+        $('.modal-notes').on('shown.bs.modal', function() {
+            var modal = $(this);
+
+            modal.find('.modal-body')
+                .load($(this).data('url'), function() {
+                    modal.find('.modal-footer button.btn-primary').fadeIn();
+                })
+                .block({
+                    message: Translator.trans('Loading data...')
+                });
+        });
+
+        $('button.btn-submit-note').on('click', function() {
+            $(this).attr('disabled', 'disabled');
+            $(this).closest('form').submit();
+        });
+
+        $('.modal-notes form').each(function() {
+            var form = $(this);
+            $(this).ajaxForm({
+                target: form.find('.modal-body'),
+                success: function() {
+                    form.find('button.btn-primary').removeAttr('disabled');
+                }
+            });
+        });
+    };
 
     return {
         init: function() {

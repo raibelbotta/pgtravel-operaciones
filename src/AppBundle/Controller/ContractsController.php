@@ -456,8 +456,7 @@ class ContractsController extends Controller
         $manager->flush();
 
         return new JsonResponse(array(
-            'inputId'   => $request->get('inputId'),
-            'value'     => $record ? sprintf('%0.2f', $record->getValue()) : ''
+            'value'     => $request->get('value') ? sprintf('%0.2f', $request->get('value')) : ''
         ));
     }
 

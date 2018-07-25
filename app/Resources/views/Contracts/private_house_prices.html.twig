@@ -9,7 +9,7 @@
 
     <div class="x_panel">
         <div class="x_title">
-            <h4>ABC</h4>
+            <h4>Prices for private house</h4>
             <div class="clearfix"></div>
         </div>
         <div class="x_content table-responsive">
@@ -28,13 +28,15 @@
                             <td>{{ facility }}</td>
                             {% for season in contract.privateHouseSeassons %}
                                 <td>
-                                    <div class="input-group input-group-sm" style="margin-bottom: 0px;">
-                                        <span class="input-group-addon"><span class="fa fa-dollar"></span></span>
-                                        <input type="text"
-                                               class="form-control text-right updatable-ajax"
-                                               value="{{ prices[facility.id][season.id]|default("") }}"
-                                               data-params="season:{{ season.id }}|facility:{{ facility.id }}">
-                                    </div>
+                                    <!-- ko component: {
+                                            name: 'input-price',
+                                            params: {
+                                                season: {{ season.id }},
+                                                facility: {{ facility.id }},
+                                                value: '{{ prices[facility.id][season.id]|default("") }}'
+                                            }
+                                        } -->
+                                    <!-- /ko -->
                                 </td>
                                 <td>
                                     <a href="{{ path('app_contracts_setprivatehousenotes', {'seasonId': season.id, 'facilityId': facility.id}) }}"
@@ -76,60 +78,49 @@
 {% block page_javascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            App.PrivateHousePrices.init();
+            ko.components.register('input-price', {
+                viewModel: function(params) {
+                    this.season = params.season;
+                    this.facility = params.facility;
+                    this.dataParams = params.dataParams;
+                    this.value = ko.observable(params.value);
+                    this.isSaving = ko.observable(false);
+                    this.dataParams = ko.pureComputed(function() {
+                        return 'season:' + this.season + '|facility:' + this.facility;
+                    }, this);
 
-            var submitHandler = function() {
+                    this.onChange = function() {
+                        var id = $.now(),
+                            data = {
+                                season: this.season,
+                                facility: this.facility,
+                                value: this.value()
+                            };
 
-            };
+                        this.isSaving(true);
+                        var self = this;
 
-            $('a.link-edit-notes').on('click', function(event) {
-                event.preventDefault();
-
-                var input = $('input:text[data-params="' + $(this).data('params') + '"]'),
-                    modal = $(this).closest('tr').find('.modal'),
-                    url = $(this).attr('href');
-
-                modal.find('.modal-body').empty();
-                modal.find('.modal-footer button.btn-primary').hide();
-
-                if (($.trim(input.val()) === '') || !$.isNumeric(input.val())) {
-                    swal({
-                        title: 'Notes without price',
-                        text: 'You must set a price for this record before write notes',
-                        type: 'warning'
-                    });
-                }
-
-                modal.data('url', url);
-                modal.modal();
-            });
-
-            $('.modal-notes').on('shown.bs.modal', function() {
-                var modal = $(this);
-
-                modal.find('.modal-body')
-                    .load($(this).data('url'), function() {
-                        modal.find('.modal-footer button.btn-primary').fadeIn();
-                    })
-                    .block({
-                        message: 'Loading data...'
-                    });
-            });
-
-            $('button.btn-submit-note').on('click', function() {
-                $(this).attr('disabled', 'disabled');
-                $(this).closest('form').submit();
-            });
-
-            $('.modal-notes form').each(function() {
-                var form = $(this);
-                $(this).ajaxForm({
-                    target: form.find('.modal-body'),
-                    success: function() {
-                        form.find('button.btn-primary').removeAttr('disabled');
+                        $.ajax({
+                            url: Routing.generate('app_contracts_setprivatehouseprice'),
+                            data: data,
+                            dataType: 'json',
+                            method: 'POST'
+                        }).done(function(response) {
+                            self.value(response.value);
+                            self.isSaving(false);
+                        });
                     }
-                });
+                },
+                template:
+                    '<div class="input-group input-group-sm" style="margin-bottom: 0px;">' +
+                    '<span class="input-group-addon"><span class="fa fa-dollar"></span></span>' +
+                    '<input type="text" data-bind="{value: value, attr: {\'data-params\': dataParams()}, style: {borderColor: isSaving() ? \'red\' : \'\'}, event: {change: onChange}}" class="form-control text-right updatable-ajax">' +
+                    '</div>'
             });
+
+            ko.applyBindings();
+
+            App.PrivateHousePrices.init();
         });
     </script>
 {% endblock %}

@@ -447,7 +447,7 @@ class ContractsController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
 
-        $record = $manager->getRepository('AppBundle:ContractPrivateHousePrice')->savePrice(
+        $record = $manager->getRepository('AppBundle:ContractPrivateHousePrice')->savePriceBySeasonAndFacility(
             $manager->find('AppBundle:ContractPrivateHouseSeason', $request->get('season')),
             $manager->find('AppBundle:ContractPrivateHouseFacility', $request->get('facility')),
             $request->get('value')

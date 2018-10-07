@@ -436,7 +436,7 @@ body .container.body .right_col {
 body {
   color: #73879C;
   background: #2A3F54;
-  font-family: "Helvetica Neue", Roboto, Arial, sans-serif;
+  font-family: Roboto, Arial, sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.471; }
@@ -3320,7 +3320,7 @@ a.hiddenanchor {
   text-decoration: underline; }
 
 .login_content h1 {
-  font: normal 25px Helvetica, Arial, sans-serif;
+  font: normal 25px Roboto, Arial, sans-serif;
   letter-spacing: -0.05em;
   line-height: 20px;
   margin: 10px 0 30px; }

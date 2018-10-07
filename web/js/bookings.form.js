@@ -144,8 +144,6 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
             //Las line charges
             $('#offer_form_totalSuppliers, #offer_form_totalExpenses, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
-                var $controls = $('#offer_form_totalSuppliers, #offer_form_totalExpenses, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus');
-
                 var sum = getFloat($('#offer_form_totalSuppliers').val()),
                     sum2 = getFloat($('#offer_form_totalExpenses').val()),
                     $plus = $('#offer_form_percentApplied_percent'), charge;
@@ -156,7 +154,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     charge = new Number(sum * ($plus.val() / 100) + sum + sum2);
                 }
 
-                $('#offer_form_clientCharge').val(charge.toFixed(2));
+                $('#offer_form_grandTotal').val(charge.toFixed(2));
             });
 
             $('#offer_form_totalSuppliers').trigger('change');
@@ -799,7 +797,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
                 $searchBox.modal('hide');
             });
-        }
+        };
 
         var initTransportControls = function() {
             var $tab = $searchBox.find('#tab-transport'),
@@ -873,7 +871,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
                 $searchBox.modal('hide');
             });
-        }
+        };
 
         var initGeneralControls = function() {
             $searchBox.find('.tab-content .tab-pane:not(#tab-hotel, #tab-private-house, #tab-car-rental, #tab-transport)').each(function() {
@@ -923,7 +921,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     updateResults();
                 });
             });
-        }
+        };
 
         initHotelControls();
         initPrivateHouseControls();

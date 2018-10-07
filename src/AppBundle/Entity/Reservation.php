@@ -276,6 +276,7 @@ class Reservation implements AlertableInterface
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
         $this->administrativeCharges = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payAttachments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->revenuePaxLines = new \Doctrine\Common\Collections\ArrayCollection();
 
         $this->cone = false;
         $this->state = 'offer';

@@ -204,13 +204,6 @@ class Reservation implements AlertableInterface
     private $totalRevenue;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
-    private $profit;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="is_cancelled", type="boolean", options={"default": false})
@@ -1101,30 +1094,6 @@ class Reservation implements AlertableInterface
     public function getTotalRevenue()
     {
         return $this->totalRevenue;
-    }
-
-    /**
-     * Set profit
-     *
-     * @param string $profit
-     *
-     * @return Reservation
-     */
-    public function setProfit($profit)
-    {
-        $this->profit = $profit;
-
-        return $this;
-    }
-
-    /**
-     * Get profit
-     *
-     * @return string
-     */
-    public function getProfit()
-    {
-        return $this->profit;
     }
 
     /**

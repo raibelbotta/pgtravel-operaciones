@@ -110,7 +110,6 @@ class OfferFormType extends AbstractType
                     'label' => 'Revenue'
                 ))
                 ->add('totalRevenue')
-                ->add('profit')
                 ;
 
         $manager = $this->manager;

@@ -144,17 +144,21 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
             //Las line charges
             $('#offer_form_totalSuppliers, #offer_form_totalExpenses, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
-                var sum = getFloat($('#offer_form_totalSuppliers').val()),
-                    sum2 = getFloat($('#offer_form_totalExpenses').val()),
-                    $plus = $('#offer_form_percentApplied_percent'), charge;
+                var totalSuppliers = getFloat($('#offer_form_totalSuppliers').val()),
+                    totalExpenses = getFloat($('#offer_form_totalExpenses').val()),
+                    $plus = $('#offer_form_percentApplied_percent'),
+                    charge,
+                    profit;
 
                 if ($plus.val() === 'plus') {
-                    charge = new Number(sum + sum2 + getFloat($('#offer_form_percentApplied_plus').val()));
+                    profit = getFloat($('#offer_form_percentApplied_plus').val());
                 } else {
-                    charge = new Number(sum * ($plus.val() / 100) + sum + sum2);
+                    profit = (totalSuppliers + totalExpenses) / ((100 - getFloat($plus.val())) / 100) - (totalSuppliers + totalExpenses);
                 }
+                charge = totalSuppliers + totalExpenses + profit;
 
                 $('#offer_form_grandTotal').val(charge.toFixed(2));
+                $('#offer_form_totalRevenue').val(profit.toFixed(2));
             });
 
             $('#offer_form_totalSuppliers').trigger('change');
@@ -408,15 +412,17 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 }
             }
         });
-        $.validator.addMethod('totalizedrevenuelines', function(value, element, params) {
-            var value = window.parseFloat(value);
-            var total = 0;
 
-            $('#offer_form_revenuePaxLines input[name$="[total]"]').each(function() {
+        $.validator.addMethod('totalizedrevenuelines', function(value) {
+            var floatValue = window.parseFloat(value),
+                total = 0,
+                container = $('#offer_form_revenuePaxLines');
+
+             container.find('input[name^="offer_form[revenuePaxLines]["][name$="][total]"]').each(function() {
                 total += window.parseFloat($(this).val());
             });
 
-            return total === value;
+            return total === floatValue;
         }, 'Error totalizing revenue lines');
 
         $('#reservation').validate({

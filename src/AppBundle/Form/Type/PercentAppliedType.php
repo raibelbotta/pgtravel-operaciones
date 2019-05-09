@@ -20,8 +20,11 @@ class PercentAppliedType extends AbstractType
         $builder
                 ->add('percent', ChoiceType::class, array(
                     'choices' => array(
+                        '8' => 8,
                         '10%' => 10,
+                        '12%' => 12,
                         '15%' => 15,
+                        '25%' => 25,
                         '20%' => 20,
                         '30%' => 30,
                         'Add plus' => 'plus'

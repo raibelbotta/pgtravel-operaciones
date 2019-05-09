@@ -13,6 +13,7 @@
             <div class="row">
                 <div class="form-group col-sm-3 col-xs-6">
                     {{ form_row(form.clientType) }}
+                    {{ form_errors(form.clientType) }}
                 </div>
                 <div class="form-group col-sm-3 col-xs-6">
                     {{ form_label(form.operator, null, {'label_attr': {'class': 'control-label'}}) }}
@@ -127,18 +128,13 @@
                     {{ form_row(form.percentApplied) }}
                 </div>
                 <div class="col-sm-4 col-sm-offset-8 col-xs-12">
-                    {{ form_row(form.grandTotal, {'attr': {class: 'text-right'}}) }}
+                    {{ form_row(form.grandTotal, {'attr': {class: 'text-right', totalizedrevenuelines: 'totalizedrevenuelines'}}) }}
                 </div>
             </div>
             {{ form_row(form.revenuePaxLines) }}
             <div class="row">
                 <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
-                    {{ form_row(form.totalRevenue, {attr: {class: 'text-right', totalizedrevenuelines: 'totalizedrevenuelines'}}) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2 col-sm-offset-10 col-xs-6 col-xs-offset-6">
-                    {{ form_row(form.profit, {attr: {class: 'text-right'}}) }}
+                    {{ form_row(form.totalRevenue, {attr: {class: 'text-right'}}) }}
                 </div>
             </div>
         </div>

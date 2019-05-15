@@ -2,7 +2,13 @@ App = typeof App !== 'undefined' ? App : {};
 App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
 +(App.Bookings.Form = function($) {
-    "use strcit";
+    "use strict";
+
+    var body;
+
+    var getFloat = function(val) {
+        return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+    };
 
     var init = function() {
         $('input:radio[name="offer_form[clientType]"]').iCheck({
@@ -47,7 +53,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
         App.Forms.initTelephoneControl($('#offer_form_directClientMobilePhone'));
 
-        $('body').on('click', '.btn-search-service', function() {
+        body.on('click', '.btn-search-service', function() {
             var $item = $(this).closest('.item');
 
             $('#searchServiceModal').remove();
@@ -56,7 +62,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             $m.find('.modal-body').empty().append($('<p>' + Translator.trans('Loading data...') + '</p>')).load(Routing.generate('app_offers_searchservice'), initSearchBox);
         });
 
-        $('body').on('change', '.item.item-service select[name$="[model]"]', function() {
+        body.on('change', '.item.item-service select[name$="[model]"]', function() {
             var $item = $(this).closest('.item'),
                 option = this.options[this.selectedIndex];
 
@@ -76,10 +82,6 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         $('.item.item-service select[name$="[model]"]').trigger('change');
 
         +(function() {
-            var getFloat = function(val) {
-                return isNaN(parseFloat(val)) ? 0 : parseFloat(val);
-            };
-
             var updateExpense = function(item) {
                 var $item = $(item),
                     $nights = $item.find('input[name$="[nights]"]'),
@@ -91,7 +93,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     total = nights * getFloat($price.val()) + pax * getFloat($price.val());
 
                 $total.val(total.toFixed(2));
-            }
+            };
 
             var updateTotalExpenses = function() {
                 var total = new Number(0);
@@ -135,7 +137,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 });
 
                 $total.val(total.toFixed(2)).trigger('change');
-            }
+            };
 
             //Totales de cargos administrativos
             $('.item-administrative-charge').on('change', 'input[name$="[total]"]', function() {
@@ -146,14 +148,14 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             $('#offer_form_totalSuppliers, #offer_form_totalExpenses, #offer_form_percentApplied_percent, #offer_form_percentApplied_plus').on('change', function() {
                 var totalSuppliers = getFloat($('#offer_form_totalSuppliers').val()),
                     totalExpenses = getFloat($('#offer_form_totalExpenses').val()),
-                    $plus = $('#offer_form_percentApplied_percent'),
+                    plus = $('#offer_form_percentApplied_percent').val(),
                     charge,
                     profit;
 
-                if ($plus.val() === 'plus') {
+                if (plus === 'plus') {
                     profit = getFloat($('#offer_form_percentApplied_plus').val());
                 } else {
-                    profit = (totalSuppliers + totalExpenses) / ((100 - getFloat($plus.val())) / 100) - (totalSuppliers + totalExpenses);
+                    profit = (totalSuppliers + totalExpenses) / ((100 - getFloat(plus)) / 100);
                 }
                 charge = totalSuppliers + totalExpenses + profit;
 
@@ -174,7 +176,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             updateTotalExpenses();
             updateTotalCharges();
         }());
-    }
+    };
 
     var initRevenueLinesCollection = function() {
         var collection = $('#offer_form_revenuePaxLines'),
@@ -199,7 +201,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $(this).remove();
             });
         });
-    }
+    };
 
     var initCollections = function() {
         var updateNights = function($item, trigger) {
@@ -254,7 +256,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             }
 
             $nights.data('ajax', xhr);
-        }
+        };
 
         var initDatepickers = function(item) {
             var dps = $(item).find('input.datepicker'), options = {
@@ -274,7 +276,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $(dps[0]).parent().data("DateTimePicker").maxDate(e.date);
                 updateNights($(item), dps[1]);
             });
-        }
+        };
 
         var initPlaces = function(item) {
             $(item).find('select[name$="[origin]"], select[name$="[destination]"]').select2({
@@ -300,13 +302,13 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     }
                 }
             });
-        }
+        };
 
         var initSupplier = function(item) {
             $(item).find('select[name$="[supplier]"]').select2({
                 width: '100%'
             });
-        }
+        };
 
         $('.item.item-service').each(function() {
             initDatepickers(this);
@@ -314,11 +316,11 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             initSupplier(this);
         });
 
-        $('body').on('change', '.item-service input[name$="[nights]"]', function() {
+        body.on('change', '.item-service input[name$="[nights]"]', function() {
             updateNights($(this).closest('.item'), this);
         });
 
-        $('body').on('click', '.btn-add-item', function(event) {
+        body.on('click', '.btn-add-item', function(event) {
             var $btn = $(this);
 
             if (typeof $btn.data('collection') === 'undefined') {
@@ -331,10 +333,10 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
             var $container = $($btn.data('collection')),
                 index = $container.data('index'),
-                prototype = $container.data('prototype')
+                prototype = $container.data('prototype'),
                 $counter = $container.data('counter') ? $($container.data('counter')) : null;
 
-            $item = $(prototype.replace(/__name__/g, index));
+            var $item = $(prototype.replace(/__name__/g, index));
             $container.data('index', index + 1);
             if ($counter) {
                 $counter.val(parseInt($counter.val(), 10) + 1);
@@ -371,7 +373,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             $item.find('.btn-search-service').trigger('click');
         });
 
-        $('body').on('click', '.btn-remove-item', function(event) {
+        body.on('click', '.btn-remove-item', function(event) {
             var $btn = $(this), $item = $btn.closest('.item');
 
             if ($btn.is('a')) {
@@ -399,7 +401,16 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
         });
 
         initRevenueLinesCollection();
-    }
+
+        body.on('change', 'input[name^="offer_form[revenuePaxLines]["][name$="][price]"], input[name^="offer_form[revenuePaxLines]["][name$="][pax]"]', function() {
+            var $item = $(this).closest('.item'),
+                $price = $item.find('input[name$="][price]"]'),
+                $pax = $item.find('input[name$="][pax]"]'),
+                $total = $item.find('input[name$="][total]"]');
+
+            $total.val(getFloat(getFloat($price.val()) * getFloat($pax.val())));
+        });
+    };
 
     var initValidation = function() {
         $.validator.addClassRules('endatrequired', {
@@ -475,7 +486,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 $element.tooltipster('hide');
             }
         });
-    }
+    };
 
     var initSearchBox = function() {
         var $searchBox = $('#searchServiceModal');
@@ -522,7 +533,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     gControl(name).val(value);
                 });
             }
-        }
+        };
 
 
         var initHotelControls = function() {
@@ -567,7 +578,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
             var updateResults = function() {
                 $table.dataTable().api().draw();
-            }
+            };
 
             $table.on('click', 'button.btn-select-service', function() {
                 var data = $(this).data('service');
@@ -638,7 +649,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             $searchBox.find('a[role=tab][aria-controls=tab-hotel]').on('shown.bs.tab', function() {
                 updateResults();
             });
-        }
+        };
 
         var initPrivateHouseControls = function() {
             var $tab = $searchBox.find('#tab-private-house'),
@@ -668,7 +679,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             });
             var updateResults = function() {
                 $table.dataTable().api().draw();
-            }
+            };
 
             $tab.find('form .date:first').on('dp.change', function(e) {
                 var from = e.date ? e.date.clone() : null,
@@ -738,7 +749,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
                 $searchBox.modal('hide');
             });
-        }
+        };
 
         var initCarRentalControls = function() {
             var $tab = $searchBox.find('#tab-car-rental'),
@@ -771,7 +782,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
 
             var updateResults = function() {
                 $table.dataTable().api().draw();
-            }
+            };
 
             utils.initDatepickers($tab.find('input.datepicker:first').parent(), $tab.find('input.datepicker:last').parent(), updateResults);
 
@@ -839,7 +850,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                     } else {
                         initTable();
                     }
-                }
+                };
 
             $tab.find('form input:checkbox').iCheck({
                 checkboxClass: 'icheckbox_flat-green'
@@ -889,12 +900,12 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                             'from': $tab.find('input.datepicker:first').val(),
                             'to': $tab.find('input.datepicker:last').val(),
                             'quantity': $tab.find('select[name=quantity]').val()
-                        }
+                        };
 
                         $tab.find('.table-responsive.results').empty().text(Translator.trans('Loading services...')).load(Routing.generate('app_offers_getgeneralserviceprices'), data, function() {
                             $tab.find('.table-responsive.results table').DataTable({});
                         });
-                    }
+                    };
 
                 utils.initDatepickers($tab.find('.date:has(.datepicker):first'), $tab.find('.date:has(.datepicker):last'), updateResults);
 
@@ -939,10 +950,12 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
             var model = $searchBox.data('item').find('select[name$="[model]"]').val();
             $searchBox.find('.nav.nav-tabs a[href="#tab-' + model + '"]').tab('show');
         }());
-    }
+    };
 
     return {
         init: function() {
+            body = $('body');
+
             init();
             initCollections();
             initValidation();

@@ -13,13 +13,12 @@
             {{ form_start(form, {'attr': {'role': 'form', 'id': 'reservation'}}) }}
                 {{ form_row(form) }}
                 <div class="pull-right">
-                    <label>
-                        {{ form_widget(form.jumpToOperation, {'attr': {'class': 'flat'}}) }}
-                        {{ form.jumpToOperation.vars.label }}
-                    </label>
-                    |
+                    &nbsp;|
                     <button type="button" class="btn btn-primary" onclick="$('form#reservation').submit();">{{ 'Save'|trans }}</button>
                     <a href="{{ path('app_offers_index') }}" class="btn btn-default">{{ 'Back to list'|trans }}</a>
+                </div>
+                <div class="pull-right">
+                    {{ form_widget(form.jumpToOperation, {'attr': {'class': 'flat'}}) }}
                 </div>
                 {{ form_rest(form) }}
             {{ form_end(form) }}

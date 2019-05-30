@@ -188,7 +188,7 @@ class OffersController extends Controller
             $manager->persist($form->getData());
             $manager->flush();
 
-            return $this->redirect($this->generateUrl($form->get('jumpToOperation')->getData() ? 'app_bookings_index' : 'app_offers_index'));
+            return $this->redirect($this->generateUrl('app_offers_index'));
         }
 
         return $this->render('Offers/new.html.twig', array(

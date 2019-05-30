@@ -152,8 +152,8 @@ class NotificationsController extends Controller
                 null !== $record->getReservation()->getClient() ? (string) $record->getReservation()->getClient() : $record->getReservation()->getDirectClientFullName(),
                 null !== $record->getSupplier() ? $record->getSupplier()->getName() : '',
                 $record->getName(),
-                $record->getStartAt()->format('d/m/Y'),
-                $record->getEndAt()->format('d/m/Y'),
+                $record->getStartAt() ? $record->getStartAt()->format('d/m/Y') : null,
+                $record->getEndAt() ? $record->getEndAt()->format('d/m/Y') : null,
                 $record->getSupplierReference(),
                 $twig->render('Notifications/_actions.html.twig', array('record' => $record))
             );

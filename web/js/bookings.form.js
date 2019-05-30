@@ -155,7 +155,7 @@ App.Bookings = typeof App.Bookings !== 'undefined' ? App.Bookings : {};
                 if (plus === 'plus') {
                     profit = getFloat($('#offer_form_percentApplied_plus').val());
                 } else {
-                    profit = (totalSuppliers + totalExpenses) / ((100 - getFloat(plus)) / 100);
+                    profit = ((totalSuppliers + totalExpenses) / ((100 - getFloat(plus)) / 100)) - (totalSuppliers + totalExpenses);
                 }
                 charge = totalSuppliers + totalExpenses + profit;
 
